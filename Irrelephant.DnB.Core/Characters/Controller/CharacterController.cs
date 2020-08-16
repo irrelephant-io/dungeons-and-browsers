@@ -1,5 +1,5 @@
-﻿
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Irrelephant.DnB.Core.GameFlow;
 
 namespace Irrelephant.DnB.Core.Characters.Controller
 {
@@ -12,7 +12,7 @@ namespace Irrelephant.DnB.Core.Characters.Controller
             Character = character;
         }
 
-        public abstract Task Act();
+        public abstract Task Act(Combat combat);
 
     }
 }

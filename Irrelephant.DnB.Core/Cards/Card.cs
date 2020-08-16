@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Irrelephant.DnB.Core.Data;
+using Irrelephant.DnB.Core.Data.Effects;
 
 namespace Irrelephant.DnB.Core.Cards
 {

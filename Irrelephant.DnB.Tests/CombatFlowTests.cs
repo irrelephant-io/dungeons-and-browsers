@@ -34,24 +34,24 @@ namespace Irrelephant.DnB.Tests
         [Fact]
         public void CombatEnds_WhenOneSideRemains()
         {
-            Assert.False(_combat.IsDone);
+            Assert.False(_combat.IsOver);
             _combat.Defenders = new List<CharacterController>();
-            Assert.True(_combat.IsDone);
+            Assert.True(_combat.IsOver);
         }
 
         [Fact]
-        public async Task CombatShould_ResolvesCharacterActions_OncePerRound()
+        public async Task CombatShould_ResolveCharacterActions_OncePerRound()
         {
             Assert.Equal(1, _combat.Round);
             await _combat.ResolveRound();
-            _attacker.Verify(a => a.Act(), Times.Exactly(1));
-            _defender1.Verify(a => a.Act(), Times.Exactly(1));
-            _defender2.Verify(a => a.Act(), Times.Exactly(1));
+            _attacker.Verify(a => a.Act(_combat), Times.Exactly(1));
+            _defender1.Verify(a => a.Act(_combat), Times.Exactly(1));
+            _defender2.Verify(a => a.Act(_combat), Times.Exactly(1));
             Assert.Equal(2, _combat.Round);
             await _combat.ResolveRound();
-            _attacker.Verify(a => a.Act(), Times.Exactly(2));
-            _defender1.Verify(a => a.Act(), Times.Exactly(2));
-            _defender2.Verify(a => a.Act(), Times.Exactly(2));
+            _attacker.Verify(a => a.Act(_combat), Times.Exactly(2));
+            _defender1.Verify(a => a.Act(_combat), Times.Exactly(2));
+            _defender2.Verify(a => a.Act(_combat), Times.Exactly(2));
             Assert.Equal(3, _combat.Round);
         }
     }

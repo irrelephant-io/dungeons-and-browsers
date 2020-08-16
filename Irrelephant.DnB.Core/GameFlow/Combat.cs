@@ -8,19 +8,19 @@ namespace Irrelephant.DnB.Core.GameFlow
 {
     public class Combat
     {
-        public IEnumerable<CharacterController> Attackers;
+        public virtual IEnumerable<CharacterController> Attackers { get; set; }
 
-        public IEnumerable<CharacterController> Defenders;
+        public virtual IEnumerable<CharacterController> Defenders { get; set; }
 
         public int Round { get; private set; } = 1;
 
         public async Task ResolveRound()
         {
-            await Attackers.Sequentially(attacker => attacker.Act());
-            await Defenders.Sequentially(attacker => attacker.Act());
+            await Attackers.Sequentially(attacker => attacker.Act(this));
+            await Defenders.Sequentially(attacker => attacker.Act(this));
             Round++;
         }
 
-        public bool IsDone => !Attackers.Any() || !Defenders.Any();
+        public bool IsOver => !Attackers.Any() || !Defenders.Any();
     }
 }
