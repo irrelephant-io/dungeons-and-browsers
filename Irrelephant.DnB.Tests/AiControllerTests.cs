@@ -24,7 +24,6 @@ namespace Irrelephant.DnB.Tests
 
         private readonly Mock<AiController> _mockEnemy;
 
-
         public AiControllerTests()
         {
             _effect1 = new Mock<Effect>();
@@ -124,7 +123,6 @@ namespace Irrelephant.DnB.Tests
                 _mockEnemy.Object.Character,
                 mockEnemy2.Object.Character
             });
-            targetList.Clear();
         }
 
         private Mock<Effect> BuildMockEffect(Targets targets, Action<IEnumerable<Character>> callback)

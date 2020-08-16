@@ -1,0 +1,16 @@
+﻿<div class="combat-view">
+    <div class="character-column attackers">
+        @foreach (var attacker in _combat.Attackers)
+        {
+            <CharacterView Character="attacker.Character"/>
+        }
+    </div>
+    
+    <div class="character-column defenders">
+        @foreach (var defender in _combat.Defenders)
+        {
+            <CharacterView Character="defender.Character"/>
+        }
+    </div>
+
+</div>

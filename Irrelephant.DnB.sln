@@ -8,9 +8,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Irrelephant.DnB.Server", "I
 		{F52D3A5E-2756-4B46-B370-388D684B6C5F} = {F52D3A5E-2756-4B46-B370-388D684B6C5F}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irrelephant.DnB.Core", "Irrelephant.DnB.Core\Irrelephant.DnB.Core.csproj", "{F52D3A5E-2756-4B46-B370-388D684B6C5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Irrelephant.DnB.Core", "Irrelephant.DnB.Core\Irrelephant.DnB.Core.csproj", "{F52D3A5E-2756-4B46-B370-388D684B6C5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irrelephant.DnB.Tests", "Irrelephant.DnB.Tests\Irrelephant.DnB.Tests.csproj", "{60A72F61-46EC-4838-AA98-CACD4A9BC91A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Irrelephant.DnB.Tests", "Irrelephant.DnB.Tests\Irrelephant.DnB.Tests.csproj", "{60A72F61-46EC-4838-AA98-CACD4A9BC91A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
