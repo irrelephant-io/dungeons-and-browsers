@@ -125,6 +125,30 @@ namespace Irrelephant.DnB.Tests
             });
         }
 
+        [Fact]
+        public async Task AiController_ShouldChooseTargets_BasedOnEffectType()
+        {
+            var targetList = new List<Character>();
+            void Callback(IEnumerable<Character> targets) => targetList.AddRange(targets);
+            var mockAmbiguousEffect = BuildMockEffect(Targets.Friendly | Targets.Enemy | Targets.SingleTarget, Callback);
+            mockAmbiguousEffect.SetupGet(x => x.EffectType).Returns(EffectType.Debuff);
+            var mockAnotherAmbiguousEffect = BuildMockEffect(Targets.Friendly | Targets.Enemy | Targets.SingleTarget, Callback);
+            mockAnotherAmbiguousEffect.SetupGet(x => x.EffectType).Returns(EffectType.Buff);
+            var controller = new AiController(new NonPlayerCharacter
+            {
+                ActionPool = new[] { mockAmbiguousEffect.Object, mockAnotherAmbiguousEffect.Object }
+            });
+            var combat = new Mock<Combat>();
+            combat.SetupGet(c => c.Attackers).Returns(new List<CharacterController> { _mockEnemy.Object });
+            combat.SetupGet(c => c.Defenders).Returns(new List<CharacterController> { controller });
+
+            await controller.Act(combat.Object);
+            AssertionUtilities.OnlyContains(targetList, new [] { _mockEnemy.Object.Character });
+            targetList.Clear();
+
+            await controller.Act(combat.Object);
+            AssertionUtilities.OnlyContains(targetList, new[] { controller.Character });
+        }
         private Mock<Effect> BuildMockEffect(Targets targets, Action<IEnumerable<Character>> callback)
         {
             var mock = new Mock<Effect>();

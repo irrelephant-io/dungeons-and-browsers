@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Irrelephant.DnB.Core.GameFlow;
 
 namespace Irrelephant.DnB.Core.Characters.Controller
@@ -12,7 +13,10 @@ namespace Irrelephant.DnB.Core.Characters.Controller
             Character = character;
         }
 
-        public abstract Task Act(Combat combat);
-
+        public virtual Task Act(Combat combat)
+        {
+            Console.WriteLine($"{Character.Name} acts!");
+            return Task.CompletedTask;
+        }
     }
 }

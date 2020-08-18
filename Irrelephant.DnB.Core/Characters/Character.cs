@@ -20,5 +20,21 @@ namespace Irrelephant.DnB.Core.Characters
         }
 
         public abstract void TakeTurn();
+
+        public void DealDamage(int amount, bool ignoreArmor = false)
+        {
+            if (!ignoreArmor)
+            {
+                var armorDamage = Math.Min(Armor, amount);
+                Armor -= armorDamage;
+                amount -= armorDamage;
+            }
+
+            Health -= Math.Min(Health, amount);
+        }
+
+        public bool IsAlive => !CanDie || Health > 0;
+
+        public bool CanDie => MaxHealth > 0;
     }
 }

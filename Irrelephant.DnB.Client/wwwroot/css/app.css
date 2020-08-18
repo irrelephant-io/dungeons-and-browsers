@@ -1,0 +1,80 @@
+﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+
+.combat-view {
+    display: flex;
+    -o-justify-content: space-between;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+}
+
+.character-column {
+    flex-direction: column;
+}
+
+.character {
+    position: relative;
+    height: 230px;
+    padding: 5px 10px 10px 10px;
+    -ms-border-radius: 10px;
+    border-radius: 10px;
+    border: 1px solid black;
+    background: rosybrown;
+    margin-bottom: 10px;
+}
+
+.character .character-name {
+    margin-bottom: 3px;
+    padding-left: 5px;
+    font-weight: 500;
+}
+
+.character .armor {
+    bottom: 5px;
+    position: absolute;
+    left: 10px;
+    margin: 0;
+    color: darkblue;
+}
+
+.character .armor .armor-total {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.character .health {
+    bottom: 5px;
+    position: absolute;
+    right: 10px;
+    margin: 0;
+    color: darkred;
+}
+
+.character .health .health-total {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.character .health .health-max {
+    font-size: 16px;
+    font-weight: 400;
+}
+
+
+.character .graphic {
+    border: 1px solid black;
+    -ms-border-radius: 10px;
+    border-radius: 10px;
+}
+
+.character .graphic img {
+    width: 250px;
+    border-radius: 10px;
+    -webkit-object-fit: cover;
+    object-fit: cover;
+    height: 150px;
+}
+
+.rounded-card {
+    -ms-border-radius: 15px;
+    border-radius: 15px;
+}

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Core.Characters;
 
@@ -6,7 +8,7 @@ namespace Irrelephant.DnB.Core.Data.Effects
 {
     public class Effect
     {
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
 
         public virtual Targets ValidTargets { get; } = Targets.None;
 
@@ -14,6 +16,7 @@ namespace Irrelephant.DnB.Core.Data.Effects
 
         public virtual Task Apply(IEnumerable<Character> targets)
         {
+            Console.WriteLine($"Effect '{Name}' is resolved. Targets: {string.Join(", ", targets.Select(t => t.Name))}");
             return Task.CompletedTask;
         }
     }

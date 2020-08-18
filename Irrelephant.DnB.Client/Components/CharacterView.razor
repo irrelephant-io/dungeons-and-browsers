@@ -1,0 +1,21 @@
+﻿@using Irrelephant.DnB.Core.Characters
+
+<div class="character rounded-card">
+    <p class="character-name">@Character.Name</p>
+    <div class="graphic">
+        <img src="img/@(Character.Id).png" />
+    </div>
+    @if(Character.Armor > 0) {
+        <p class="armor">
+            <span class="armor-total">@(Character.Armor)</span>
+        </p>
+    }
+    <p class="health">
+        <span class="health-total">@(Character.Health)</span>/<span class="health-max">@(Character.MaxHealth)</span>
+    </p>
+</div>
+
+@code {
+    [Parameter]
+    public Character Character { get; set; }
+}

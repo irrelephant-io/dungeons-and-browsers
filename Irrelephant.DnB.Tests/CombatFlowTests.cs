@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Core.Characters;
 using Irrelephant.DnB.Core.Characters.Controller;
@@ -20,9 +21,9 @@ namespace Irrelephant.DnB.Tests
         
         public CombatFlowTests()
         {
-            _attacker = new Mock<AiController>(new NonPlayerCharacter());
-            _defender1 = new Mock<AiController>(new NonPlayerCharacter());
-            _defender2 = new Mock<AiController>(new NonPlayerCharacter());
+            _attacker = new Mock<AiController>(new NonPlayerCharacter { MaxHealth = 1, Health = 1 });
+            _defender1 = new Mock<AiController>(new NonPlayerCharacter { MaxHealth = 1, Health = 1 });
+            _defender2 = new Mock<AiController>(new NonPlayerCharacter { MaxHealth = 1, Health = 1 });
 
             _combat = new Combat
             {
@@ -53,6 +54,27 @@ namespace Irrelephant.DnB.Tests
             _defender1.Verify(a => a.Act(_combat), Times.Exactly(2));
             _defender2.Verify(a => a.Act(_combat), Times.Exactly(2));
             Assert.Equal(3, _combat.Round);
+        }
+
+        [Fact]
+        public async Task CombatShould_RemoveDeadCharacters_AtTheEndOfRound()
+        {
+            Assert.False(_combat.IsOver);
+            _defender1.Object.Character.Health = 0;
+            Assert.Equal(2, _combat.Defenders.Count());
+            await _combat.ResolveRound();
+            Assert.False(_combat.IsOver);
+            Assert.Single(_combat.Defenders);
+            _defender2.Object.Character.Health = 0;
+            await _combat.ResolveRound();
+            Assert.True(_combat.IsOver);
+            Assert.Empty(_combat.Defenders);
+        }
+
+        [Fact]
+        public async Task CombatDamage_ShouldBeDealt_ToArmorFirst()
+        {
+            _defender1.Object.Character.Armor = 5;
         }
     }
 }

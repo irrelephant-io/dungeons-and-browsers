@@ -33,6 +33,7 @@ namespace Irrelephant.DnB.Core.Characters.Controller
 
         public async override Task Act(Combat combat)
         {
+            await base.Act(combat);
             var nextAction = _actionQueue.Dequeue();
             await nextAction.Apply(PickTarget(nextAction, combat));
             _actionQueue.Enqueue(nextAction);
@@ -55,6 +56,18 @@ namespace Irrelephant.DnB.Core.Characters.Controller
 
             if ((nextAction.ValidTargets & Targets.Team) != 0)
             {
+                if ((nextAction.ValidTargets & (Targets.Friendly | Targets.Enemy)) != 0)
+                {
+                    if (nextAction.EffectType == EffectType.Buff)
+                    {
+                        return this.GetTeamIn(combat).Select(cc => cc.Character);
+                    }
+                    if (nextAction.EffectType == EffectType.Debuff)
+                    {
+                        return this.GetOpposingTeamIn(combat).Select(cc => cc.Character);
+                    }
+                }
+
                 if ((nextAction.ValidTargets & Targets.Friendly) != 0)
                 {
                     return this.GetTeamIn(combat).Select(cc => cc.Character);
@@ -68,6 +81,18 @@ namespace Irrelephant.DnB.Core.Characters.Controller
 
             if ((nextAction.ValidTargets & Targets.SingleTarget) != 0)
             {
+                if ((nextAction.ValidTargets & (Targets.Friendly | Targets.Enemy)) != 0)
+                {
+                    if (nextAction.EffectType == EffectType.Buff)
+                    {
+                        return this.GetTeamIn(combat).Take(1).Select(cc => cc.Character);
+                    }
+                    if (nextAction.EffectType == EffectType.Debuff)
+                    {
+                        return this.GetOpposingTeamIn(combat).Take(1).Select(cc => cc.Character);
+                    }
+                }
+
                 if ((nextAction.ValidTargets & Targets.Friendly) != 0)
                 {
                     return this.GetTeamIn(combat).Take(1).Select(cc => cc.Character);
