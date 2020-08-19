@@ -1,8 +1,13 @@
-﻿<div class="game-console">
-    @foreach (var message in Combat.Log.Messages)
-    {
-        <p>@message</p>
-    }
+﻿<div class="control-surface">
+    <div class="hand-view" onb>
+        @{ int index = 0; }
+        @foreach (var card in Player.Hand)
+        {
+            <div class="rotate-container @GetRotationStyle(index)">
+                <CardView Card=card/>
+            </div>
+            index++;
+        }
+    </div>
 </div>
-
 <button @onclick="EndTurn">END TURN</button>

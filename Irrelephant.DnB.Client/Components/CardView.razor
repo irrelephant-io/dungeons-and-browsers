@@ -1,0 +1,37 @@
+﻿@using Irrelephant.DnB.Core.Cards
+
+<div 
+    class="noselect card rounded-card @_selectionClass"
+    @onclick=ToggleSelection
+    draggable="true"
+>
+    <span class="energy-cost">@(new string('¤', @Card.ActionCost))</span>
+    <p class="card-name">@Card.Name</p>
+    <div class="graphic">
+        <img src="img/@(Card.Id).png" />
+    </div>
+    <p class="text">
+        @Card.Text
+    </p>
+</div>
+
+@code
+{
+
+    private string _selectionClass = string.Empty;
+
+    [Parameter]
+    public Card Card { get; set; }
+
+    public void ToggleSelection()
+    {
+        if (string.IsNullOrEmpty(_selectionClass))
+        {
+            _selectionClass = "active";
+        }
+        else
+        {
+            _selectionClass = string.Empty;
+        }
+    }
+}

@@ -5,6 +5,7 @@
     -o-justify-content: space-between;
     -webkit-justify-content: space-between;
     justify-content: space-between;
+    padding: 10px 10px;
 }
 
 .character-column {
@@ -22,11 +23,11 @@
     margin-bottom: 10px;
 }
 
-.character .character-name {
-    margin-bottom: 3px;
-    padding-left: 5px;
-    font-weight: 500;
-}
+    .character .character-name {
+        margin-bottom: 3px;
+        padding-left: 5px;
+        font-weight: 500;
+    }
 
 .character .armor {
     bottom: 5px;
@@ -36,10 +37,10 @@
     color: darkblue;
 }
 
-.character .armor .armor-total {
-    font-size: 22px;
-    font-weight: 700;
-}
+    .character .armor .armor-total {
+        font-size: 22px;
+        font-weight: 700;
+    }
 
 .character .health {
     bottom: 5px;
@@ -49,15 +50,15 @@
     color: darkred;
 }
 
-.character .health .health-total {
-    font-size: 22px;
-    font-weight: 700;
-}
+    .character .health .health-total {
+        font-size: 22px;
+        font-weight: 700;
+    }
 
-.character .health .health-max {
-    font-size: 16px;
-    font-weight: 400;
-}
+    .character .health .health-max {
+        font-size: 16px;
+        font-weight: 400;
+    }
 
 
 .character .graphic {
@@ -66,15 +67,44 @@
     border-radius: 10px;
 }
 
-.character .graphic img {
-    width: 250px;
-    border-radius: 10px;
-    -webkit-object-fit: cover;
-    object-fit: cover;
-    height: 150px;
-}
+    .character .graphic img {
+        width: 250px;
+        border-radius: 10px;
+        -webkit-object-fit: cover;
+        object-fit: cover;
+        height: 150px;
+    }
 
 .rounded-card {
     -ms-border-radius: 15px;
     border-radius: 15px;
+}
+
+.control-surface {
+    position: absolute;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+}
+
+    .control-surface .hand-view {
+        display: flex;
+        bottom: 0;
+        width: 100%;
+        position: absolute;
+        -o-justify-content: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        height: 400px;
+        align-items: flex-end;
+        overflow: hidden;
+    }
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none; 
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

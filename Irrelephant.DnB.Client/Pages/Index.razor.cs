@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Irrelephant.DnB.Core.Cards;
 using Irrelephant.DnB.Core.Characters;
 using Irrelephant.DnB.Core.Characters.Controller;
+using Irrelephant.DnB.Core.Data.Effects;
 using Irrelephant.DnB.Core.GameFlow;
 using Irrelephant.DnB.Core.Infrastructure;
 using Microsoft.AspNetCore.Components;
@@ -43,7 +45,64 @@ namespace Irrelephant.DnB.Client.Pages
                 Id = "player-0",
                 Name = "Player",
                 MaxHealth = 70,
-                Health = 70
+                Health = 70,
+                Hand = new[]
+                {
+                    new Card {
+                        Id = "resolute-strike",
+                        Name = "Resolute Strike",
+                        ActionCost = 2,
+                        Effects = new[] { EffectLibrary.AddBlock, EffectLibrary.DealSmallDamage }
+                    },
+                    new Card {
+                        Id = "resolute-strike",
+                        Name = "Resolute Strike",
+                        ActionCost = 2,
+                        Effects = new[] { EffectLibrary.AddBlock, EffectLibrary.DealSmallDamage }
+                    },
+                    new Card {
+                        Id = "resolute-strike",
+                        Name = "Resolute Strike",
+                        ActionCost = 2,
+                        Effects = new[] { EffectLibrary.AddBlock, EffectLibrary.DealSmallDamage }
+                    },
+                    new Card {
+                        Id = "resolute-strike",
+                        Name = "Resolute Strike",
+                        ActionCost = 2,
+                        Effects = new[] { EffectLibrary.AddBlock, EffectLibrary.DealSmallDamage }
+                    },
+                    new Card {
+                        Id = "resolute-strike",
+                        Name = "Resolute Strike",
+                        ActionCost = 2,
+                        Effects = new[] { EffectLibrary.AddBlock, EffectLibrary.DealSmallDamage }
+                    },
+                    new Card {
+                        Id = "resolute-strike",
+                        Name = "Resolute Strike",
+                        ActionCost = 2,
+                        Effects = new[] { EffectLibrary.AddBlock, EffectLibrary.DealSmallDamage }
+                    },
+                    new Card {
+                        Id = "resolute-strike",
+                        Name = "Resolute Strike",
+                        ActionCost = 2,
+                        Effects = new[] { EffectLibrary.AddBlock, EffectLibrary.DealSmallDamage }
+                    },
+                    new Card {
+                        Id = "resolute-strike",
+                        Name = "Resolute Strike",
+                        ActionCost = 2,
+                        Effects = new[] { EffectLibrary.AddBlock, EffectLibrary.DealSmallDamage }
+                    },
+                    new Card {
+                        Id = "resolute-strike",
+                        Name = "Resolute Strike",
+                        ActionCost = 2,
+                        Effects = new[] { EffectLibrary.AddBlock, EffectLibrary.DealSmallDamage }
+                    }
+                }
             });
             _combat = new Combat
             {

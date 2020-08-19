@@ -12,6 +12,8 @@ namespace Irrelephant.DnB.Core.Cards
 {
     public class Card
     {
+        public string Id { get; set; }
+
         public string Name { get; set; }
 
         public string Text => string.Join(Environment.NewLine, Effects.Select(e => e.Name));

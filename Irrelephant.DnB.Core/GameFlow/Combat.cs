@@ -32,7 +32,7 @@ namespace Irrelephant.DnB.Core.GameFlow
             Attackers = Attackers.Where(combatant => combatant.Character.IsAlive).ToArray();
             Defenders = Defenders.Where(combatant => combatant.Character.IsAlive).ToArray();
         }
-
+        
         public bool IsOver => !Attackers.Any() || !Defenders.Any();
     }
 }
