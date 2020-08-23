@@ -1,12 +1,12 @@
 ﻿<div class="combat-view">
-    <div class="character-column attackers">
+    <div class="character-row attackers">
         @foreach (var attacker in Combat.Attackers)
         {
             <CharacterView Character="attacker.Character" />
         }
     </div>
 
-    <div class="character-column defenders">
+    <div class="character-row defenders">
         @foreach (var defender in Combat.Defenders)
         {
             <CharacterView Character="defender.Character" />

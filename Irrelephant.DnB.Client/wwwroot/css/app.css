@@ -8,8 +8,16 @@
     padding: 10px 10px;
 }
 
-.character-column {
-    flex-direction: column;
+.character-row {
+    display: flex;
+}
+
+.character-row.attackers {
+    flex-direction: row-reverse;
+}
+
+.character-row.defenders {
+    flex-direction: row;
 }
 
 .character {
@@ -20,13 +28,14 @@
     border-radius: 10px;
     border: 1px solid black;
     background: rosybrown;
-    margin-bottom: 10px;
+    margin: 0 5px;
 }
 
     .character .character-name {
         margin-bottom: 3px;
         padding-left: 5px;
         font-weight: 500;
+        text-align: center;
     }
 
 .character .armor {
@@ -68,11 +77,11 @@
 }
 
     .character .graphic img {
-        width: 250px;
+        width: 150px;
         border-radius: 10px;
         -webkit-object-fit: cover;
         object-fit: cover;
-        height: 150px;
+        height: 100px;
     }
 
 .rounded-card {

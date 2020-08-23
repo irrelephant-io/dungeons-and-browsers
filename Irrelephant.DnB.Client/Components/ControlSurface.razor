@@ -4,10 +4,11 @@
         @foreach (var card in Player.Hand)
         {
             <div class="rotate-container @GetRotationStyle(index)">
-                <CardView Card=card/>
+                <CardView Card=card />
             </div>
             index++;
         }
     </div>
+
+    <button @onclick="EndTurn">END TURN</button>
 </div>
-<button @onclick="EndTurn">END TURN</button>

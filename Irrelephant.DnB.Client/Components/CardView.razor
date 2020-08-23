@@ -5,7 +5,7 @@
     @onclick=ToggleSelection
     draggable="true"
 >
-    <span class="energy-cost">@(new string('¤', @Card.ActionCost))</span>
+    <span class="energy-cost">@Card.ActionCost</span>
     <p class="card-name">@Card.Name</p>
     <div class="graphic">
         <img src="img/@(Card.Id).png" />

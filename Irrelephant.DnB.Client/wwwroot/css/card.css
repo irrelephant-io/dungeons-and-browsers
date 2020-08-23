@@ -1,6 +1,7 @@
 ﻿.card {
-    margin: 0 -50px;
-    height: 350px;
+    margin: 0 -40px;
+    height: 250px;
+    width: 178px;
     padding: 5px 10px 10px 10px;
     bottom: 0;
     -ms-border-radius: 10px;
@@ -35,11 +36,11 @@
     }
 
         .card .graphic img {
-            width: 250px;
+            width: 154px;
             border-radius: 10px;
             -webkit-object-fit: cover;
             object-fit: cover;
-            height: 150px;
+            height: 100px;
         }
 
     .card .text {
@@ -49,9 +50,9 @@
 
     .card .energy-cost {
         position: absolute;
-        top: -10px;
-        left: 7px;
-        font-size: 32px;
+        top: -5px;
+        left: 4px;
+        font-size: 20px;
         color: gold;
     }
 
@@ -67,7 +68,7 @@
     -ms-transform: rotate(-5deg);
     -webkit-transform: rotate(-5deg);
     transform: rotate(-5deg);
-    bottom: -10px;
+    bottom: -3px;
     position: relative;
 }
 
@@ -75,7 +76,7 @@
     -ms-transform: rotate(-10deg);
     -webkit-transform: rotate(-10deg);
     transform: rotate(-10deg);
-    bottom: -35px;
+    bottom: -13px;
     position: relative;
 }
 
@@ -83,7 +84,7 @@
     -ms-transform: rotate(-15deg);
     -webkit-transform: rotate(-15deg);
     transform: rotate(-15deg);
-    bottom: -75px;
+    bottom: -31px;
     position: relative;
 }
 
@@ -91,7 +92,7 @@
     -ms-transform: rotate(-20deg);
     -webkit-transform: rotate(-20deg);
     transform: rotate(-20deg);
-    bottom: -130px;
+    bottom: -58px;
     position: relative;
 }
 
@@ -99,7 +100,7 @@
     -ms-transform: rotate(5deg);
     -webkit-transform: rotate(5deg);
     transform: rotate(5deg);
-    bottom: -10px;
+    bottom: -3px;
     position: relative;
 }
 
@@ -107,7 +108,7 @@
     -ms-transform: rotate(10deg);
     -webkit-transform: rotate(10deg);
     transform: rotate(10deg);
-    bottom: -35px;
+    bottom: -13px;
     position: relative;
 }
 
@@ -115,7 +116,7 @@
     -ms-transform: rotate(15deg);
     -webkit-transform: rotate(15deg);
     transform: rotate(15deg);
-    bottom: -75px;
+    bottom: -31px;
     position: relative;
 }
 
@@ -123,7 +124,7 @@
     -ms-transform: rotate(20deg);
     -webkit-transform: rotate(20deg);
     transform: rotate(20deg);
-    bottom: -130px;
+    bottom: -58px;
     position: relative;
 }
 
