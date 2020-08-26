@@ -1,5 +1,6 @@
 ﻿using System.Linq;
-using Irrelephant.DnB.Client.Pages;
+using System.Threading.Tasks;
+using Irrelephant.DnB.Core.Cards;
 using Irrelephant.DnB.Core.Characters;
 using Irrelephant.DnB.Core.Characters.Controller;
 using Irrelephant.DnB.Core.GameFlow;
@@ -15,7 +16,9 @@ namespace Irrelephant.DnB.Client.Components
         [Parameter]
         public PlayerCharacterController Controller { get; set; }
 
-        private PlayerCharacter Player => (PlayerCharacter)Controller.Character;
+        public Card PlayedCard { get; set; }
+
+        public PlayerCharacter Player => (PlayerCharacter)Controller.Character;
 
         public void EndTurn()
         {
@@ -37,6 +40,28 @@ namespace Irrelephant.DnB.Client.Components
             }
 
             return "rotate-none";
+        }
+
+        private async Task HandleCardDrop()
+        {
+            if (PlayedCard.CanPlay(Player)) {
+                await PlayedCard.Play(Player, null);
+            }
+            else {
+                System.Console.WriteLine("Cant play the card!");
+            }
+        }
+
+        private Task HandleDragEnter()
+        {
+            System.Console.WriteLine("Entered!");
+            return Task.CompletedTask;
+        }
+
+        private Task HandleDragLeave()
+        {
+            System.Console.WriteLine("Left!");
+            return Task.CompletedTask;
         }
     }
 }

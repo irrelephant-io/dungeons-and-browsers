@@ -2,13 +2,13 @@
 
 <div 
     class="noselect card rounded-card @_selectionClass"
-    @onclick=ToggleSelection
+    @ondragstart="HandleDragStart"
     draggable="true"
 >
     <span class="energy-cost">@Card.ActionCost</span>
     <p class="card-name">@Card.Name</p>
     <div class="graphic">
-        <img src="img/@(Card.Id).png" />
+        <img draggable="false" src="img/@(Card.Id).png" />
     </div>
     <p class="text">
         @Card.Text
@@ -23,6 +23,9 @@
     [Parameter]
     public Card Card { get; set; }
 
+    [CascadingParameter]
+    public ControlSurface ControlSurface { get; set; }
+
     public void ToggleSelection()
     {
         if (string.IsNullOrEmpty(_selectionClass))
@@ -33,5 +36,13 @@
         {
             _selectionClass = string.Empty;
         }
+    }
+
+    private void HandleDragStart(DragEventArgs dragEvent)
+    {
+        dragEvent.DataTransfer.DropEffect = "move";
+        dragEvent.DataTransfer.EffectAllowed = "move";
+        Console.WriteLine(Card.Name + " is dragged!");
+        ControlSurface.PlayedCard = Card;
     }
 }

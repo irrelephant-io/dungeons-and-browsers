@@ -94,17 +94,18 @@
     bottom: 0;
     height: 100%;
     width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
     .control-surface .hand-view {
         display: flex;
         bottom: 0;
-        width: 100%;
-        position: absolute;
+        width: 100%;    
         -o-justify-content: center;
         -webkit-justify-content: center;
         justify-content: center;
-        height: 400px;
+        height: 300px;
         align-items: flex-end;
         overflow: hidden;
     }
@@ -116,4 +117,9 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.card-play-area {
+    width: 100%;
+    flex-grow: 1;
 }

@@ -1,14 +1,22 @@
-﻿<div class="control-surface">
-    <div class="hand-view" onb>
-        @{ int index = 0; }
-        @foreach (var card in Player.Hand)
-        {
-            <div class="rotate-container @GetRotationStyle(index)">
-                <CardView Card=card />
-            </div>
-            index++;
-        }
+﻿<CascadingValue Value="this">
+    <div class="control-surface">
+        <div class="card-play-area"
+             @ondrop="HandleCardDrop"
+             @ondragenter="HandleDragEnter"
+             @ondragleave="HandleDragLeave"
+             ondragover="event.preventDefault();"
+             ondragstart="event.dataTransfer.setData('', event.target.id);">
+        </div>
+        <div class="hand-view" onb>
+            @{ int index = 0; }
+            @foreach (var card in Player.Hand)
+            {
+                <div class="rotate-container @GetRotationStyle(index)">
+                    <CardView Card=card />
+                </div>
+                index++;
+            }
+        </div>
+        <button @onclick="EndTurn">END TURN</button>
     </div>
-
-    <button @onclick="EndTurn">END TURN</button>
-</div>
+</CascadingValue>

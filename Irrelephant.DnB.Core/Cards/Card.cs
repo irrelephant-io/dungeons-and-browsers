@@ -34,5 +34,10 @@ namespace Irrelephant.DnB.Core.Cards
                 throw new NotEnoughActionsException();
             }
         }
+
+        public bool CanPlay(PlayerCharacter player)
+        {
+            return player.Energy >= ActionCost;
+        }
     }
 }
