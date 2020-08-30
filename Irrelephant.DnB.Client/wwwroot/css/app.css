@@ -140,3 +140,22 @@
     width: 100%;
     flex-grow: 1;
 }
+
+.control-surface .actions-display {
+    position: absolute;
+    bottom: 50px;
+    left: 20px;
+    padding: 30px;
+    background: gold;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    color: white;
+    display: flex;
+    align-items: flex-end;
+}
+
+    .control-surface .actions-display .actions-total {
+        font-size: 34px;
+        font-weight: 700;
+    }

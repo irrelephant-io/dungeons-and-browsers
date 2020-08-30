@@ -116,18 +116,6 @@ namespace Irrelephant.DnB.Client.Components
             }
         }
 
-        private Task HandleDragEnter()
-        {
-            System.Console.WriteLine("Entered!");
-            return Task.CompletedTask;
-        }
-
-        private Task HandleDragLeave()
-        {
-            System.Console.WriteLine("Left!");
-            return Task.CompletedTask;
-        }
-
         public void CardClicked(Card c)
         {
             // Nothing for now

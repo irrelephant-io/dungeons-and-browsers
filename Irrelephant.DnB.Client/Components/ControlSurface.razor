@@ -5,10 +5,11 @@
     <div class="control-surface">
         <div class="card-play-area"
              @ondrop="HandleCardDrop"
-             @ondragenter="HandleDragEnter"
-             @ondragleave="HandleDragLeave"
              ondragover="event.preventDefault();"
              ondragstart="event.dataTransfer.setData('', event.target.id);">
+        </div>
+        <div class="actions-display">
+            <span class="actions-total">@Player.Energy</span>/<span class="actions-max">@Player.EnergyMax</span>
         </div>
         <div class="hand-view @_targetPickingClass">
             @{ int index = 0; }
