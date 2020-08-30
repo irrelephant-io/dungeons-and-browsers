@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Core.GameFlow;
+using Irrelephant.DnB.Core.Utils;
 
 namespace Irrelephant.DnB.Core.Characters.Controller
 {
@@ -18,12 +20,20 @@ namespace Irrelephant.DnB.Core.Characters.Controller
             var player = Character as PlayerCharacter;
             player.Energy = player.EnergyMax;
             _turnPromise = new TaskCompletionSource<bool>();
-            return _turnPromise.Task;
+            InvokeOnAction();
+            return Task.WhenAll(DrawCards(player), _turnPromise.Task);
         }
 
-        public void EndTurn()
+        private static async Task DrawCards(PlayerCharacter player)
+        {
+            await player.Draw(player.DrawLimit);
+        }
+
+        public async Task EndTurn()
         {
             Console.WriteLine($"{Character.Name} ends their turn!");
+            var player = Character as PlayerCharacter;
+            await player.Hand.Sequentially(card => player.Discard(card));
             _turnPromise?.SetResult(true);
         }
     }

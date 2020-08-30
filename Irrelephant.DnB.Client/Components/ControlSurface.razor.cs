@@ -31,9 +31,9 @@ namespace Irrelephant.DnB.Client.Components
 
         private string _targetPickingClass = string.Empty;
 
-        public void EndTurn()
+        public async Task EndTurn()
         {
-            Controller.EndTurn();
+            await Controller.EndTurn();
         }
 
         public Task<IEnumerable<Character>> PickTarget(Effect e)

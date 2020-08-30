@@ -4,7 +4,7 @@ namespace Irrelephant.DnB.Core.Characters
 {
     public abstract class Character
     {
-        public string Id { get; set; }
+        public string GraphicId { get; set; }
 
         public int Health { get; set; }
 

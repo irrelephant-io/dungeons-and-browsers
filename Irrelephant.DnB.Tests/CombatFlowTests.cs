@@ -70,11 +70,5 @@ namespace Irrelephant.DnB.Tests
             Assert.True(_combat.IsOver);
             Assert.Empty(_combat.Defenders);
         }
-
-        [Fact]
-        public async Task CombatDamage_ShouldBeDealt_ToArmorFirst()
-        {
-            _defender1.Object.Character.Armor = 5;
-        }
     }
 }

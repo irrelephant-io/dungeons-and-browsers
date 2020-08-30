@@ -41,7 +41,7 @@ namespace Irrelephant.DnB.Client.Pages
 
         private void SetupCombat()
         {
-            _player = new PlayerCharacterController(SetupPlayer()); ;
+            _player = new PlayerCharacterController(SetupPlayer());
             _combat = new Combat
             {
                 Attackers = new CharacterController[]
@@ -65,7 +65,7 @@ namespace Irrelephant.DnB.Client.Pages
         {
             var playerHand = new Card
             {
-                Id = "resolute-strike",
+                GraphicId = "resolute-strike",
                 Name = "Resolute Strike",
                 ActionCost = 2,
                 Effects = new[] { EffectLibrary.AddBlock, EffectLibrary.DealSmallMeleeDamage }
@@ -73,7 +73,7 @@ namespace Irrelephant.DnB.Client.Pages
             .Union(
                 new Card
                 {
-                    Id = "shiv-throw",
+                    GraphicId = "shiv-throw",
                     Name = "Shiv Throw",
                     ActionCost = 1,
                     Effects = new[] { EffectLibrary.DealSmallDamage }
@@ -81,12 +81,13 @@ namespace Irrelephant.DnB.Client.Pages
             );
             return new PlayerCharacter
             {
-                Id = "player-0",
+                GraphicId = "player-0",
                 Name = "Player",
                 MaxHealth = 70,
                 Health = 70,
                 EnergyMax = 4,
-                Hand = playerHand
+                DrawLimit = 5,
+                DiscardPile = playerHand
             };
         }
     }

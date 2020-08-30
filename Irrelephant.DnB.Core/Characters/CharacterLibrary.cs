@@ -6,7 +6,7 @@ namespace Irrelephant.DnB.Core.Characters
     {
         public static Character VileGoblin = new NonPlayerCharacter
         {
-            Id = "goblin-0",
+            GraphicId = "goblin-0",
             Name = "Vile Goblin", 
             Health = 30, MaxHealth = 30,
             ActionPool = new []
@@ -19,7 +19,7 @@ namespace Irrelephant.DnB.Core.Characters
 
         public static Character WretchedGoblin = new NonPlayerCharacter
         {
-            Id = "goblin-1",
+            GraphicId = "goblin-1",
             Name = "Wretched Goblin",
             Health = 25, MaxHealth = 25,
             ActionPool = new[]
@@ -31,7 +31,7 @@ namespace Irrelephant.DnB.Core.Characters
 
         public static Character RagingOrc = new NonPlayerCharacter
         {
-            Id = "orc-0",
+            GraphicId = "orc-0",
             Name = "Raging Orc",
             Health = 55,
             MaxHealth = 55,

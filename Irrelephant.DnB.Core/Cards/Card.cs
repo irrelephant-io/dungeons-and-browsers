@@ -6,13 +6,14 @@ using Irrelephant.DnB.Core.Characters;
 using Irrelephant.DnB.Core.Data;
 using Irrelephant.DnB.Core.Data.Effects;
 using Irrelephant.DnB.Core.Exceptions;
+using Irrelephant.DnB.Core.Infrastructure;
 using Irrelephant.DnB.Core.Utils;
 
 namespace Irrelephant.DnB.Core.Cards
 {
-    public class Card : ICloneable
+    public class Card : ICopyable<Card>
     {
-        public string Id { get; set; }
+        public string GraphicId { get; set; }
 
         public string Name { get; set; }
 
@@ -28,6 +29,7 @@ namespace Irrelephant.DnB.Core.Cards
             {
                 player.Energy -= ActionCost;
                 await Effects.Sequentially(async e => await e.Apply(await targetProvider.PickTarget(e)));
+                await player.Discard(this);
             }
             else
             {
@@ -37,12 +39,15 @@ namespace Irrelephant.DnB.Core.Cards
 
         public bool CanPlay(PlayerCharacter player)
         {
-            return player.Energy >= ActionCost;
+            var isEnoughEnergy = player.Energy >= ActionCost;
+            var isInHand = player.Hand.Contains(this);
+            return isEnoughEnergy && isInHand;
         }
 
-        public object Clone()
+        public Card Copy()
         {
-            return MemberwiseClone();
+            var cardCopy = (Card)MemberwiseClone();
+            return cardCopy;
         }
     }
 }
