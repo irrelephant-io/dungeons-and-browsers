@@ -14,11 +14,6 @@ namespace Irrelephant.DnB.Core.Characters
 
         public string Name { get; set; }
 
-        public void Pass()
-        {
-
-        }
-
         public void DealDamage(int amount, bool ignoreArmor = false)
         {
             if (!ignoreArmor)

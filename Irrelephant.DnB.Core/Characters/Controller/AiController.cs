@@ -23,6 +23,11 @@ namespace Irrelephant.DnB.Core.Characters.Controller
             SetupActionQueue(character);
         }
 
+        public string GetIntentText()
+        {
+            return _actionQueue.Peek().Name;
+        }
+
         private void SetupActionQueue(Character character)
         {
             var npc = (NonPlayerCharacter) character;

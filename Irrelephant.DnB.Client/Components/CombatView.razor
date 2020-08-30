@@ -2,14 +2,14 @@
     <div class="character-row attackers">
         @foreach (var attacker in Combat.Attackers)
         {
-            <CharacterView Character="attacker.Character" />
+            <CharacterView CharacterController="attacker" />
         }
     </div>
 
     <div class="character-row defenders">
         @foreach (var defender in Combat.Defenders)
         {
-            <CharacterView Character="defender.Character" />
+            <CharacterView CharacterController="defender" />
         }
     </div>
 </div>

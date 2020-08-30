@@ -159,3 +159,9 @@
         font-size: 34px;
         font-weight: 700;
     }
+
+.combat-view .character .intent-text {
+    font-size: 14px;
+    text-align: center;
+    padding: 10px;
+}

@@ -68,7 +68,7 @@ namespace Irrelephant.DnB.Client.Pages
                 GraphicId = "resolute-strike",
                 Name = "Resolute Strike",
                 ActionCost = 2,
-                Effects = new[] { EffectLibrary.AddBlock, EffectLibrary.DealSmallMeleeDamage }
+                Effects = new[] { EffectLibrary.Card.AddBlock, EffectLibrary.Card.DealSmallMeleeDamage }
             }.Copies(3)
             .Union(
                 new Card
@@ -76,7 +76,7 @@ namespace Irrelephant.DnB.Client.Pages
                     GraphicId = "shiv-throw",
                     Name = "Shiv Throw",
                     ActionCost = 1,
-                    Effects = new[] { EffectLibrary.DealSmallDamage }
+                    Effects = new[] { EffectLibrary.Card.DealSmallDamage }
                 }.Copies(3)
             );
             return new PlayerCharacter

@@ -11,9 +11,9 @@ namespace Irrelephant.DnB.Core.Characters
             Health = 30, MaxHealth = 30,
             ActionPool = new []
             {
-                EffectLibrary.DealSmallDamage,
-                EffectLibrary.DealSmallDamage,
-                EffectLibrary.AddBlock
+                EffectLibrary.Npc.DealSmallDamage,
+                EffectLibrary.Npc.DealSmallDamage,
+                EffectLibrary.Npc.AddBlock
             }
         };
 
@@ -24,8 +24,8 @@ namespace Irrelephant.DnB.Core.Characters
             Health = 25, MaxHealth = 25,
             ActionPool = new[]
             {
-                EffectLibrary.DealMediumDamage,
-                EffectLibrary.AddBlock
+                EffectLibrary.Npc.DealMediumDamage,
+                EffectLibrary.Npc.AddBlock
             }
         };
 
@@ -37,9 +37,9 @@ namespace Irrelephant.DnB.Core.Characters
             MaxHealth = 55,
             ActionPool = new[]
             {
-                EffectLibrary.DealMediumDamage,
-                EffectLibrary.DealMediumDamage,
-                EffectLibrary.DealHeavyDamage
+                EffectLibrary.Npc.DealMediumDamage,
+                EffectLibrary.Npc.DealMediumDamage,
+                EffectLibrary.Npc.DealHeavyDamage
             }
         };
     }
