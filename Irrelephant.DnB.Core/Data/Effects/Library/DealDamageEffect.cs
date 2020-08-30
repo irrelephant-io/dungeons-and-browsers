@@ -7,9 +7,9 @@ namespace Irrelephant.DnB.Core.Data.Effects.Library
 {
     public class DealDamageEffect : Effect
     {
-        private readonly int _damage;
+        protected readonly int Damage;
 
-        public override string Name => $"Deal {_damage} damage.";
+        public override string Name => $"Deal {Damage} damage.";
 
         public override Targets ValidTargets => Targets.SingleTarget | Targets.Enemy | Targets.Friendly;
 
@@ -17,14 +17,14 @@ namespace Irrelephant.DnB.Core.Data.Effects.Library
 
         public DealDamageEffect(int damage)
         {
-            _damage = damage;
+            Damage = damage;
         }
 
         public async override Task Apply(IEnumerable<Character> targets)
         {
             var characters = targets as Character[] ?? targets.ToArray();
             await base.Apply(characters);
-            characters.Single().DealDamage(_damage);
+            characters.Single().DealDamage(Damage);
         }
     }
 }

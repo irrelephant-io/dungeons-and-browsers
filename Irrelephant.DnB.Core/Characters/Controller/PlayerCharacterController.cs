@@ -15,6 +15,8 @@ namespace Irrelephant.DnB.Core.Characters.Controller
         public override Task Act(Combat combat)
         {
             Console.WriteLine($"{Character.Name} starts their turn!");
+            var player = Character as PlayerCharacter;
+            player.Energy = player.EnergyMax;
             _turnPromise = new TaskCompletionSource<bool>();
             return _turnPromise.Task;
         }

@@ -1,6 +1,9 @@
 ﻿@using Irrelephant.DnB.Core.Characters
 
-<div class="noselect character rounded-card">
+<div
+     @onclick="HandleClick"
+     class="noselect character rounded-card"
+>
     <p class="character-name">@Character.Name</p>
     <div class="graphic">
         <img src="img/@(Character.Id).png" />
@@ -18,4 +21,12 @@
 @code {
     [Parameter]
     public Character Character { get; set; }
+
+    [CascadingParameter]
+    public ControlSurface ControlSurface { get; set; }
+
+    public void HandleClick()
+    {
+        ControlSurface.CharacterClicked(Character);
+    }
 }

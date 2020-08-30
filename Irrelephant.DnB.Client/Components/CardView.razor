@@ -1,10 +1,11 @@
 ﻿@using Irrelephant.DnB.Core.Cards
+@inject IJSRuntime JSRuntime;
 
-<div 
-    class="noselect card rounded-card @_selectionClass"
-    @ondragstart="HandleDragStart"
-    draggable="true"
->
+<div class="noselect card rounded-card @_selectionClass"
+     @ref="CardComponentReference"
+     @ondragstart="HandleDragStart"
+     @onclick="HandleClick"
+     draggable="true">
     <span class="energy-cost">@Card.ActionCost</span>
     <p class="card-name">@Card.Name</p>
     <div class="graphic">
@@ -23,6 +24,8 @@
     [Parameter]
     public Card Card { get; set; }
 
+    public ElementReference CardComponentReference;
+
     [CascadingParameter]
     public ControlSurface ControlSurface { get; set; }
 
@@ -38,11 +41,23 @@
         }
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        // Doesnt work but leaving it in as a showcase point
+        if (firstRender)
+            await JSRuntime.InvokeVoidAsync("attachDragEvent", CardComponentReference);
+    }
+
     private void HandleDragStart(DragEventArgs dragEvent)
     {
         dragEvent.DataTransfer.DropEffect = "move";
         dragEvent.DataTransfer.EffectAllowed = "move";
         Console.WriteLine(Card.Name + " is dragged!");
         ControlSurface.PlayedCard = Card;
+    }
+
+    private void HandleClick()
+    {
+        ControlSurface.CardClicked(Card);
     }
 }

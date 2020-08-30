@@ -10,9 +10,5 @@ namespace Irrelephant.DnB.Core.Characters
 
         public IEnumerable<Effect> ActionPool;
 
-        public override void TakeTurn()
-        {
-
-        }
     }
 }

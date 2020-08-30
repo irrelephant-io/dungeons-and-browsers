@@ -19,8 +19,6 @@ namespace Irrelephant.DnB.Core.Characters
 
         }
 
-        public abstract void TakeTurn();
-
         public void DealDamage(int amount, bool ignoreArmor = false)
         {
             if (!ignoreArmor)

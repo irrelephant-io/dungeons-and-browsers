@@ -3,8 +3,9 @@
 
 @if (_isReady)
 {
-    <CombatView Combat=_combat/>
-    <ControlSurface Combat=_combat Controller=_player/>
+    <ControlSurface Combat=_combat Controller=_player>
+        <CombatView Combat=_combat />
+    </ControlSurface>
 }
 else
 {

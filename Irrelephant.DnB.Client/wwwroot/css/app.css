@@ -20,6 +20,16 @@
     flex-direction: row;
 }
 
+.select-defender .defenders .character {
+    box-shadow: 0 0 10px 10px red;
+    z-index: 100500;
+}
+
+.select-attacker .attackers .character {
+    box-shadow: 0 0 10px 10px red;
+    z-index: 100500;
+}
+
 .character {
     position: relative;
     height: 230px;
@@ -108,6 +118,13 @@
         height: 300px;
         align-items: flex-end;
         overflow: hidden;
+        transition: bottom 0.2s;
+    }
+
+    .hand-view.select-defender,
+    .hand-view.select-attacker {
+        bottom: -300px;
+        position: absolute;
     }
 
 .noselect {

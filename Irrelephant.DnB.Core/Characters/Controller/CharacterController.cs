@@ -18,5 +18,12 @@ namespace Irrelephant.DnB.Core.Characters.Controller
             Console.WriteLine($"{Character.Name} acts!");
             return Task.CompletedTask;
         }
+
+        public event Action OnAction;
+
+        public void InvokeOnAction()
+        {
+            OnAction?.Invoke();
+        }
     }
 }

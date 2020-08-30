@@ -10,7 +10,7 @@ using Irrelephant.DnB.Core.Utils;
 
 namespace Irrelephant.DnB.Core.Cards
 {
-    public class Card
+    public class Card : ICloneable
     {
         public string Id { get; set; }
 
@@ -27,7 +27,7 @@ namespace Irrelephant.DnB.Core.Cards
             if (player.Energy >= ActionCost)
             {
                 player.Energy -= ActionCost;
-                await Effects.Sequentially(e => e.Apply(targetProvider.PickTarget(e)));
+                await Effects.Sequentially(async e => await e.Apply(await targetProvider.PickTarget(e)));
             }
             else
             {
@@ -38,6 +38,11 @@ namespace Irrelephant.DnB.Core.Cards
         public bool CanPlay(PlayerCharacter player)
         {
             return player.Energy >= ActionCost;
+        }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
         }
     }
 }

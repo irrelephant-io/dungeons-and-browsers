@@ -18,6 +18,14 @@ namespace Irrelephant.DnB.Core.GameFlow
 
         public int Round { get; private set; } = 1;
 
+        public event Action OnActionTaken;
+
+        public void Start()
+        {
+            Attackers.ForEach(a => a.OnAction += () => OnActionTaken?.Invoke());
+            Defenders.ForEach(d => d.OnAction += () => OnActionTaken?.Invoke());
+        }
+
         public async Task ResolveRound()
         {
             Console.WriteLine($"Round {Round} starts!");

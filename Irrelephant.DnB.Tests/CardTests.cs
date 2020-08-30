@@ -27,7 +27,7 @@ namespace Irrelephant.DnB.Tests
 
         public CardTests()
         {
-            _effect1 = new DealDamageEffect(5);
+            _effect1 = new DealMeleeDamageEffect(5);
             _effect2 = new AddArmorEffect(5);
             _character = new Mock<PlayerCharacter>();
             _effectTarget = new Mock<Character>();

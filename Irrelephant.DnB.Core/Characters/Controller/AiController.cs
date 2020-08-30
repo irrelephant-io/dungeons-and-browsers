@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,6 +36,7 @@ namespace Irrelephant.DnB.Core.Characters.Controller
             var nextAction = _actionQueue.Dequeue();
             await nextAction.Apply(PickTarget(nextAction, combat));
             _actionQueue.Enqueue(nextAction);
+            InvokeOnAction();
         }
 
         private IEnumerable<Character> PickTarget(Effect nextAction, Combat combat)
@@ -54,54 +54,73 @@ namespace Irrelephant.DnB.Core.Characters.Controller
                         .Select(cc => cc.Character));
             }
 
-            if ((nextAction.ValidTargets & Targets.Team) != 0)
+            if (nextAction.ValidTargets.Matches(Targets.MeleeRange))
             {
-                if ((nextAction.ValidTargets & (Targets.Friendly | Targets.Enemy)) != 0)
-                {
-                    if (nextAction.EffectType == EffectType.Buff)
-                    {
-                        return this.GetTeamIn(combat).Select(cc => cc.Character);
-                    }
-                    if (nextAction.EffectType == EffectType.Debuff)
-                    {
-                        return this.GetOpposingTeamIn(combat).Select(cc => cc.Character);
-                    }
-                }
+                return this.GetOpposingTeamIn(combat).Take(1).Select(cc => cc.Character);
+            }
 
-                if ((nextAction.ValidTargets & Targets.Friendly) != 0)
+            if (nextAction.ValidTargets.Matches(Targets.Team))
+            {
+                return PickTeamTarget(nextAction, combat);
+            }
+
+            if (nextAction.ValidTargets.Matches(Targets.SingleTarget))
+            {
+                return PickSingleTarget(nextAction, combat);
+            }
+
+            return Enumerable.Empty<Character>();
+        }
+
+        private IEnumerable<Character> PickSingleTarget(Effect nextAction, Combat combat)
+        {
+            if (nextAction.ValidTargets.Matches(Targets.Friendly, Targets.Enemy))
+            {
+                if (nextAction.EffectType == EffectType.Buff)
+                {
+                    return this.GetTeamIn(combat).Take(1).Select(cc => cc.Character);
+                }
+                if (nextAction.EffectType == EffectType.Debuff)
+                {
+                    return this.GetOpposingTeamIn(combat).Take(1).Select(cc => cc.Character);
+                }
+            }
+
+            if (nextAction.ValidTargets.Matches(Targets.Friendly))
+            {
+                return this.GetTeamIn(combat).Take(1).Select(cc => cc.Character);
+            }
+
+            if (nextAction.ValidTargets.Matches(Targets.Enemy))
+            {
+                return this.GetOpposingTeamIn(combat).Take(1).Select(cc => cc.Character);
+            }
+
+            return Enumerable.Empty<Character>();
+        }
+
+        private IEnumerable<Character> PickTeamTarget(Effect nextAction, Combat combat)
+        {
+            if (nextAction.ValidTargets.Matches(Targets.Friendly, Targets.Enemy))
+            {
+                if (nextAction.EffectType == EffectType.Buff)
                 {
                     return this.GetTeamIn(combat).Select(cc => cc.Character);
                 }
-
-                if ((nextAction.ValidTargets & Targets.Enemy) != 0)
+                if (nextAction.EffectType == EffectType.Debuff)
                 {
                     return this.GetOpposingTeamIn(combat).Select(cc => cc.Character);
                 }
             }
 
-            if ((nextAction.ValidTargets & Targets.SingleTarget) != 0)
+            if (nextAction.ValidTargets.Matches(Targets.Friendly))
             {
-                if ((nextAction.ValidTargets & (Targets.Friendly | Targets.Enemy)) != 0)
-                {
-                    if (nextAction.EffectType == EffectType.Buff)
-                    {
-                        return this.GetTeamIn(combat).Take(1).Select(cc => cc.Character);
-                    }
-                    if (nextAction.EffectType == EffectType.Debuff)
-                    {
-                        return this.GetOpposingTeamIn(combat).Take(1).Select(cc => cc.Character);
-                    }
-                }
+                return this.GetTeamIn(combat).Select(cc => cc.Character);
+            }
 
-                if ((nextAction.ValidTargets & Targets.Friendly) != 0)
-                {
-                    return this.GetTeamIn(combat).Take(1).Select(cc => cc.Character);
-                }
-
-                if ((nextAction.ValidTargets & Targets.Enemy) != 0)
-                {
-                    return this.GetOpposingTeamIn(combat).Take(1).Select(cc => cc.Character);
-                }
+            if (nextAction.ValidTargets.Matches(Targets.Enemy))
+            {
+                return this.GetOpposingTeamIn(combat).Select(cc => cc.Character);
             }
 
             return Enumerable.Empty<Character>();

@@ -15,9 +15,5 @@ namespace Irrelephant.DnB.Core.Characters
 
         public IEnumerable<Card> Hand;
 
-        public override void TakeTurn()
-        {
-
-        }
     }
 }
