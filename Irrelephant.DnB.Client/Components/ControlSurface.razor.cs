@@ -7,12 +7,13 @@ using Irrelephant.DnB.Core.Characters.Controller;
 using Irrelephant.DnB.Core.Data;
 using Irrelephant.DnB.Core.Data.Effects;
 using Irrelephant.DnB.Core.GameFlow;
+using Irrelephant.DnB.Core.Infrastructure;
 using Irrelephant.DnB.Core.Utils;
 using Microsoft.AspNetCore.Components;
 
 namespace Irrelephant.DnB.Client.Components
 {
-    public partial class ControlSurface : ComponentBase, ITargetProvider
+    public partial class ControlSurface : ComponentBase, ITargetProvider, IEffector
     {
         [Parameter]
         public Combat Combat { get; set; }
@@ -23,15 +24,24 @@ namespace Irrelephant.DnB.Client.Components
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
+        private string _currentPrompt;
+        public string CurrentPrompt {
+            get => _currentPrompt;
+            set {
+                _currentPrompt = value;
+                StateHasChanged();
+            }
+        }
+
         public Card PlayedCard { get; set; }
 
-        public PlayerCharacter Player => (PlayerCharacter)Controller.Character;
+        private PlayerCharacter Player => (PlayerCharacter)Controller.Character;
 
         private TaskCompletionSource<IEnumerable<Character>> _targetPickingPromise;
 
         private string _targetPickingClass = string.Empty;
 
-        public async Task EndTurn()
+        private async Task EndTurn()
         {
             await Controller.EndTurn();
         }
@@ -60,7 +70,7 @@ namespace Irrelephant.DnB.Client.Components
             {
                 _targetPickingPromise = new TaskCompletionSource<IEnumerable<Character>>();
                 PickSingleTarget(e.ValidTargets);
-                System.Console.WriteLine("Picking target");
+                CurrentPrompt = $"Pick target for \"{e.Name}\"";
                 return _targetPickingPromise.Task;
             }
 
@@ -107,12 +117,10 @@ namespace Irrelephant.DnB.Client.Components
 
         private async Task HandleCardDrop()
         {
-            if (PlayedCard.CanPlay(Player)) {
+            if (PlayedCard.CanPlay(Player))
+            {
                 await PlayedCard.Play(Player, this);
                 Controller.InvokeOnAction();
-            }
-            else {
-                System.Console.WriteLine("Cant play the card!");
             }
         }
 
@@ -123,12 +131,32 @@ namespace Irrelephant.DnB.Client.Components
 
         public void CharacterClicked(Character c)
         {
-            System.Console.WriteLine("Clicked");
             if (_targetPickingPromise != null)
             {
                 _targetPickingPromise.SetResult(c.ArrayOf());
                 _targetPickingClass = string.Empty;
+                CurrentPrompt = string.Empty;
             }
+        }
+
+        public Task CreateEffect(EffectType type, Character target)
+        {
+            // Welp, not sure how to do that;
+            return Task.CompletedTask;
+        }
+
+        public async Task PostPrompt(string prompt, int timeMs)
+        {
+            _currentPrompt = prompt;
+            await CreateDelay(timeMs);
+            _currentPrompt = string.Empty;
+        }
+
+        public async Task CreateDelay(int timeMs)
+        {
+            StateHasChanged();
+            await Task.Delay(timeMs);
+            StateHasChanged();
         }
     }
 }

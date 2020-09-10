@@ -99,6 +99,12 @@
     border-radius: 15px;
 }
 
+.action-prompt {
+    text-align: center;
+    font-size: 36px;
+    margin: 50px;
+}
+
 .control-surface {
     position: absolute;
     bottom: 0;
@@ -164,4 +170,9 @@
     font-size: 14px;
     text-align: center;
     padding: 10px;
+}
+
+body {
+    background-image: url(/img/bg.png);
+    background-position-x: center;
 }

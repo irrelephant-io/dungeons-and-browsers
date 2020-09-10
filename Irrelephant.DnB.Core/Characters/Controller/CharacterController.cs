@@ -15,7 +15,6 @@ namespace Irrelephant.DnB.Core.Characters.Controller
 
         public virtual Task Act(Combat combat)
         {
-            Console.WriteLine($"{Character.Name} acts!");
             return Task.CompletedTask;
         }
 

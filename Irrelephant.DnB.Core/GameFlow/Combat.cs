@@ -10,11 +10,11 @@ namespace Irrelephant.DnB.Core.GameFlow
 {
     public class Combat
     {
-        public GameLog Log { get; set; }
-
         public virtual IEnumerable<CharacterController> Attackers { get; set; }
 
         public virtual IEnumerable<CharacterController> Defenders { get; set; }
+
+        public IEffector Effector { get; set; }
 
         public int Round { get; private set; } = 1;
 
@@ -28,7 +28,6 @@ namespace Irrelephant.DnB.Core.GameFlow
 
         public async Task ResolveRound()
         {
-            Console.WriteLine($"Round {Round} starts!");
             await Attackers.Sequentially(attacker => attacker.Act(this));
             await Defenders.Sequentially(defender => defender.Act(this));
             CleanupDeadBodies();

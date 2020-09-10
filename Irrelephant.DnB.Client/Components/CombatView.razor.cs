@@ -1,4 +1,5 @@
-﻿using Irrelephant.DnB.Core.GameFlow;
+﻿using System.Threading.Tasks;
+using Irrelephant.DnB.Core.GameFlow;
 using Microsoft.AspNetCore.Components;
 
 namespace Irrelephant.DnB.Client.Components
@@ -8,5 +9,15 @@ namespace Irrelephant.DnB.Client.Components
         [Parameter]
         public Combat Combat { get; set; }
 
+        [CascadingParameter]
+        public ControlSurface ControlSurface { get; set; }
+
+        protected override void OnAfterRender(bool firstRender)
+        {
+            if (firstRender)
+            {
+                Combat.Effector = ControlSurface;
+            }
+        }
     }
 }

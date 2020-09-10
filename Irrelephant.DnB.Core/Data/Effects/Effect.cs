@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Core.Characters;
+using Irrelephant.DnB.Core.Infrastructure;
 
 namespace Irrelephant.DnB.Core.Data.Effects
 {
@@ -14,10 +13,13 @@ namespace Irrelephant.DnB.Core.Data.Effects
 
         public virtual EffectType EffectType { get; } = EffectType.Neutral;
 
-        public virtual Task Apply(IEnumerable<Character> targets)
+        public async virtual Task Apply(IEnumerable<Character> targets, IEffector effector = null)
         {
-            Console.WriteLine($"Effect '{Name}' is resolved. Targets: {string.Join(", ", targets.Select(t => t.Name))}");
-            return Task.CompletedTask;
+            var task = effector?.CreateDelay(timeMs: 1000);
+            if (task != null)
+            {
+                await task;
+            }
         }
     }
 }

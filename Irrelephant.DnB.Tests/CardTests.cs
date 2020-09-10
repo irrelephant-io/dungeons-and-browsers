@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Core.Cards;
@@ -22,8 +21,6 @@ namespace Irrelephant.DnB.Tests
 
         private readonly Mock<PlayerCharacter> _character;
 
-        private readonly Mock<Character> _effectTarget;
-
         private readonly Effect _effect1;
 
         private readonly Effect _effect2;
@@ -33,10 +30,10 @@ namespace Irrelephant.DnB.Tests
             _effect1 = new DealMeleeDamageEffect(5);
             _effect2 = new AddArmorEffect(5);
             _character = new Mock<PlayerCharacter>();
-            _effectTarget = new Mock<Character>();
+            var effectTarget = new Mock<Character>();
             _targetProviderMock = new Mock<ITargetProvider>();
             _targetProviderMock.Setup(x => x.PickTarget(It.IsAny<Effect>()))
-                .Returns(Task.FromResult<IEnumerable<Character>>(new[] { _effectTarget.Object }));
+                .Returns(Task.FromResult<IEnumerable<Character>>(new[] { effectTarget.Object }));
             _card = new Card
             {
                 Name = "Resolute strike",

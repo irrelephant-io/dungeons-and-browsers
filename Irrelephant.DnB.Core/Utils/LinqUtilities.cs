@@ -24,17 +24,20 @@ namespace Irrelephant.DnB.Core.Utils
 
         public static IEnumerable<TItem> ForEach<TItem>(this IEnumerable<TItem> items, Action<TItem> action)
         {
-            foreach (var item in items)
+            var itemArray = items as TItem[] ?? items.ToArray();
+            foreach (var item in itemArray)
+            {
                 action(item);
+            }
 
-            return items;
+            return itemArray;
         }
 
-        private static readonly Random _rng = new Random();
+        private static readonly Random Rng = new Random();
 
         public static IEnumerable<TItem> Shuffle<TItem>(this IEnumerable<TItem> items)
         {
-            return items.OrderBy(rng => _rng.Next());
+            return items.OrderBy(rng => Rng.Next());
         }
     }
 }

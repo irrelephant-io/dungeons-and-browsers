@@ -1,5 +1,4 @@
 ﻿@using Irrelephant.DnB.Core.Cards
-@inject IJSRuntime JSRuntime;
 
 <div class="noselect card rounded-card @_selectionClass"
      @ref="CardComponentReference"
@@ -40,14 +39,7 @@
             _selectionClass = string.Empty;
         }
     }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        // Doesnt work but leaving it in as a showcase point
-        if (firstRender)
-            await JSRuntime.InvokeVoidAsync("attachDragEvent", CardComponentReference);
-    }
-
+    
     private void HandleDragStart(DragEventArgs dragEvent)
     {
         dragEvent.DataTransfer.DropEffect = "move";

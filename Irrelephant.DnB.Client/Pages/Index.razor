@@ -1,7 +1,7 @@
 ﻿@page "/"
 @using Irrelephant.DnB.Client.Components
 
-@if (_isReady)
+@if (IsReady)
 {
     <ControlSurface Combat=_combat Controller=_player>
         <CombatView Combat=_combat />

@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Core.Characters;
+using Irrelephant.DnB.Core.Infrastructure;
+using Irrelephant.DnB.Core.Utils;
 
 namespace Irrelephant.DnB.Core.Data.Effects.Library
 {
@@ -20,11 +22,11 @@ namespace Irrelephant.DnB.Core.Data.Effects.Library
             Damage = damage;
         }
 
-        public async override Task Apply(IEnumerable<Character> targets)
+        public async override Task Apply(IEnumerable<Character> targets, IEffector effector = null)
         {
             var characters = targets as Character[] ?? targets.ToArray();
             await base.Apply(characters);
-            characters.Single().DealDamage(Damage);
+            characters.ForEach(c => c.DealDamage(Damage));
         }
     }
 }

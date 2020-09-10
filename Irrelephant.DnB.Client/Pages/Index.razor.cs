@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Core.Cards;
@@ -14,7 +15,7 @@ namespace Irrelephant.DnB.Client.Pages
 {
     public partial class Index : ComponentBase
     {
-        private bool _isReady;
+        public bool IsReady;
 
         private PlayerCharacterController _player;
 
@@ -25,13 +26,13 @@ namespace Irrelephant.DnB.Client.Pages
             if (firstRender)
             {
                 SetupCombat();
-                _isReady = true;
+                IsReady = true;
                 StateHasChanged();
                 await UpdateLoop();
             }
         }
 
-        public async Task UpdateLoop()
+        private async Task UpdateLoop()
         {
             while (!_combat.IsOver)
             {
@@ -53,12 +54,11 @@ namespace Irrelephant.DnB.Client.Pages
                 {
                     new AiController(CharacterLibrary.RagingOrc),
                     new AiController(CharacterLibrary.WretchedGoblin)
-                },
-                Log = new GameLog()
+                }
             };
 
             _combat.Start();
-            _combat.OnActionTaken += () => StateHasChanged();
+            _combat.OnActionTaken += StateHasChanged;
         }
 
         private static PlayerCharacter SetupPlayer()
@@ -69,7 +69,7 @@ namespace Irrelephant.DnB.Client.Pages
                 Name = "Resolute Strike",
                 ActionCost = 2,
                 Effects = new[] { EffectLibrary.Card.AddBlock, EffectLibrary.Card.DealSmallMeleeDamage }
-            }.Copies(3)
+            }.Copies(2)
             .Union(
                 new Card
                 {
@@ -77,8 +77,54 @@ namespace Irrelephant.DnB.Client.Pages
                     Name = "Shiv Throw",
                     ActionCost = 1,
                     Effects = new[] { EffectLibrary.Card.DealSmallDamage }
-                }.Copies(3)
-            );
+                }.Copies(2)
+            )
+            .Union(
+                new Card
+                {
+                    GraphicId = "reckless-assault",
+                    Name = "Reckless Assault",
+                    ActionCost = 1,
+                    Effects = new[] {
+                        EffectLibrary.Card.SelfDamageSmall, EffectLibrary.Card.DealMediumMeleeDamage
+                    }
+                }.Copies(1))
+            .Union(
+                new Card {
+                    GraphicId = "tactical-adaptation",
+                    Name = "Tactical Adaptation",
+                    ActionCost = 1,
+                    Effects = new [] {
+                        EffectLibrary.Card.DrawTwoCards
+                    }
+                }.Copies(2))
+            .Union(
+                new Card {
+                    GraphicId = "rampage",
+                    Name = "RAMPAGE!",
+                    ActionCost = 2,
+                    Effects = new [] {
+                        EffectLibrary.Card.SmallDamageToAllies,
+                        EffectLibrary.Card.MediumDamageToEnemies
+                    }
+                }.Copies(2))
+            .Union(
+                new Card {
+                    GraphicId = "defend",
+                    Name = "Defend",
+                    ActionCost = 1,
+                    Effects = new [] {
+                        EffectLibrary.Card.AddMediumBlock
+                    }
+                }.Copies(3))
+            .Union(new Card {
+                GraphicId = "strike",
+                Name = "Strike",
+                ActionCost = 1,
+                Effects = new [] {
+                    EffectLibrary.Card.DealSmallMeleeDamage
+                }
+            }.Copies(3));
             return new PlayerCharacter
             {
                 GraphicId = "player-0",
@@ -86,7 +132,7 @@ namespace Irrelephant.DnB.Client.Pages
                 MaxHealth = 70,
                 Health = 70,
                 EnergyMax = 4,
-                DrawLimit = 5,
+                DrawLimit = 6,
                 DiscardPile = playerHand
             };
         }

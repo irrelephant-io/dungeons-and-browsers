@@ -1,8 +1,11 @@
 ﻿@using Irrelephant.DnB.Core.Characters.Controller
 @using Irrelephant.DnB.Core.Characters
 
-<div @onclick="HandleClick"
-     class="noselect character rounded-card">
+<div
+    @onclick="HandleClick"
+    id="@Character.Id"
+    class="noselect character rounded-card @_animationClass"
+>
     <p class="character-name">@Character.Name</p>
     <div class="graphic">
         <img src="img/@(Character.GraphicId).png" />
@@ -28,6 +31,8 @@
     [CascadingParameter]
     public ControlSurface ControlSurface { get; set; }
 
+    private string _animationClass;
+
     public void HandleClick()
     {
         ControlSurface.CharacterClicked(Character);
@@ -41,5 +46,23 @@
         }
 
         return string.Empty;
+    }
+
+    public async Task PlayHurtAnimation()
+    {
+        _animationClass = "animation-hurt";
+        StateHasChanged();
+        await Task.Delay(500);
+        _animationClass = string.Empty;
+        StateHasChanged();
+    }
+
+    public async Task PlayActionAnimation()
+    {
+        _animationClass = "animation-action";
+        StateHasChanged();
+        await Task.Delay(500);
+        _animationClass = string.Empty;
+        StateHasChanged();
     }
 }
