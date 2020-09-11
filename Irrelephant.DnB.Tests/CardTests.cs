@@ -37,7 +37,7 @@ namespace Irrelephant.DnB.Tests
             _card = new Card
             {
                 Name = "Resolute strike",
-                               ActionCost = 1,
+                ActionCost = 1,
                 Effects = new[] { _effect1, _effect2 }
             };
             _character.SetupGet(c => c.Hand).Returns(_card.ArrayOf());
@@ -46,7 +46,7 @@ namespace Irrelephant.DnB.Tests
 
         [Fact]
         public async Task Card_CantBePlayed_WhenNotEnoughActions()
-        {  
+        {
             _character.SetupGet(x => x.Energy).Returns(0);
             await Assert.ThrowsAsync<NotEnoughActionsException>(() => _card.Play(_character.Object, _targetProviderMock.Object));
         }

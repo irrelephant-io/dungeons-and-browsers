@@ -25,7 +25,8 @@ namespace Irrelephant.DnB.Client.Components
         public RenderFragment ChildContent { get; set; }
 
         private string _currentPrompt;
-        public string CurrentPrompt {
+
+        private string CurrentPrompt {
             get => _currentPrompt;
             set {
                 _currentPrompt = value;
@@ -141,7 +142,8 @@ namespace Irrelephant.DnB.Client.Components
 
         public Task CreateEffect(EffectType type, Character target)
         {
-            // Welp, not sure how to do that;
+            // TODO: Welp, not sure how to do that
+            // It is tricky to find a component in the hierarchy
             return Task.CompletedTask;
         }
 

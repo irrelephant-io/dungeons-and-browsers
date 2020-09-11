@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Core.Cards;
 using Irrelephant.DnB.Core.Characters;
 using Irrelephant.DnB.Core.Characters.Controller;
 using Irrelephant.DnB.Core.Data.Effects;
 using Irrelephant.DnB.Core.GameFlow;
-using Irrelephant.DnB.Core.Infrastructure;
 using Irrelephant.DnB.Core.Utils;
 using Microsoft.AspNetCore.Components;
 
@@ -24,7 +21,7 @@ namespace Irrelephant.DnB.Client.Pages
         protected async override Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
-            {
+            {   
                 SetupCombat();
                 IsReady = true;
                 StateHasChanged();
