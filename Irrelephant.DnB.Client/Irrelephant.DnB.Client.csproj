@@ -6,18 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\img\goblin-0.png" />
-    <Content Remove="wwwroot\img\goblin-1.png" />
-    <Content Remove="wwwroot\img\orc-0.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\img\goblin-0.png" />
-    <None Include="wwwroot\img\goblin-1.png" />
-    <None Include="wwwroot\img\orc-0.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Build" Version="3.2.1" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="3.2.1" PrivateAssets="all" />
