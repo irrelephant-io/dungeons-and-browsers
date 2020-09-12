@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,9 +22,9 @@ namespace Irrelephant.DnB.Tests
         
         public CombatFlowTests()
         {
-            _attacker = new Mock<AiController>(new NonPlayerCharacter { MaxHealth = 1, Health = 1 });
-            _defender1 = new Mock<AiController>(new NonPlayerCharacter { MaxHealth = 1, Health = 1 });
-            _defender2 = new Mock<AiController>(new NonPlayerCharacter { MaxHealth = 1, Health = 1 });
+            _attacker = new Mock<AiController>(new NonPlayerCharacter { Id = Guid.NewGuid(), MaxHealth = 1, Health = 1 });
+            _defender1 = new Mock<AiController>(new NonPlayerCharacter { Id = Guid.NewGuid(), MaxHealth = 1, Health = 1 });
+            _defender2 = new Mock<AiController>(new NonPlayerCharacter { Id = Guid.NewGuid(), MaxHealth = 1, Health = 1 });
 
             _combat = new Combat
             {

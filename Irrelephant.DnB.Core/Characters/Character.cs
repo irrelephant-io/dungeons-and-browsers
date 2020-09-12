@@ -4,7 +4,7 @@ namespace Irrelephant.DnB.Core.Characters
 {
     public abstract class Character
     {
-        public Guid Id { get; } = Guid.NewGuid();
+        public Guid Id { get; set; }
 
         public string GraphicId { get; set; }
 

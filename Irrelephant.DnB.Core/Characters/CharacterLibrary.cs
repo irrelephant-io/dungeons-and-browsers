@@ -1,4 +1,5 @@
-﻿using Irrelephant.DnB.Core.Data.Effects;
+﻿using System;
+using Irrelephant.DnB.Core.Data.Effects;
 
 namespace Irrelephant.DnB.Core.Characters
 {
@@ -6,6 +7,7 @@ namespace Irrelephant.DnB.Core.Characters
     {
         public static Character VileGoblin = new NonPlayerCharacter
         {
+            Id = Guid.NewGuid(),
             GraphicId = "goblin-0",
             Name = "Vile Goblin", 
             Health = 30, MaxHealth = 30,
@@ -19,6 +21,7 @@ namespace Irrelephant.DnB.Core.Characters
 
         public static Character WretchedGoblin = new NonPlayerCharacter
         {
+            Id = Guid.NewGuid(),
             GraphicId = "goblin-1",
             Name = "Wretched Goblin",
             Health = 25, MaxHealth = 25,
@@ -31,6 +34,7 @@ namespace Irrelephant.DnB.Core.Characters
 
         public static Character RagingOrc = new NonPlayerCharacter
         {
+            Id = Guid.NewGuid(),
             GraphicId = "orc-0",
             Name = "Raging Orc",
             Health = 55,

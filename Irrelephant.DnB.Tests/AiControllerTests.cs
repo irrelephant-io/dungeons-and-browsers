@@ -33,6 +33,7 @@ namespace Irrelephant.DnB.Tests
             _effect2.Setup(e => e.ValidTargets).Returns(Targets.SingleTarget | Targets.Enemy);
             var character = new NonPlayerCharacter
             {
+                Id = Guid.NewGuid(),
                 ActionPool = new[]
                 {
                     _effect1.Object,
@@ -41,7 +42,7 @@ namespace Irrelephant.DnB.Tests
             };
             _controller = new AiController(character);
             _combat = new Mock<Combat>();
-            _mockEnemy = new Mock<AiController>(new NonPlayerCharacter());
+            _mockEnemy = new Mock<AiController>(new NonPlayerCharacter { Id = Guid.NewGuid() });
             _combat.SetupGet(combat => combat.Attackers).Returns(new List<CharacterController> { _mockEnemy.Object });
             _combat.SetupGet(combat => combat.Defenders).Returns(new List<CharacterController> { _controller });
         }
@@ -78,7 +79,8 @@ namespace Irrelephant.DnB.Tests
 
             var controller = new AiController(new NonPlayerCharacter
             {
-                ActionPool = new []
+                Id = Guid.NewGuid(),
+                ActionPool = new[]
                 {
                     selfEffect.Object,
                     friendliesEffect.Object,
@@ -89,15 +91,15 @@ namespace Irrelephant.DnB.Tests
                 }
             });
 
-            var mockFriendly = new Mock<AiController>(new NonPlayerCharacter());
-            var mockEnemy2 = new Mock<AiController>(new NonPlayerCharacter());
+            var mockFriendly = new Mock<AiController>(new NonPlayerCharacter { Id = Guid.NewGuid() });
+            var mockEnemy2 = new Mock<AiController>(new NonPlayerCharacter{ Id = Guid.NewGuid() });
 
             var combat = new Mock<Combat>();
             combat.SetupGet(c => c.Attackers).Returns(new List<CharacterController> { _mockEnemy.Object, mockEnemy2.Object });
             combat.SetupGet(c => c.Defenders).Returns(new List<CharacterController> { controller, mockFriendly.Object });
 
             await controller.Act(combat.Object);
-            AssertionUtilities.OnlyContains(targetList, new [] { controller.Character });
+            AssertionUtilities.OnlyContains(targetList, new[] { controller.Character });
             targetList.Clear();
 
             await controller.Act(combat.Object);
@@ -137,6 +139,7 @@ namespace Irrelephant.DnB.Tests
             mockAnotherAmbiguousEffect.SetupGet(x => x.EffectType).Returns(EffectType.Buff);
             var controller = new AiController(new NonPlayerCharacter
             {
+                Id = Guid.NewGuid(),
                 ActionPool = new[] { mockAmbiguousEffect.Object, mockAnotherAmbiguousEffect.Object }
             });
             var combat = new Mock<Combat>();
@@ -144,7 +147,7 @@ namespace Irrelephant.DnB.Tests
             combat.SetupGet(c => c.Defenders).Returns(new List<CharacterController> { controller });
 
             await controller.Act(combat.Object);
-            AssertionUtilities.OnlyContains(targetList, new [] { _mockEnemy.Object.Character });
+            AssertionUtilities.OnlyContains(targetList, new[] { _mockEnemy.Object.Character });
             targetList.Clear();
 
             await controller.Act(combat.Object);

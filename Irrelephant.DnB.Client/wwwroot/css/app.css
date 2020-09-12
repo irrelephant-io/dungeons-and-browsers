@@ -94,7 +94,7 @@
         height: 100px;
     }
 
-.rounded-card {
+.rounded-card { 
     -ms-border-radius: 15px;
     border-radius: 15px;
 }

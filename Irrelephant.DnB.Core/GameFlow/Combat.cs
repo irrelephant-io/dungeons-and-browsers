@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Irrelephant.DnB.Core.Characters;
 using Irrelephant.DnB.Core.Characters.Controller;
 using Irrelephant.DnB.Core.Infrastructure;
 using Irrelephant.DnB.Core.Utils;
@@ -19,6 +20,14 @@ namespace Irrelephant.DnB.Core.GameFlow
         public int Round { get; private set; } = 1;
 
         public event Action OnActionTaken;
+
+
+        protected Character FindCharacterById(Guid id)
+        {
+            return (Attackers.FirstOrDefault(a => a.Character.Id == id)
+                    ?? Defenders.FirstOrDefault(d => d.Character.Id == id))
+                ?.Character;
+        }
 
         public void Start()
         {
