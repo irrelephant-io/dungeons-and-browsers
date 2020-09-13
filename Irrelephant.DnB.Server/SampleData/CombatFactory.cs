@@ -16,25 +16,43 @@ namespace Irrelephant.DnB.Server.SampleData
             return new CombatSnapshot
             {
                 Id = combat.CombatId,
+                ActiveCharacterId = combat.FindController(cc => cc.Character is PlayerCharacter).Character.Id,
                 Turn = combat.Round,
-                Attackers = combat.Attackers.Select(cc => cc.Character).Select(character => new CharacterSnapshot
-                {
-                    Id = character.Id,
-                    Name = character.Name,
-                    GraphicId = character.GraphicId,
-                    Health = character.Health,
-                    MaxHealth = character.MaxHealth
-                }).ToArray(),
-                Defenders = combat.Defenders.Select(cc => cc.Character).Select(character =>
-                    new CharacterSnapshot
-                    {
-                        Id = character.Id,
-                        Name = character.Name,
-                        GraphicId = character.GraphicId,
-                        Health = character.Health,
-                        MaxHealth = character.MaxHealth
-                    }).ToArray()
+                Attackers = combat.Attackers.Select(cc => cc.Character).Select(GetCharacterSnapshot).ToArray(),
+                Defenders = combat.Defenders.Select(cc => cc.Character).Select(GetCharacterSnapshot).ToArray()
             };
+        }
+
+        private static CharacterSnapshot GetCharacterSnapshot(Character character)
+        {
+            var snap = new CharacterSnapshot
+            {
+                Id = character.Id,
+                Name = character.Name,
+                GraphicId = character.GraphicId,
+                Health = character.Health,
+                MaxHealth = character.MaxHealth
+            };
+            if (character is PlayerCharacter pc)
+            {
+                snap.Deck = GetDeckSnapshot(pc);
+            }
+
+            return snap;
+        }
+
+        private static DeckSnapshot GetDeckSnapshot(PlayerCharacter character)
+        {
+            return new DeckSnapshot {
+                Hand = character.Hand.Select(MapCard).ToArray(),
+                DiscardPile = character.DiscardPile.Select(MapCard).ToArray(),
+                DrawPile = character.DrawPile.Select(MapCard).ToArray()
+            };
+        }
+
+        private static CardSnapshot MapCard(Card card)
+        {
+            return new CardSnapshot { Id = card.Id, ActionCost = card.ActionCost, GraphicId = card.GraphicId, Name = card.Name, Text = card.Text };
         }
 
         public static Combat BuildCombat()
@@ -124,7 +142,7 @@ namespace Irrelephant.DnB.Server.SampleData
                 Effects = new[] {
                     EffectLibrary.Card.DealSmallMeleeDamage
                 }
-            }.Copies(3));
+            }.Copies(3)).ToArray();
             return new PlayerCharacter
             {
                 GraphicId = "player-0",
@@ -133,7 +151,8 @@ namespace Irrelephant.DnB.Server.SampleData
                 Health = 70,
                 EnergyMax = 4,
                 DrawLimit = 6,
-                DiscardPile = playerHand
+                Hand = playerHand.Take(6).ToArray(),
+                DiscardPile = playerHand.Skip(6).ToArray()
             };
         }
     }

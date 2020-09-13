@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Irrelephant.DnB.Core.Cards;
 using Irrelephant.DnB.Core.Characters;
+using Irrelephant.DnB.Core.Characters.Controller;
 using Irrelephant.DnB.Core.GameFlow;
 using Irrelephant.DnB.Core.Networking;
 
@@ -12,6 +14,8 @@ namespace Irrelephant.DnB.Client.Networking
         public bool MyTurn { get; private set; }
 
         public bool IsReady { get; private set; }
+
+        public Guid MyId { get; private set; }
 
         private readonly IRemoteCombatListener _remoteCombatListener;
 
@@ -38,10 +42,9 @@ namespace Irrelephant.DnB.Client.Networking
 
         private void OnJoinedCombat(CombatSnapshot snapshot)
         {
-            Console.WriteLine("Got snapshot!");
-            Attackers = snapshot.Attackers.Select(c => new RemoteCharacterController(MapCharacter(c))).ToArray();
-            Defenders = snapshot.Defenders.Select(c => new RemoteCharacterController(MapCharacter(c))).ToArray();
-            Console.WriteLine(Attackers.Count());
+            MyId = snapshot.ActiveCharacterId;
+            Attackers = snapshot.Attackers.Select(MapCharacter).ToArray();
+            Defenders = snapshot.Defenders.Select(MapCharacter).ToArray();
             IsReady = true;
             NotifyUpdate();
         }
@@ -56,14 +59,38 @@ namespace Irrelephant.DnB.Client.Networking
             NotifyUpdate();
         }
 
-        private Character MapCharacter(CharacterSnapshot snapshot)
+        private CharacterController MapCharacter(CharacterSnapshot snapshot)
         {
-            return new NonPlayerCharacter {
+            var character = snapshot.Id == MyId
+                ? new PlayerCharacter() as Character
+                : new NonPlayerCharacter();
+
+            character.Id = snapshot.Id;
+            character.Name = snapshot.Name;
+            character.Health = snapshot.Health;
+            character.MaxHealth = snapshot.MaxHealth;
+            character.GraphicId = snapshot.GraphicId;
+
+            if (character is PlayerCharacter pc)
+            {
+                pc.Hand = snapshot.Deck.Hand.Select(MapCard).ToArray();
+                pc.DiscardPile = snapshot.Deck.DiscardPile.Select(MapCard).ToArray();
+                pc.DrawPile = snapshot.Deck.DrawPile.Select(MapCard).ToArray();
+                return new PlayerCharacterController(pc);
+            }
+
+            return new RemoteCharacterController(character);
+        }
+
+        private Card MapCard(CardSnapshot snapshot)
+        {
+            return new ClientCard
+            {
                 Id = snapshot.Id,
+                ActionCost = snapshot.ActionCost,
+                GraphicId = snapshot.GraphicId,
                 Name = snapshot.Name,
-                Health = snapshot.Health,
-                MaxHealth = snapshot.MaxHealth,
-                GraphicId = snapshot.GraphicId
+                RemoteText = snapshot.Text
             };
         }
     }

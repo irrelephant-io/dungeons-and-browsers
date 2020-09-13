@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Irrelephant.DnB.Core.GameFlow;
 using Irrelephant.DnB.Server.SampleData;
 using Microsoft.AspNetCore.SignalR;

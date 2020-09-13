@@ -1,4 +1,6 @@
-﻿<CascadingValue Value="this">
+﻿@if (Combat.IsReady)
+{
+<CascadingValue Value="this">
     <div class="combat @_targetPickingClass">
         @ChildContent
     </div>
@@ -17,7 +19,7 @@
             @foreach (var card in Player.Hand)
             {
                 <div class="rotate-container @GetRotationStyle(index)">
-                    <CardView Card=card />
+                    <CardView Card=card/>
                 </div>
                 index++;
             }
@@ -25,3 +27,4 @@
         <button @onclick="EndTurn">END TURN</button>
     </div>
 </CascadingValue>
+}

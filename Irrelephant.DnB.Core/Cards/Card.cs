@@ -13,17 +13,19 @@ namespace Irrelephant.DnB.Core.Cards
 {
     public class Card : ICopyable<Card>
     {
+        public Guid Id { get; set; }
+
         public string GraphicId { get; set; }
 
         public string Name { get; set; }
 
-        public string Text => string.Join(Environment.NewLine, Effects.Select(e => e.Name));
+        public virtual string Text => string.Join(Environment.NewLine, Effects.Select(e => e.Name));
 
         public int ActionCost { get; set; }
 
         public IEnumerable<Effect> Effects { get; set; }
 
-        public async Task Play(PlayerCharacter player, ITargetProvider targetProvider)
+        public async virtual Task Play(PlayerCharacter player, ITargetProvider targetProvider)
         {
             if (player.Energy >= ActionCost)
             {

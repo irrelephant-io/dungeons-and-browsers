@@ -27,11 +27,19 @@ namespace Irrelephant.DnB.Core.GameFlow
             OnUpdate?.Invoke();
         }
 
-        protected Character FindCharacterById(Guid id)
+        public Character FindCharacterById(Guid id)
         {
-            return (Attackers.FirstOrDefault(a => a.Character.Id == id)
-                    ?? Defenders.FirstOrDefault(d => d.Character.Id == id))
-                ?.Character;
+            return FindControllerByCharacterId(id)?.Character;
+        }
+
+        public CharacterController FindControllerByCharacterId(Guid id)
+        {
+            return FindController(cc => cc.Character.Id == id);
+        }
+
+        public CharacterController FindController(Func<CharacterController, bool> predicate)
+        {
+            return Attackers.FirstOrDefault(predicate) ?? Defenders.FirstOrDefault(predicate);
         }
 
         public void Start()

@@ -19,9 +19,6 @@ namespace Irrelephant.DnB.Client.Shared
         public ClientCombat Combat { get; set; }
 
         [Parameter]
-        public PlayerCharacterController Controller { get; set; }
-
-        [Parameter]
         public RenderFragment ChildContent { get; set; }
 
         private string _currentPrompt;
@@ -36,7 +33,9 @@ namespace Irrelephant.DnB.Client.Shared
 
         public Card PlayedCard { get; set; }
 
-        private PlayerCharacter Player => (PlayerCharacter)Controller.Character;
+        private PlayerCharacter Player => (PlayerCharacter)Combat.FindCharacterById(Combat.MyId);
+
+        private PlayerCharacterController Controller => (PlayerCharacterController)Combat.FindControllerByCharacterId(Combat.MyId);
 
         private TaskCompletionSource<IEnumerable<Character>> _targetPickingPromise;
 
@@ -44,7 +43,7 @@ namespace Irrelephant.DnB.Client.Shared
 
         private async Task EndTurn()
         {
-            await Controller.EndTurn();
+            await Combat.EndTurn();
         }
 
         public Task<IEnumerable<Character>> PickTarget(Effect e)

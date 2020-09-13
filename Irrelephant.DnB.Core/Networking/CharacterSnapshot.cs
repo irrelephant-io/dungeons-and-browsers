@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace Irrelephant.DnB.Core.Networking
 {
-   // [DataContract]
+    [DataContract]
     public class CharacterSnapshot
     {
         [DataMember(Name = "id", IsRequired = true)]
@@ -20,6 +20,9 @@ namespace Irrelephant.DnB.Core.Networking
 
         [DataMember(Name = "maxHealth")]
         public int MaxHealth { get; set; }
+
+        [DataMember(Name = "deck")]
+        public DeckSnapshot Deck { get; set; }
 
         [DataMember(Name = "intent", IsRequired = false)]
         public string Intent { get; set; }

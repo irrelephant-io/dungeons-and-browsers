@@ -3,6 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Client.Networking;
 using Irrelephant.DnB.Client.Tests.Mocks;
+using Irrelephant.DnB.Core.Characters;
+using Irrelephant.DnB.Core.Characters.Controller;
 using Irrelephant.DnB.Core.Exceptions;
 using Moq;
 using Xunit;
@@ -49,6 +51,17 @@ namespace Irrelephant.DnB.Client.Tests
         }
 
         [Fact]
+        public async Task ShouldReceiveMyCharacterId_WhenJoiningCombat()
+        {
+            await AssertExtensions.Eventually(() => {
+                Assert.Equal(FakeCombat.Object.ActiveCharacterId, _combat.MyId);
+                var pcController = _combat.Attackers.First(c => c.Character.Id == _combat.MyId);
+                Assert.IsAssignableFrom<PlayerCharacterController>(pcController);
+                Assert.IsAssignableFrom<PlayerCharacter>(pcController.Character);
+            });
+        }
+
+        [Fact]
         public async Task ShouldGetNotified_WhenYourTurnStarts()
         {
             await StableState();
@@ -59,12 +72,25 @@ namespace Irrelephant.DnB.Client.Tests
         }
 
         [Fact]
-        public async Task ShouldBeAbleToAct_OnlyWhenYourTurn()
+        public async Task ShouldBeAbleToAct_OnlyDuringYourTurn()
         {
             await StableState();
             await Assert.ThrowsAsync<NotMyTurnException>(() => _combat.EndTurn());
             await MyTurn();
             await _combat.EndTurn();
+        }
+
+        [Fact]
+        public async Task ShouldFillOutDeckForMyCharacter_OnJoiningCombat()
+        {
+            await StableState();
+            var myChar = (PlayerCharacter)_combat.FindCharacterById(_combat.MyId);
+            Assert.NotEmpty(myChar.DiscardPile);
+            Assert.Equal(FakeCombat.Deck.Card1.CardId, myChar.DiscardPile.Single().Id);
+            Assert.NotEmpty(myChar.DrawPile);
+            Assert.Equal(FakeCombat.Deck.Card2.CardId, myChar.DrawPile.Single().Id);
+            Assert.NotEmpty(myChar.Hand);
+            Assert.Equal(FakeCombat.Deck.Card3.CardId, myChar.Hand.Single().Id);
         }
 
         [Fact]
