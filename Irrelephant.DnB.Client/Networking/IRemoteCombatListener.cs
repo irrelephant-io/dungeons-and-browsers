@@ -10,6 +10,12 @@ namespace Irrelephant.DnB.Client.Networking
 
         event Action<CharacterSnapshot> OnCharacterUpdated;
 
-        public Task NotifyJoined();
+        event Action OnMyTurn;
+
+        public Task NotifyJoinedAsync();
+
+        public Task<bool> NotifyEndTurnAsync();
+
+        public Task StartAsync();
     }
 }

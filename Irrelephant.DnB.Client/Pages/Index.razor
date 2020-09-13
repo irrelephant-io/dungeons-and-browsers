@@ -1,11 +1,12 @@
 ﻿@page "/"
-@using Irrelephant.DnB.Client.Components
+@using Irrelephant.DnB.Client.Shared
+@inject NavigationManager Navigation
 
 @if (IsReady)
 {
-    <ControlSurface Combat=_combat Controller=_player>
+    //<ControlSurface Combat=_combat Controller=_pc>
         <CombatView Combat=_combat />
-    </ControlSurface>
+    //</ControlSurface>
 }
 else
 {

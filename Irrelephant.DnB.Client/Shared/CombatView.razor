@@ -1,0 +1,20 @@
+﻿@using Irrelephant.DnB.Client.Shared
+
+@if (Combat != null && Combat.IsReady)
+{
+    <div class="combat-view">
+        <div class="character-row attackers">
+            @foreach (var attacker in Combat.Attackers)
+            {
+                <CharacterView CharacterController="attacker"/>
+            }
+        </div>
+
+        <div class="character-row defenders">
+            @foreach (var defender in Combat.Defenders)
+            {
+                <CharacterView CharacterController="defender"/>
+            }
+        </div>
+    </div>
+}

@@ -14,11 +14,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irrelephant.DnB.Server", "Irrelephant.DnB.Server\Irrelephant.DnB.Server.csproj", "{B241973C-E04E-41F9-A5DB-2F71B419D395}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Irrelephant.DnB.Server", "Irrelephant.DnB.Server\Irrelephant.DnB.Server.csproj", "{B241973C-E04E-41F9-A5DB-2F71B419D395}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irrelephant.DnB.Client.Tests", "Irrelephant.DnB.Client.Tests\Irrelephant.DnB.Client.Tests.csproj", "{AB087C49-D5A2-43AC-A633-4247C82F3FC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Irrelephant.DnB.Client.Tests", "Irrelephant.DnB.Client.Tests\Irrelephant.DnB.Client.Tests.csproj", "{AB087C49-D5A2-43AC-A633-4247C82F3FC7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{16731B05-AC83-47E3-A829-B9F8A3974659}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irrelephant.DnB.Server.Tests", "Irrelephant.DnB.Server.Tests\Irrelephant.DnB.Server.Tests.csproj", "{91081D4C-A458-46A6-AEA4-B69DC2AAAD44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,6 +48,10 @@ Global
 		{AB087C49-D5A2-43AC-A633-4247C82F3FC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB087C49-D5A2-43AC-A633-4247C82F3FC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB087C49-D5A2-43AC-A633-4247C82F3FC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91081D4C-A458-46A6-AEA4-B69DC2AAAD44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91081D4C-A458-46A6-AEA4-B69DC2AAAD44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91081D4C-A458-46A6-AEA4-B69DC2AAAD44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91081D4C-A458-46A6-AEA4-B69DC2AAAD44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,6 +59,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{60A72F61-46EC-4838-AA98-CACD4A9BC91A} = {16731B05-AC83-47E3-A829-B9F8A3974659}
 		{AB087C49-D5A2-43AC-A633-4247C82F3FC7} = {16731B05-AC83-47E3-A829-B9F8A3974659}
+		{91081D4C-A458-46A6-AEA4-B69DC2AAAD44} = {16731B05-AC83-47E3-A829-B9F8A3974659}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {06401C31-9C07-4004-9339-4FDBBA221CEB}

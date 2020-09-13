@@ -1,13 +1,30 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Irrelephant.DnB.Core.GameFlow;
+using Irrelephant.DnB.Server.SampleData;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Irrelephant.DnB.Server.Hubs
 {
-    public class CombatHub : Hub
+    public class CombatHub : Hub<ICombatClient>
     {
-        public async Task SendMessage(string user, string message)
+        private Combat _combat;
+
+        public CombatHub()
         {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            _combat = CombatFactory.BuildCombat();
+        }
+
+        public async Task JoinCombat()
+        {
+            await Clients.Caller.Joined(_combat.GetSnapshot());
+        }
+
+        public async Task EndTurn()
+        {
+            await Task.Delay(1000);
+            await Clients.Caller.MyTurn();
         }
     }
 }

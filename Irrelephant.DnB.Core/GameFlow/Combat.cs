@@ -4,23 +4,28 @@ using System.Linq;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Core.Characters;
 using Irrelephant.DnB.Core.Characters.Controller;
-using Irrelephant.DnB.Core.Infrastructure;
 using Irrelephant.DnB.Core.Utils;
 
 namespace Irrelephant.DnB.Core.GameFlow
 {
     public class Combat
     {
+        public static Guid GlobalCombatId = new Guid("5e575388-e9cb-400c-880d-718984dc31f5");
+        
+        public Guid CombatId { get; } = GlobalCombatId;
+
         public virtual IEnumerable<CharacterController> Attackers { get; set; }
 
         public virtual IEnumerable<CharacterController> Defenders { get; set; }
 
-        public IEffector Effector { get; set; }
-
         public int Round { get; private set; } = 1;
 
-        public event Action OnActionTaken;
+        public event Action OnUpdate;
 
+        protected void NotifyUpdate()
+        {
+            OnUpdate?.Invoke();
+        }
 
         protected Character FindCharacterById(Guid id)
         {
@@ -31,8 +36,8 @@ namespace Irrelephant.DnB.Core.GameFlow
 
         public void Start()
         {
-            Attackers.ForEach(a => a.OnAction += () => OnActionTaken?.Invoke());
-            Defenders.ForEach(d => d.OnAction += () => OnActionTaken?.Invoke());
+            Attackers.ForEach(a => a.OnAction += NotifyUpdate);
+            Defenders.ForEach(d => d.OnAction += NotifyUpdate);
         }
 
         public async Task ResolveRound()

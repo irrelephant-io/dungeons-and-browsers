@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Irrelephant.DnB.Server.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +25,13 @@ namespace Irrelephant.DnB.Server
             services.AddResponseCompression(options =>
                 options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new [] {"application/octet-stream" })
             );
+            services.AddCors(options => options.AddPolicy("DefaultCorsPolicy", builder =>
+            {
+                builder.AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                    .WithOrigins("https://localhost:44325");
+            }));
             services.AddControllers();
         }
 
@@ -45,6 +47,7 @@ namespace Irrelephant.DnB.Server
             app.UseRouting();
             app.UseAuthorization();
             app.UseResponseCompression();
+            app.UseCors("DefaultCorsPolicy");
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

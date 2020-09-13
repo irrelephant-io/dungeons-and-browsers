@@ -1,18 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Irrelephant.DnB.Core.Networking
 {
+    [DataContract]
     public class CombatSnapshot
     {
-        public Guid Id;
+        [DataMember(Name = "id", IsRequired = true)]
+        public Guid Id { get; set; }
 
-        public IEnumerable<CharacterSnapshot> Attackers;
+        [DataMember(Name = "attackers")]
+        public CharacterSnapshot[] Attackers { get; set; }
 
-        public IEnumerable<CharacterSnapshot> Defenders;
+        [DataMember(Name = "defenders")]
+        public CharacterSnapshot[] Defenders { get; set; }
 
-        public Guid ActiveCharacterId;
+        [DataMember(Name = "activeCharacterId")]
+        public Guid ActiveCharacterId { get; set; }
 
-        public int Turn;
+        [DataMember(Name = "turn", IsRequired = true)]
+        public int Turn { get; set; }
     }
 }
