@@ -84,7 +84,7 @@ namespace Irrelephant.DnB.Client.Tests
         public async Task ShouldFillOutDeckForMyCharacter_OnJoiningCombat()
         {
             await StableState();
-            var myChar = (PlayerCharacter)_combat.FindCharacterById(_combat.MyId);
+            var myChar = _combat.MyCharacter;
             Assert.NotEmpty(myChar.DiscardPile);
             Assert.Equal(FakeCombat.Deck.Card1.CardId, myChar.DiscardPile.Single().Id);
             Assert.NotEmpty(myChar.DrawPile);
@@ -100,6 +100,43 @@ namespace Irrelephant.DnB.Client.Tests
             _combat.OnUpdate += () => isFired = true;
             await AssertExtensions.Eventually(() => {
                 Assert.True(isFired);
+            });
+        }
+
+        [Fact]
+        public async Task ShouldDrawCard_WhenReceivingDrawCardMessage()
+        {
+            await StableState();
+            _listener.Raise(l => l.OnDrawCard += null, FakeCombat.Deck.Card2.CardId);
+            var myChar = _combat.MyCharacter;
+            await AssertExtensions.Eventually(() => {
+                Assert.Contains(myChar.Hand, c => c.Id == FakeCombat.Deck.Card2.CardId);
+                Assert.DoesNotContain(myChar.DrawPile, c => c.Id == FakeCombat.Deck.Card2.CardId);
+            });
+        }
+
+        [Fact]
+        public async Task ShouldDiscardCard_WhenReceivingDiscardCardMessage()
+        {
+            await StableState();
+            _listener.Raise(l => l.OnDiscardCard += null, FakeCombat.Deck.Card3.CardId);
+            var myChar = _combat.MyCharacter;
+            await AssertExtensions.Eventually(() => {
+                Assert.DoesNotContain(myChar.Hand, c => c.Id == FakeCombat.Deck.Card3.CardId);
+                Assert.Contains(myChar.DiscardPile, c => c.Id == FakeCombat.Deck.Card3.CardId);
+            });
+        }
+
+        [Fact]
+        public async Task ShouldPutAllCardIntoDrawPile_OnReshuffle()
+        {
+            await StableState();
+            _listener.Raise(l => l.OnReshuffleDiscardPile += null);
+            var myChar = _combat.MyCharacter;
+            await AssertExtensions.Eventually(() => {
+                Assert.Empty(myChar.DiscardPile);
+                Assert.Contains(myChar.DrawPile, c => c.Id == FakeCombat.Deck.Card1.CardId);
+                Assert.Contains(myChar.DrawPile, c => c.Id == FakeCombat.Deck.Card2.CardId);
             });
         }
 

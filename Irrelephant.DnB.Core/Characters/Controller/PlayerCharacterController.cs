@@ -1,7 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Irrelephant.DnB.Core.GameFlow;
-using Irrelephant.DnB.Core.Utils;
 
 namespace Irrelephant.DnB.Core.Characters.Controller
 {
@@ -15,23 +13,15 @@ namespace Irrelephant.DnB.Core.Characters.Controller
 
         public override Task Act(Combat combat)
         {
-            var player = Character as PlayerCharacter;
-            player.Energy = player.EnergyMax;
             _turnPromise = new TaskCompletionSource<bool>();
             InvokeOnAction();
-            return Task.WhenAll(DrawCards(player), _turnPromise.Task);
+            return _turnPromise.Task;
         }
 
-        private static async Task DrawCards(PlayerCharacter player)
+        public Task EndTurn()
         {
-            await player.Draw(player.DrawLimit);
-        }
-
-        public async Task EndTurn()
-        {
-            var player = Character as PlayerCharacter;
-            await player.Hand.Sequentially(card => player.Discard(card));
             _turnPromise?.SetResult(true);
+            return Task.CompletedTask;
         }
     }
 }

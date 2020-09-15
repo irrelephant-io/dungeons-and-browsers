@@ -4,4 +4,12 @@
     <InstrumentationMode>Optimised</InstrumentationMode>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
+  <EngineModes>
+    <EngineMode>
+      <Name>Continuous Unit Tests / Manual Integration Tests</Name>
+      <Settings>
+        <TestsToExecuteAutomatically>DoesNotHaveCategory 'Integration'</TestsToExecuteAutomatically>
+      </Settings>
+    </EngineMode>
+  </EngineModes>
 </SolutionConfiguration>

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Irrelephant.DnB.Client.Networking;
 using Irrelephant.DnB.Core.Exceptions;
 using Moq;
@@ -20,7 +21,7 @@ namespace Irrelephant.DnB.Client.Tests.Mocks
 
         private void SetupNotifyEndTurn()
         {
-            Setup(l => l.NotifyEndTurnAsync())
+            Setup(l => l.NotifyEndTurnAsync(It.IsAny<Guid>()))
                 .Callback(async () =>
                 {
                     if (!_isMyTurn)

@@ -23,7 +23,7 @@ namespace Irrelephant.DnB.Core.Characters
 
         public virtual Task Discard(Card card)
         {
-            // Can only discard card thats actually in hand
+            // Can only discard card that's actually in hand
             var cardInHand = Hand.First(c => c == card);
             Hand = Hand.Where(c => c != cardInHand);
             DiscardPile = DiscardPile.Union(cardInHand.ArrayOf()).ToArray();
@@ -32,12 +32,19 @@ namespace Irrelephant.DnB.Core.Characters
             return Task.CompletedTask;
         }
 
-        public virtual Task Draw()
+        public async virtual Task DiscardHand()
+        {
+            while (Hand.Any())
+            {
+                await Discard(Hand.First());
+            }
+        }
+
+        public async virtual Task<Card> Draw()
         {
             if (!DrawPile.Any())
             {
-                DrawPile = DiscardPile.Shuffle().ToArray();
-                DiscardPile = new Card[0];
+                await ReshuffleDiscard();
             }
 
             if (!DrawPile.Any())
@@ -48,6 +55,13 @@ namespace Irrelephant.DnB.Core.Characters
             var cardToDraw = DrawPile.First();
             Hand = cardToDraw.ArrayOf().Union(Hand).ToArray();
             DrawPile = DrawPile.Where(c => c != cardToDraw).ToArray();
+            return cardToDraw;
+        }
+
+        protected virtual Task ReshuffleDiscard()
+        {
+            DrawPile = DiscardPile.Shuffle().ToArray();
+            DiscardPile = new Card[0];
             return Task.CompletedTask;
         }
 
@@ -56,6 +70,11 @@ namespace Irrelephant.DnB.Core.Characters
             await Enumerable
                 .Range(0, count)
                 .Sequentially(_ => Draw());
+        }
+
+        public async Task DrawHand()
+        {
+            await Draw(DrawLimit);
         }
     }
 }

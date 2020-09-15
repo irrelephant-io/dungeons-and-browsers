@@ -26,7 +26,7 @@ namespace Irrelephant.DnB.Core.Data.Effects.Library
         {
             var characters = targets as Character[] ?? targets.ToArray();
             await base.Apply(characters);
-            characters.ForEach(c => c.DealDamage(Damage));
+            await characters.Sequentially(c => c.DealDamage(Damage));
         }
     }
 }

@@ -71,5 +71,28 @@ namespace Irrelephant.DnB.Tests
             Assert.True(_combat.IsOver);
             Assert.Empty(_combat.Defenders);
         }
+
+        [Fact]
+        public async Task CombatShould_AddNewCombatants_InTheBeginningOfTheRound_WhenCombatUnderway()
+        {
+            await _combat.Start();
+            var extraAttacker = new Mock<AiController>(new NonPlayerCharacter { Id = Guid.NewGuid() });
+            var extraDefender = new Mock<AiController>(new NonPlayerCharacter { Id = Guid.NewGuid() });
+            await _combat.AddAttacker(position: 0, extraAttacker.Object);
+            await _combat.AddDefender(position: 0, extraDefender.Object);
+            Assert.DoesNotContain(extraAttacker.Object, _combat.Combatants);
+            Assert.DoesNotContain(extraDefender.Object, _combat.Combatants);
+            await _combat.ResolveRound();
+            Assert.Contains(extraAttacker.Object, _combat.Combatants);
+            Assert.Contains(extraDefender.Object, _combat.Combatants);
+        }
+
+        [Fact]
+        public async Task CombatShould_PutCombatantsInAction_UntilStarted()
+        {
+            var extraAttacker = new Mock<AiController>(new NonPlayerCharacter { Id = Guid.NewGuid() });
+            await _combat.AddAttacker(position: 0, extraAttacker.Object);
+            Assert.Contains(extraAttacker.Object, _combat.Combatants);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Irrelephant.DnB.Core.Cards;
 using Irrelephant.DnB.Core.Characters;
 using Irrelephant.DnB.Core.Characters.Controller;
@@ -6,6 +7,10 @@ using Irrelephant.DnB.Core.Data.Effects;
 using Irrelephant.DnB.Core.GameFlow;
 using Irrelephant.DnB.Core.Networking;
 using Irrelephant.DnB.Core.Utils;
+using Irrelephant.DnB.Server.Hubs;
+using Irrelephant.DnB.Server.Networking;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Irrelephant.DnB.Server.SampleData
 {
@@ -16,14 +21,13 @@ namespace Irrelephant.DnB.Server.SampleData
             return new CombatSnapshot
             {
                 Id = combat.CombatId,
-                ActiveCharacterId = combat.FindController(cc => cc.Character is PlayerCharacter).Character.Id,
                 Turn = combat.Round,
-                Attackers = combat.Attackers.Select(cc => cc.Character).Select(GetCharacterSnapshot).ToArray(),
-                Defenders = combat.Defenders.Select(cc => cc.Character).Select(GetCharacterSnapshot).ToArray()
+                Attackers = combat.Attackers.Select(cc => cc.Character).Select(c => GetCharacterSnapshot(c)).ToArray(),
+                Defenders = combat.Defenders.Select(cc => cc.Character).Select(c => GetCharacterSnapshot(c)).ToArray(),
             };
         }
 
-        private static CharacterSnapshot GetCharacterSnapshot(Character character)
+        public static CharacterSnapshot GetCharacterSnapshot(Character character, bool sendDeck = true)
         {
             var snap = new CharacterSnapshot
             {
@@ -33,7 +37,7 @@ namespace Irrelephant.DnB.Server.SampleData
                 Health = character.Health,
                 MaxHealth = character.MaxHealth
             };
-            if (character is PlayerCharacter pc)
+            if (sendDeck && character is PlayerCharacter pc)
             {
                 snap.Deck = GetDeckSnapshot(pc);
             }
@@ -57,12 +61,10 @@ namespace Irrelephant.DnB.Server.SampleData
 
         public static Combat BuildCombat()
         {
-            var player = new PlayerCharacterController(SetupPlayer());
-            var combat = new Combat
+            return new Combat
             {
                 Attackers = new CharacterController[]
                 {
-                    player,
                     new AiController(CharacterLibrary.VileGoblin)
                 },
                 Defenders = new[]
@@ -71,11 +73,9 @@ namespace Irrelephant.DnB.Server.SampleData
                     new AiController(CharacterLibrary.WretchedGoblin)
                 }
             };
-            combat.Start();
-            return combat;
         }
 
-        private static PlayerCharacter SetupPlayer()
+        public static RemotePlayerCharacter SetupPlayer(IServiceProvider services)
         {
             var playerHand = new Card
             {
@@ -142,17 +142,17 @@ namespace Irrelephant.DnB.Server.SampleData
                 Effects = new[] {
                     EffectLibrary.Card.DealSmallMeleeDamage
                 }
-            }.Copies(3)).ToArray();
-            return new PlayerCharacter
+            }.Copies(3)).ToArray().ForEach(card => card.Id = Guid.NewGuid());
+            return new RemotePlayerCharacter(services.GetRequiredService<IHubContext<CombatHub>>())
             {
+                Id = Guid.NewGuid(),
                 GraphicId = "player-0",
                 Name = "Player",
                 MaxHealth = 70,
                 Health = 70,
                 EnergyMax = 4,
                 DrawLimit = 6,
-                Hand = playerHand.Take(6).ToArray(),
-                DiscardPile = playerHand.Skip(6).ToArray()
+                DrawPile = playerHand
             };
         }
     }

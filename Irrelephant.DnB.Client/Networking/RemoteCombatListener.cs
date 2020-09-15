@@ -13,7 +13,7 @@ namespace Irrelephant.DnB.Client.Networking
         public RemoteCombatListener(NavigationManager navigationManager)
         {
             _connection = new HubConnectionBuilder()
-                .WithUrl("https://localhost:5001/combat")
+                .WithUrl("https://localhost:44364/combat")
                 .Build();
             SetupEventListeners();
         }
@@ -23,24 +23,31 @@ namespace Irrelephant.DnB.Client.Networking
             _connection.On<CombatSnapshot>("Joined", snapshot => OnJoinedCombat?.Invoke(snapshot));
             _connection.On<CharacterSnapshot>("CharacterUpdated", snapshot => OnCharacterUpdated?.Invoke(snapshot));
             _connection.On("MyTurn", () => OnMyTurn?.Invoke());
+            _connection.On<Guid>("DrawCard", cardId => OnDrawCard?.Invoke(cardId));
+            _connection.On<Guid>("DiscardCard", cardId => OnDiscardCard?.Invoke(cardId));
+            _connection.On("ReshuffleDiscardPile", () => OnReshuffleDiscardPile?.Invoke());
         }
 
         public event Action<CombatSnapshot> OnJoinedCombat;
 
         public event Action<CharacterSnapshot> OnCharacterUpdated;
 
+        public event Action<Guid> OnDrawCard;
+
+        public event Action<Guid> OnDiscardCard;
+
+        public event Action OnReshuffleDiscardPile;
+
         public event Action OnMyTurn;
 
         public async Task NotifyJoinedAsync()
         {
-            Console.WriteLine("Joining combat!");
             await _connection.SendAsync("JoinCombat");
-            Console.WriteLine("Request sent!");
         }
 
-        public async Task<bool> NotifyEndTurnAsync()
+        public async Task<bool> NotifyEndTurnAsync(Guid combatId)
         {
-            await _connection.SendAsync("EndTurn");
+            await _connection.SendAsync("EndTurn", combatId);
             return true;
         }
 

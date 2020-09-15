@@ -1,16 +1,21 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using DeepEqual.Syntax;
 using Irrelephant.DnB.Client.Tests;
 using Irrelephant.DnB.Core.Networking;
+using Irrelephant.DnB.Core.Utils;
 using Irrelephant.DnB.Server.SampleData;
 using Irrelephant.DnB.Server.Tests.Fixtures;
 using Irrelephant.DnB.Server.Tests.Infrastructure;
 using Microsoft.AspNetCore.SignalR.Client;
+using Moq;
 using Xunit;
 
 namespace Irrelephant.DnB.Server.Tests
 {
     [Collection(nameof(ServerTestsCollection))]
+    [Trait("Category", "Integration")]
     public class CombatHubTests
     {
         private readonly ServerFixture _fixture;
@@ -35,7 +40,12 @@ namespace Irrelephant.DnB.Server.Tests
             });
             await _fixture.CombatConnection.SendAsync("JoinCombat");
             await AssertExtensions.Eventually(() => {
-                receivedSnapshot.ShouldDeepEqual(CombatFactory.BuildCombat().GetSnapshot());
+                var expectedSnapshot = CombatFactory.BuildCombat().GetSnapshot();
+                expectedSnapshot.ActiveCharacterId = receivedSnapshot.ActiveCharacterId;
+                receivedSnapshot.Attackers = receivedSnapshot.Attackers
+                    .Where(a => a.Id != receivedSnapshot.ActiveCharacterId).ToArray();
+                receivedSnapshot.Id = Guid.Empty; // combat id is generated when combat is created, so not checking it
+                receivedSnapshot.ShouldDeepEqual(expectedSnapshot);
             });
         }
     }

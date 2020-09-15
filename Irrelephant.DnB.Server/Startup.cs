@@ -1,5 +1,8 @@
+using System;
+using System.ComponentModel.Design;
 using System.Linq;
 using Irrelephant.DnB.Server.Hubs;
+using Irrelephant.DnB.Server.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -22,6 +25,8 @@ namespace Irrelephant.DnB.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSignalR();
+            services.AddScoped(container => container);
+            services.AddSingleton<ICombatRepository, MemoryCombatRepository>();
             services.AddResponseCompression(options =>
                 options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new [] {"application/octet-stream" })
             );

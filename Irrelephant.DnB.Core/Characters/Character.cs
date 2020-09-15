@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Irrelephant.DnB.Core.Characters
 {
@@ -16,7 +17,7 @@ namespace Irrelephant.DnB.Core.Characters
 
         public string Name { get; set; }
 
-        public void DealDamage(int amount, bool ignoreArmor = false)
+        public virtual Task DealDamage(int amount, bool ignoreArmor = false)
         {
             if (!ignoreArmor)
             {
@@ -26,6 +27,7 @@ namespace Irrelephant.DnB.Core.Characters
             }
 
             Health -= Math.Min(Health, amount);
+            return Task.CompletedTask;
         }
 
         public bool IsAlive => !CanDie || Health > 0;
