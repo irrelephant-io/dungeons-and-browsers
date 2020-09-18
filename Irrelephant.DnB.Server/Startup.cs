@@ -24,7 +24,9 @@ namespace Irrelephant.DnB.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSignalR();
+            services.AddSignalR(cfg => {
+                cfg.EnableDetailedErrors = true;
+            });
             services.AddScoped(container => container);
             services.AddSingleton<ICombatRepository, MemoryCombatRepository>();
             services.AddResponseCompression(options =>

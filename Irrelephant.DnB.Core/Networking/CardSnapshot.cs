@@ -20,5 +20,8 @@ namespace Irrelephant.DnB.Core.Networking
 
         [DataMember(Name = "actionCost")]
         public int ActionCost { get; set; }
+
+        [DataMember(Name = "effects")]
+        public EffectSnapshot[] Effects { get; set; }
     }
 }

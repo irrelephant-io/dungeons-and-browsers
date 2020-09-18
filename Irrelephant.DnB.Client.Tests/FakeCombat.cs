@@ -64,7 +64,9 @@ namespace Irrelephant.DnB.Client.Tests
             Name = Attacker.Name,
             Health = Attacker.Health - 10,
             MaxHealth = Attacker.MaxHealth,
-            Intent = Attacker.Intent
+            Intent = Attacker.Intent,
+            Actions = 4,
+            ActionsMax = 4
         };
 
 
@@ -81,6 +83,8 @@ namespace Irrelephant.DnB.Client.Tests
                     Health = Attacker.Health,
                     MaxHealth = Attacker.MaxHealth,
                     Intent = Attacker.Intent,
+                    Actions = 4,
+                    ActionsMax = 4,
                     Deck = new DeckSnapshot {
                         DiscardPile = new[] {
                             new CardSnapshot {
@@ -88,7 +92,8 @@ namespace Irrelephant.DnB.Client.Tests
                                 ActionCost = Deck.Card1.ActionCost,
                                 Name = Deck.Card1.Name,
                                 GraphicId = Deck.Card1.GraphicId,
-                                Text = Deck.Card1.Text
+                                Text = Deck.Card1.Text,
+                                Effects = new EffectSnapshot[0]
                             }
                         },
                         DrawPile = new[] {
@@ -97,7 +102,8 @@ namespace Irrelephant.DnB.Client.Tests
                                 ActionCost = Deck.Card2.ActionCost,
                                 Name = Deck.Card2.Name,
                                 GraphicId = Deck.Card2.GraphicId,
-                                Text = Deck.Card2.Text
+                                Text = Deck.Card2.Text,
+                                Effects = new EffectSnapshot[0]
                             }
                         },
                         Hand = new[] {
@@ -106,7 +112,8 @@ namespace Irrelephant.DnB.Client.Tests
                                 ActionCost = Deck.Card3.ActionCost,
                                 Name = Deck.Card3.Name,
                                 GraphicId = Deck.Card3.GraphicId,
-                                Text = Deck.Card3.Text
+                                Text = Deck.Card3.Text,
+                                Effects = new EffectSnapshot[0]
                             }
                         }
                     }

@@ -16,11 +16,15 @@ namespace Irrelephant.DnB.Client.Networking
 
         event Action<Guid> OnDiscardCard;
 
+        event Action<Guid> OnCardPlayed;
+
         event Action OnReshuffleDiscardPile;
 
         public Task NotifyJoinedAsync();
 
         public Task<bool> NotifyEndTurnAsync(Guid combatId);
+
+        public Task PlayCard(Guid combatId, CardTargets targets);
 
         public Task StartAsync();
     }

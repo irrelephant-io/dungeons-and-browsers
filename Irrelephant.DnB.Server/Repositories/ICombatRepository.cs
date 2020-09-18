@@ -9,5 +9,7 @@ namespace Irrelephant.DnB.Server.Repositories
         Task<Combat> GetCombat(Guid id);
 
         Task<Combat> AddCombat(Combat combat);
+
+        Task RemoveCombat(Combat combat);
     }
 }

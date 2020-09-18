@@ -9,9 +9,9 @@ namespace Irrelephant.DnB.Core.Characters
 {
     public class PlayerCharacter : Character
     {
-        public virtual int Energy { get; set; }
+        public virtual int Actions { get; set; }
 
-        public virtual int EnergyMax { get; set; }
+        public virtual int ActionsMax { get; set; }
 
         public virtual int DrawLimit { get; set; }
 

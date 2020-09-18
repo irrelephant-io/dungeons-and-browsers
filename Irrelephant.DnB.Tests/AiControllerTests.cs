@@ -51,24 +51,24 @@ namespace Irrelephant.DnB.Tests
         public async Task AiController_ShouldQueue_ActionsFromPool()
         {
             await _controller.Act(_combat.Object);
-            _effect1.Verify(effect => effect.Apply(It.IsAny<IEnumerable<Character>>(), null), Times.Once);
-            _effect2.Verify(effect => effect.Apply(It.IsAny<IEnumerable<Character>>(), null), Times.Never);
+            _effect1.Verify(effect => effect.Apply(It.IsAny<IEnumerable<Character>>()), Times.Once);
+            _effect2.Verify(effect => effect.Apply(It.IsAny<IEnumerable<Character>>()), Times.Never);
             await _controller.Act(_combat.Object);
-            _effect1.Verify(effect => effect.Apply(It.IsAny<IEnumerable<Character>>(), null), Times.Once);
-            _effect2.Verify(effect => effect.Apply(It.IsAny<IEnumerable<Character>>(), null), Times.Once);
+            _effect1.Verify(effect => effect.Apply(It.IsAny<IEnumerable<Character>>()), Times.Once);
+            _effect2.Verify(effect => effect.Apply(It.IsAny<IEnumerable<Character>>()), Times.Once);
             await _controller.Act(_combat.Object);
-            _effect1.Verify(effect => effect.Apply(It.IsAny<IEnumerable<Character>>(), null), Times.Exactly(2));
-            _effect2.Verify(effect => effect.Apply(It.IsAny<IEnumerable<Character>>(), null), Times.Once);
+            _effect1.Verify(effect => effect.Apply(It.IsAny<IEnumerable<Character>>()), Times.Exactly(2));
+            _effect2.Verify(effect => effect.Apply(It.IsAny<IEnumerable<Character>>()), Times.Once);
             await _controller.Act(_combat.Object);
-            _effect1.Verify(effect => effect.Apply(It.IsAny<IEnumerable<Character>>(), null), Times.Exactly(2));
-            _effect2.Verify(effect => effect.Apply(It.IsAny<IEnumerable<Character>>(), null), Times.Exactly(2));
+            _effect1.Verify(effect => effect.Apply(It.IsAny<IEnumerable<Character>>()), Times.Exactly(2));
+            _effect2.Verify(effect => effect.Apply(It.IsAny<IEnumerable<Character>>()), Times.Exactly(2));
         }
 
         [Fact]
         public async Task AiController_ShouldResolveTargetedEffects()
         {
             var targetList = new List<Character>();
-            void Callback(IEnumerable<Character> targets, IEffector e) => targetList.AddRange(targets);
+            void Callback(IEnumerable<Character> targets) => targetList.AddRange(targets);
 
             var selfEffect = BuildMockEffect(Targets.Self, Callback);
             var friendliesEffect = BuildMockEffect(Targets.Friendly | Targets.Team, Callback);
@@ -132,7 +132,7 @@ namespace Irrelephant.DnB.Tests
         public async Task AiController_ShouldChooseTargets_BasedOnEffectType()
         {
             var targetList = new List<Character>();
-            void Callback(IEnumerable<Character> targets, IEffector e) => targetList.AddRange(targets);
+            void Callback(IEnumerable<Character> targets) => targetList.AddRange(targets);
             var mockAmbiguousEffect = BuildMockEffect(Targets.Friendly | Targets.Enemy | Targets.SingleTarget, Callback);
             mockAmbiguousEffect.SetupGet(x => x.EffectType).Returns(EffectType.Debuff);
             var mockAnotherAmbiguousEffect = BuildMockEffect(Targets.Friendly | Targets.Enemy | Targets.SingleTarget, Callback);
@@ -153,11 +153,11 @@ namespace Irrelephant.DnB.Tests
             await controller.Act(combat.Object);
             AssertionUtilities.OnlyContains(targetList, new[] { controller.Character });
         }
-        private Mock<Effect> BuildMockEffect(Targets targets, Action<IEnumerable<Character>, IEffector> callback)
+        private Mock<Effect> BuildMockEffect(Targets targets, Action<IEnumerable<Character>> callback)
         {
             var mock = new Mock<Effect>();
             mock.SetupGet(e => e.ValidTargets).Returns(targets);
-            mock.Setup(e => e.Apply(It.IsAny<IEnumerable<Character>>(), null)).Callback(callback);
+            mock.Setup(e => e.Apply(It.IsAny<IEnumerable<Character>>())).Callback(callback);
             return mock;
         }
     }

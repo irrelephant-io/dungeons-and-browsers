@@ -3,9 +3,9 @@ using Irrelephant.DnB.Core.Characters.Controller;
 
 namespace Irrelephant.DnB.Client.Networking
 {
-    public class RemoteCharacterController : CharacterController
+    public class ClientCharacterController : CharacterController
     {
-        public RemoteCharacterController(Character character) : base(character)
+        public ClientCharacterController(Character character) : base(character)
         {
         }
     }

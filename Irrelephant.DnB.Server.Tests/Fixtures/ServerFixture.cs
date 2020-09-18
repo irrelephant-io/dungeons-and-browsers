@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Server.Repositories;
 using Microsoft.AspNetCore.Hosting;
@@ -15,6 +16,8 @@ namespace Irrelephant.DnB.Server.Tests.Fixtures
         private TestServer _testServer;
 
         public HubConnection CombatConnection;
+
+        public IServiceProvider Services;
 
         public HttpClient HttpClient { get; private set; }
 
@@ -34,6 +37,7 @@ namespace Irrelephant.DnB.Server.Tests.Fixtures
                         cfg.Transports = HttpTransportType.LongPolling;
                     })
                 .Build();
+            Services = _testServer.Services;
             await CombatConnection.StartAsync();
         }
 

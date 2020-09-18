@@ -47,14 +47,14 @@ namespace Irrelephant.DnB.Tests
         [Fact]
         public async Task Card_CantBePlayed_WhenNotEnoughActions()
         {
-            _character.SetupGet(x => x.Energy).Returns(0);
+            _character.SetupGet(x => x.Actions).Returns(0);
             await Assert.ThrowsAsync<NotEnoughActionsException>(() => _card.Play(_character.Object, _targetProviderMock.Object));
         }
 
         [Fact]
         public async Task Card_RequiresTargetsPerEffect_WhenPlayed()
         {
-            _character.SetupGet(x => x.Energy).Returns(100);
+            _character.SetupGet(x => x.Actions).Returns(100);
             await _card.Play(_character.Object, _targetProviderMock.Object);
             _targetProviderMock.Verify(x => x.PickTarget(_effect1), Times.Once);
             _targetProviderMock.Verify(x => x.PickTarget(_effect2), Times.Once);
@@ -63,15 +63,15 @@ namespace Irrelephant.DnB.Tests
         [Fact]
         public async Task Card_UsesEnergy_WhenPlayed()
         {
-            _character.SetupProperty(x => x.Energy, 100);
+            _character.SetupProperty(x => x.Actions, 100);
             await _card.Play(_character.Object, _targetProviderMock.Object);
-            Assert.Equal(99, _character.Object.Energy);
+            Assert.Equal(99, _character.Object.Actions);
         }
 
         [Fact]
         public async Task Card_ShouldMoveToDiscard_WhenPlayed()
         {
-            _character.SetupGet(x => x.Energy).Returns(100);
+            _character.SetupGet(x => x.Actions).Returns(100);
             await _card.Play(_character.Object, _targetProviderMock.Object);
             _character.Verify(c => c.Discard(_card), Times.Once);
         }

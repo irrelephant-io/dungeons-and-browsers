@@ -2,6 +2,7 @@
 using Irrelephant.DnB.Core.Characters;
 using Irrelephant.DnB.Core.Characters.Controller;
 using Irrelephant.DnB.Core.GameFlow;
+using Irrelephant.DnB.Server.SampleData;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Irrelephant.DnB.Server.Networking
@@ -14,10 +15,13 @@ namespace Irrelephant.DnB.Server.Networking
         {
         }
 
-        public override Task Act(Combat combat)
+        public async override Task Act(Combat combat)
         {
             var sendMyTurnTask = RemoteCharacter.HubClient.SendAsync("MyTurn");
-            return Task.WhenAll(sendMyTurnTask, base.Act(combat));
+            var sendMyUpdateTask =
+                RemoteCharacter.HubClient.SendAsync("CharacterUpdated", RemoteCharacter.GetCharacterSnapshot(sendDeck: false));
+            await Task.WhenAll(sendMyTurnTask, sendMyUpdateTask);
+            await base.Act(combat);
         }
     }
 }

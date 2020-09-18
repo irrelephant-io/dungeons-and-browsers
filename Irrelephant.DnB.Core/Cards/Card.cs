@@ -13,23 +13,23 @@ namespace Irrelephant.DnB.Core.Cards
 {
     public class Card : ICopyable<Card>
     {
-        public Guid Id { get; set; }
+        public virtual Guid Id { get; set; }
 
-        public string GraphicId { get; set; }
+        public virtual string GraphicId { get; set; }
 
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
 
         public virtual string Text => string.Join(Environment.NewLine, Effects.Select(e => e.Name));
 
-        public int ActionCost { get; set; }
+        public virtual int ActionCost { get; set; }
 
-        public IEnumerable<Effect> Effects { get; set; }
+        public virtual IEnumerable<Effect> Effects { get; set; }
 
         public async virtual Task Play(PlayerCharacter player, ITargetProvider targetProvider)
         {
-            if (player.Energy >= ActionCost)
+            if (player.Actions >= ActionCost)
             {
-                player.Energy -= ActionCost;
+                player.Actions -= ActionCost;
                 await Effects.Sequentially(async e => await e.Apply(await targetProvider.PickTarget(e)));
                 await player.Discard(this);
             }
@@ -41,7 +41,7 @@ namespace Irrelephant.DnB.Core.Cards
 
         public bool CanPlay(PlayerCharacter player)
         {
-            var isEnoughEnergy = player.Energy >= ActionCost;
+            var isEnoughEnergy = player.Actions >= ActionCost;
             var isInHand = player.Hand.Contains(this);
             return isEnoughEnergy && isInHand;
         }

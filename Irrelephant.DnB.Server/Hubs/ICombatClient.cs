@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Irrelephant.DnB.Core.Networking;
 
 namespace Irrelephant.DnB.Server.Hubs
@@ -8,5 +9,7 @@ namespace Irrelephant.DnB.Server.Hubs
         Task Joined(CombatSnapshot snapshot);
 
         Task MyTurn();
+
+        Task CardPlayed(Guid id);
     }
 }

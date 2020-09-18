@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Client.Networking;
@@ -7,13 +8,12 @@ using Irrelephant.DnB.Core.Characters;
 using Irrelephant.DnB.Core.Characters.Controller;
 using Irrelephant.DnB.Core.Data;
 using Irrelephant.DnB.Core.Data.Effects;
-using Irrelephant.DnB.Core.Infrastructure;
 using Irrelephant.DnB.Core.Utils;
 using Microsoft.AspNetCore.Components;
 
 namespace Irrelephant.DnB.Client.Shared
 {
-    public partial class ControlSurface : ComponentBase, ITargetProvider, IEffector
+    public partial class ControlSurface : ComponentBase, ITargetProvider
     {
         [Parameter]
         public ClientCombat Combat { get; set; }
@@ -33,7 +33,7 @@ namespace Irrelephant.DnB.Client.Shared
 
         public Card PlayedCard { get; set; }
 
-        private PlayerCharacter Player => (PlayerCharacter)Combat.FindCharacterById(Combat.MyId);
+        private ClientPlayerCharacter Player => (ClientPlayerCharacter)Combat.FindCharacterById(Combat.MyId);
 
         private PlayerCharacterController Controller => (PlayerCharacterController)Combat.FindControllerByCharacterId(Combat.MyId);
 
@@ -44,6 +44,15 @@ namespace Irrelephant.DnB.Client.Shared
         private async Task EndTurn()
         {
             await Combat.EndTurn();
+        }
+
+        protected override void OnInitialized()
+        {
+            Combat.OnUpdate += () => {
+                Console.WriteLine("Updated");
+                Console.WriteLine(Combat.IsReady);
+                StateHasChanged();
+            };
         }
 
         public Task<IEnumerable<Character>> PickTarget(Effect e)
@@ -137,27 +146,6 @@ namespace Irrelephant.DnB.Client.Shared
                 _targetPickingClass = string.Empty;
                 CurrentPrompt = string.Empty;
             }
-        }
-
-        public Task CreateEffect(EffectType type, Character target)
-        {
-            // TODO: Welp, not sure how to do that
-            // It is tricky to find a component in the hierarchy
-            return Task.CompletedTask;
-        }
-
-        public async Task PostPrompt(string prompt, int timeMs)
-        {
-            _currentPrompt = prompt;
-            await CreateDelay(timeMs);
-            _currentPrompt = string.Empty;
-        }
-
-        public async Task CreateDelay(int timeMs)
-        {
-            StateHasChanged();
-            await Task.Delay(timeMs);
-            StateHasChanged();
         }
     }
 }

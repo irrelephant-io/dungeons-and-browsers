@@ -40,9 +40,9 @@
 
     private string GetIntentText()
     {
-        if (CharacterController is AiController ai)
+        if (CharacterController.Character is NonPlayerCharacter npc)
         {
-            return ai.GetIntentText();
+            return npc.Intent;
         }
 
         return string.Empty;

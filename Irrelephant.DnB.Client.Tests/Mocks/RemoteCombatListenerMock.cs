@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Irrelephant.DnB.Client.Networking;
 using Irrelephant.DnB.Core.Exceptions;
+using Irrelephant.DnB.Core.Networking;
 using Moq;
 
 namespace Irrelephant.DnB.Client.Tests.Mocks
@@ -16,7 +17,28 @@ namespace Irrelephant.DnB.Client.Tests.Mocks
         {
             SetupNotifyJoin();
             SetupNotifyEndTurn();
+            SetupPlayCard();
             return this;
+        }
+
+        private void SetupPlayCard()
+        {
+            Setup(l => l.PlayCard(It.IsAny<Guid>(), It.IsAny<CardTargets>()))
+                .Callback<Guid, CardTargets>(async (_, cardTargets) => {
+                    if (!_isMyTurn)
+                    {
+                        return;
+                    }
+
+                    await Task.Delay(2 * NetworkDelay);
+                    Raise(l => l.OnCardPlayed += null, cardTargets.CardId);
+                    Raise(l => l.OnDiscardCard += null, cardTargets.CardId);
+                    var update = FakeCombat.CharacterUpdate;
+                    update.Health = FakeCombat.Attacker.Health;
+                    update.Actions = 4 - FakeCombat.Deck.Card3.ActionCost;
+                    Raise(l => l.OnCharacterUpdated += null, update);
+                })
+                .Returns(Task.Delay(NetworkDelay));
         }
 
         private void SetupNotifyEndTurn()

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Client.Networking;
@@ -6,6 +7,8 @@ using Irrelephant.DnB.Client.Tests.Mocks;
 using Irrelephant.DnB.Core.Characters;
 using Irrelephant.DnB.Core.Characters.Controller;
 using Irrelephant.DnB.Core.Exceptions;
+using Irrelephant.DnB.Core.Networking;
+using Irrelephant.DnB.Core.Utils;
 using Moq;
 using Xunit;
 
@@ -140,6 +143,22 @@ namespace Irrelephant.DnB.Client.Tests
             });
         }
 
+        [Fact]
+        public async Task ShouldGetResponse_AfterPlayingCard()
+        {
+            await MyTurn();
+            var card = _combat.MyCharacter.Hand.First();
+            var targets = new CardTargets {
+                CardId = card.Id,
+                EffectTargets = card.Effects.ToDictionary(e => e.Id, _ => _combat.Defenders.First().Character.Id.ArrayOf().ToArray())
+            };
+            await _combat.PlayCard(targets);
+            await AssertExtensions.Eventually(() => {
+                Assert.Empty(_combat.MyCharacter.Hand);
+                Assert.Equal(_combat.MyCharacter.ActionsMax - card.ActionCost, _combat.MyCharacter.Actions);
+            });
+        }
+        
         private Task StableState()
         {
             return AwaitState(() => _combat.IsReady);

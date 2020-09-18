@@ -40,7 +40,7 @@ namespace Irrelephant.DnB.Server.Tests
             });
             await _fixture.CombatConnection.SendAsync("JoinCombat");
             await AssertExtensions.Eventually(() => {
-                var expectedSnapshot = CombatFactory.BuildCombat().GetSnapshot();
+                var expectedSnapshot = CombatFactory.BuildCombat(_fixture.Services).GetSnapshot();
                 expectedSnapshot.ActiveCharacterId = receivedSnapshot.ActiveCharacterId;
                 receivedSnapshot.Attackers = receivedSnapshot.Attackers
                     .Where(a => a.Id != receivedSnapshot.ActiveCharacterId).ToArray();

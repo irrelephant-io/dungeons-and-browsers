@@ -22,7 +22,7 @@ namespace Irrelephant.DnB.Core.Data.Effects.Library
             Damage = damage;
         }
 
-        public async override Task Apply(IEnumerable<Character> targets, IEffector effector = null)
+        public async override Task Apply(IEnumerable<Character> targets)
         {
             var characters = targets as Character[] ?? targets.ToArray();
             await base.Apply(characters);

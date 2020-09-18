@@ -11,7 +11,7 @@ namespace Irrelephant.DnB.Core.Data.Effects
 
         public override Targets ValidTargets => Targets.Self;
 
-        public override Task Apply(IEnumerable<Character> targets, IEffector effector = null)
+        public override Task Apply(IEnumerable<Character> targets)
         {
             return Task.CompletedTask;
         }

@@ -62,6 +62,7 @@ namespace Irrelephant.DnB.Core.GameFlow
 
         public async Task RunCombat()
         {
+            await Start();
             while (!IsOver)
             {
                 await ResolveRound();
@@ -142,7 +143,7 @@ namespace Irrelephant.DnB.Core.GameFlow
 
         private async Task RunPlayerTurn(PlayerCharacterController controller, PlayerCharacter playerCharacter)
         {
-            playerCharacter.Energy = playerCharacter.EnergyMax;
+            playerCharacter.Actions = playerCharacter.ActionsMax;
             playerCharacter.Armor = 0;
             await playerCharacter.DrawHand();
             await controller.Act(this);

@@ -33,6 +33,7 @@ namespace Irrelephant.DnB.Core.Characters.Controller
             var npc = (NonPlayerCharacter) character;
             var actions = npc.ActionPool ?? new[] {new IdleEffect()}.ToArray();
             _actionQueue = new Queue<Effect>(actions);
+            UpdateCharacterIntent();
         }
 
         public async override Task Act(Combat combat)
@@ -41,7 +42,14 @@ namespace Irrelephant.DnB.Core.Characters.Controller
             var nextAction = _actionQueue.Dequeue();
             await nextAction.Apply(PickTarget(nextAction, combat));
             _actionQueue.Enqueue(nextAction);
+            UpdateCharacterIntent();
             InvokeOnAction();
+        }
+
+        private void UpdateCharacterIntent()
+        {
+            var npc = (NonPlayerCharacter)Character;
+            npc.Intent = _actionQueue.Peek().Name;
         }
 
         private IEnumerable<Character> PickTarget(Effect nextAction, Combat combat)

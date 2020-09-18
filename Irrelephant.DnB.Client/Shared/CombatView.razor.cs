@@ -15,7 +15,6 @@ namespace Irrelephant.DnB.Client.Shared
             if (Combat != null)
             {
                 Console.WriteLine("Wathcing combat " + Combat.CombatId);
-                Combat.OnUpdate += StateHasChanged;
             }
         }
     }

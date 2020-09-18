@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Core.Cards;
 using Irrelephant.DnB.Core.Characters;
 using Irrelephant.DnB.Core.Characters.Controller;
+using Irrelephant.DnB.Core.Data;
 using Irrelephant.DnB.Core.GameFlow;
 using Irrelephant.DnB.Core.Networking;
 using Irrelephant.DnB.Core.Utils;
@@ -18,7 +20,9 @@ namespace Irrelephant.DnB.Client.Networking
 
         public Guid MyId { get; private set; }
 
-        public PlayerCharacter MyCharacter => (PlayerCharacter)FindCharacterById(MyId);
+        public ClientPlayerCharacter MyCharacter => (ClientPlayerCharacter)FindCharacterById(MyId);
+
+        public ClientCombat() { }
 
         private readonly IRemoteCombatListener _remoteCombatListener;
 
@@ -32,6 +36,11 @@ namespace Irrelephant.DnB.Client.Networking
             _remoteCombatListener.OnDrawCard += OnDrawCard;
             _remoteCombatListener.OnDiscardCard += OnDiscardCard;
             _remoteCombatListener.OnReshuffleDiscardPile += OnReshuffleDiscardPile;
+            _remoteCombatListener.OnCardPlayed += OnCardPlayed;
+        }
+
+        private void OnCardPlayed(Guid cardId)
+        {
         }
 
         private void OnReshuffleDiscardPile()
@@ -39,6 +48,7 @@ namespace Irrelephant.DnB.Client.Networking
             var myChar = MyCharacter;
             myChar.DrawPile = myChar.DrawPile.Union(myChar.DiscardPile).ToArray();
             myChar.DiscardPile = Enumerable.Empty<Card>().ToArray();
+            NotifyUpdate();
         }
 
         private void OnDiscardCard(Guid cardId)
@@ -47,6 +57,7 @@ namespace Irrelephant.DnB.Client.Networking
             var discardedCard = myChar.Hand.First(card => card.Id == cardId);
             myChar.Hand = myChar.Hand.Where(c => c != discardedCard).ToArray();
             myChar.DiscardPile = myChar.DiscardPile.Union(discardedCard.ArrayOf()).ToArray();
+            NotifyUpdate();
         }
 
         private void OnDrawCard(Guid cardId)
@@ -55,11 +66,18 @@ namespace Irrelephant.DnB.Client.Networking
             var drawnCard = myChar.DrawPile.First(card => card.Id == cardId);
             myChar.DrawPile = myChar.DrawPile.Where(c => c != drawnCard).ToArray();
             myChar.Hand = myChar.Hand.Union(drawnCard.ArrayOf()).ToArray();
+            NotifyUpdate();
         }
 
         public async Task EndTurn()
         {
             await _remoteCombatListener.NotifyEndTurnAsync(CombatId);
+            NotifyUpdate();
+        }
+
+        public async virtual Task PlayCard(CardTargets targets)
+        {
+            await _remoteCombatListener.PlayCard(CombatId, targets);
             NotifyUpdate();
         }
 
@@ -71,11 +89,14 @@ namespace Irrelephant.DnB.Client.Networking
 
         private void OnJoinedCombat(CombatSnapshot snapshot)
         {
+            Console.WriteLine("Joined combat!");
             CombatId = snapshot.Id;
             MyId = snapshot.ActiveCharacterId;
             Attackers = snapshot.Attackers.Select(MapCharacter).ToArray();
             Defenders = snapshot.Defenders.Select(MapCharacter).ToArray();
+            MyCharacter.ClientCombat = this;
             IsReady = true;
+            Console.WriteLine("IsReady: " + IsReady);
             NotifyUpdate();
         }
 
@@ -86,13 +107,25 @@ namespace Irrelephant.DnB.Client.Networking
             characterToUpdate.MaxHealth = snapshot.MaxHealth;
             characterToUpdate.GraphicId = snapshot.GraphicId;
             characterToUpdate.Name = snapshot.Name;
+            characterToUpdate.Armor = snapshot.Armor;
+
+            if (characterToUpdate is ClientPlayerCharacter pc)
+            {
+                pc.Actions = snapshot.Actions;
+                pc.ActionsMax = snapshot.ActionsMax;
+            }
+            else if (characterToUpdate is NonPlayerCharacter npc)
+            {
+                npc.Intent = snapshot.Intent;
+            }
+
             NotifyUpdate();
         }
 
         private CharacterController MapCharacter(CharacterSnapshot snapshot)
         {
             var character = snapshot.Id == MyId
-                ? new PlayerCharacter() as Character
+                ? new ClientPlayerCharacter() as Character
                 : new NonPlayerCharacter();
 
             character.Id = snapshot.Id;
@@ -100,16 +133,23 @@ namespace Irrelephant.DnB.Client.Networking
             character.Health = snapshot.Health;
             character.MaxHealth = snapshot.MaxHealth;
             character.GraphicId = snapshot.GraphicId;
+            character.Armor = snapshot.Armor;
 
-            if (character is PlayerCharacter pc)
+            if (character is ClientPlayerCharacter pc)
             {
                 pc.Hand = snapshot.Deck.Hand.Select(MapCard).ToArray();
                 pc.DiscardPile = snapshot.Deck.DiscardPile.Select(MapCard).ToArray();
                 pc.DrawPile = snapshot.Deck.DrawPile.Select(MapCard).ToArray();
+                pc.Actions = snapshot.Actions;
+                pc.ActionsMax = snapshot.ActionsMax;
                 return new PlayerCharacterController(pc);
             }
+            else if (character is NonPlayerCharacter npc)
+            {
+                npc.Intent = snapshot.Intent;
+            }
 
-            return new RemoteCharacterController(character);
+            return new ClientCharacterController(character);
         }
 
         private Card MapCard(CardSnapshot snapshot)
@@ -120,8 +160,10 @@ namespace Irrelephant.DnB.Client.Networking
                 ActionCost = snapshot.ActionCost,
                 GraphicId = snapshot.GraphicId,
                 Name = snapshot.Name,
-                RemoteText = snapshot.Text
+                RemoteText = snapshot.Text,
+                Effects = snapshot.Effects.Select(snap => new ClientEffect(snap.Id, snap.Name, snap.Targets)).ToArray()
             };
         }
+
     }
 }

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Core.Networking;
+using Irrelephant.DnB.Core.Utils;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 
@@ -25,6 +28,7 @@ namespace Irrelephant.DnB.Client.Networking
             _connection.On("MyTurn", () => OnMyTurn?.Invoke());
             _connection.On<Guid>("DrawCard", cardId => OnDrawCard?.Invoke(cardId));
             _connection.On<Guid>("DiscardCard", cardId => OnDiscardCard?.Invoke(cardId));
+            _connection.On<Guid>("CardPlayed", cardId => OnCardPlayed?.Invoke(cardId));
             _connection.On("ReshuffleDiscardPile", () => OnReshuffleDiscardPile?.Invoke());
         }
 
@@ -35,6 +39,8 @@ namespace Irrelephant.DnB.Client.Networking
         public event Action<Guid> OnDrawCard;
 
         public event Action<Guid> OnDiscardCard;
+
+        public event Action<Guid> OnCardPlayed;
 
         public event Action OnReshuffleDiscardPile;
 
@@ -49,6 +55,12 @@ namespace Irrelephant.DnB.Client.Networking
         {
             await _connection.SendAsync("EndTurn", combatId);
             return true;
+        }
+
+        public async Task PlayCard(Guid combatId, CardTargets targets)
+        {
+            var targetIds = targets.EffectTargets.Select(kvp => kvp.Key.ArrayOf().Union(kvp.Value).ToArray()).ToArray();
+            await _connection.SendAsync("PlayCard", combatId, targets.CardId, targetIds);
         }
 
         public async Task StartAsync()

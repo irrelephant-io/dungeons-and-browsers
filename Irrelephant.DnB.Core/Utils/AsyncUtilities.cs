@@ -13,5 +13,16 @@ namespace Irrelephant.DnB.Core.Utils
                 await mapperFunction(item);
             }
         }
+
+        public static async Task<IEnumerable<TResult>> Sequentially<TItem, TResult>(this IEnumerable<TItem> items, Func<TItem, Task<TResult>> mapperFunction)
+        {
+            var results = new List<TResult>();
+            foreach (var item in items)
+            {
+                var result = await mapperFunction(item);
+                results.Add(result);
+            }
+            return results;
+        }
     }
 }

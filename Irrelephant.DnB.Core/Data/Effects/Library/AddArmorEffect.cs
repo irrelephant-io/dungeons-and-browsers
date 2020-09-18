@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Core.Characters;
-using Irrelephant.DnB.Core.Infrastructure;
 
 namespace Irrelephant.DnB.Core.Data.Effects.Library
 {
@@ -21,7 +20,7 @@ namespace Irrelephant.DnB.Core.Data.Effects.Library
             _armor = armor;
         }
 
-        public async override Task Apply(IEnumerable<Character> targets, IEffector effector = null)
+        public async override Task Apply(IEnumerable<Character> targets)
         {
             var characterArray = targets as Character[] ?? targets.ToArray();
             await base.Apply(characterArray);

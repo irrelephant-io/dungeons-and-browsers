@@ -27,7 +27,7 @@ namespace Irrelephant.DnB.Server.SampleData
             };
         }
 
-        public static CharacterSnapshot GetCharacterSnapshot(Character character, bool sendDeck = true)
+        public static CharacterSnapshot GetCharacterSnapshot(this Character character, bool sendDeck = true)
         {
             var snap = new CharacterSnapshot
             {
@@ -35,11 +35,21 @@ namespace Irrelephant.DnB.Server.SampleData
                 Name = character.Name,
                 GraphicId = character.GraphicId,
                 Health = character.Health,
-                MaxHealth = character.MaxHealth
+                MaxHealth = character.MaxHealth,
+                Armor = character.Armor,
             };
-            if (sendDeck && character is PlayerCharacter pc)
+            if (character is PlayerCharacter pc)
             {
-                snap.Deck = GetDeckSnapshot(pc);
+                if (sendDeck)
+                {
+                    snap.Deck = GetDeckSnapshot(pc);
+                }
+                snap.Actions = pc.Actions;
+                snap.ActionsMax = pc.ActionsMax;
+            }
+            else if (character is NonPlayerCharacter npc)
+            {
+                snap.Intent = npc.Intent;
             }
 
             return snap;
@@ -47,7 +57,8 @@ namespace Irrelephant.DnB.Server.SampleData
 
         private static DeckSnapshot GetDeckSnapshot(PlayerCharacter character)
         {
-            return new DeckSnapshot {
+            return new DeckSnapshot
+            {
                 Hand = character.Hand.Select(MapCard).ToArray(),
                 DiscardPile = character.DiscardPile.Select(MapCard).ToArray(),
                 DrawPile = character.DrawPile.Select(MapCard).ToArray()
@@ -56,21 +67,35 @@ namespace Irrelephant.DnB.Server.SampleData
 
         private static CardSnapshot MapCard(Card card)
         {
-            return new CardSnapshot { Id = card.Id, ActionCost = card.ActionCost, GraphicId = card.GraphicId, Name = card.Name, Text = card.Text };
+            return new CardSnapshot
+            {
+                Id = card.Id,
+                ActionCost = card.ActionCost,
+                GraphicId = card.GraphicId,
+                Name = card.Name,
+                Text = card.Text,
+                Effects = card.Effects.Select(e => new EffectSnapshot
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    Targets = e.ValidTargets
+                }).ToArray()
+            };
         }
 
-        public static Combat BuildCombat()
+        public static Combat BuildCombat(IServiceProvider services)
         {
+            var hubContext = services.GetRequiredService<IHubContext<CombatHub>>();
             return new Combat
             {
                 Attackers = new CharacterController[]
                 {
-                    new AiController(CharacterLibrary.VileGoblin)
+                    new RemoteAiController(hubContext, CharacterLibrary.VileGoblin)
                 },
                 Defenders = new[]
                 {
-                    new AiController(CharacterLibrary.RagingOrc),
-                    new AiController(CharacterLibrary.WretchedGoblin)
+                    new RemoteAiController(hubContext, CharacterLibrary.RagingOrc),
+                    new RemoteAiController(hubContext, CharacterLibrary.WretchedGoblin)
                 }
             };
         }
@@ -142,7 +167,10 @@ namespace Irrelephant.DnB.Server.SampleData
                 Effects = new[] {
                     EffectLibrary.Card.DealSmallMeleeDamage
                 }
-            }.Copies(3)).ToArray().ForEach(card => card.Id = Guid.NewGuid());
+            }.Copies(3))
+                .ForEach(card => card.Id = Guid.NewGuid())
+                .Select(card => new RemoteCard(services.GetRequiredService<IHubContext<CombatHub>>(), card))
+                .ToArray();
             return new RemotePlayerCharacter(services.GetRequiredService<IHubContext<CombatHub>>())
             {
                 Id = Guid.NewGuid(),
@@ -150,7 +178,7 @@ namespace Irrelephant.DnB.Server.SampleData
                 Name = "Player",
                 MaxHealth = 70,
                 Health = 70,
-                EnergyMax = 4,
+                ActionsMax = 4,
                 DrawLimit = 6,
                 DrawPile = playerHand
             };

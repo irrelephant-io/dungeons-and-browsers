@@ -20,5 +20,11 @@ namespace Irrelephant.DnB.Server.Repositories
             _ongoingCombats.Add(combat.CombatId, combat);
             return Task.FromResult(combat);
         }
+
+        public Task RemoveCombat(Combat combat)
+        {
+            _ongoingCombats.Remove(combat.CombatId);
+            return Task.CompletedTask;
+        }
     }
 }

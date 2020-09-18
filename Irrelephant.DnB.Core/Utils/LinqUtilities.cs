@@ -1,7 +1,9 @@
 ﻿using Irrelephant.DnB.Core.Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Irrelephant.DnB.Core.Utils
 {
@@ -38,6 +40,19 @@ namespace Irrelephant.DnB.Core.Utils
         public static IEnumerable<TItem> Shuffle<TItem>(this IEnumerable<TItem> items)
         {
             return items.OrderBy(rng => Rng.Next());
+        }
+
+        public static async Task<Dictionary<TKey, TValue>> ToDictionaryAsync<TItem, TKey, TValue>(
+            this IEnumerable<TItem> items,
+            Func<TItem, TKey> keySelector,
+            Func<TItem, Task<TValue>> valueSelector)
+        {
+            var values= await Task.WhenAll(items.Select(valueSelector));
+            var keys = items.Select(keySelector);
+
+            return keys
+                .Zip(values, (k, v) => new KeyValuePair<TKey, TValue>(k, v))
+                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }
     }
 }
