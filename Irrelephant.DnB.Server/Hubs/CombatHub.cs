@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Core.Exceptions;
 using Irrelephant.DnB.Core.GameFlow;
-using Irrelephant.DnB.Core.Networking;
 using Irrelephant.DnB.Server.Networking;
 using Irrelephant.DnB.Server.Repositories;
 using Irrelephant.DnB.Server.SampleData;

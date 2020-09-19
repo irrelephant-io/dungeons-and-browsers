@@ -6,6 +6,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Irrelephant.DnB.Core\Irrelephant.DnB.Core.csproj" />
+    <ProjectReference Include="..\Irrelephant.DnB.DataTransfer\Irrelephant.DnB.DataTransfer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
 
 

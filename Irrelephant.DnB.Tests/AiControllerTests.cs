@@ -99,28 +99,28 @@ namespace Irrelephant.DnB.Tests
             combat.SetupGet(c => c.Defenders).Returns(new List<CharacterController> { controller, mockFriendly.Object });
 
             await controller.Act(combat.Object);
-            AssertionUtilities.OnlyContains(targetList, new[] { controller.Character });
+            AssertUtilities.OnlyContains(targetList, new[] { controller.Character });
             targetList.Clear();
 
             await controller.Act(combat.Object);
-            AssertionUtilities.OnlyContains(targetList, new[] { controller.Character, mockFriendly.Object.Character });
+            AssertUtilities.OnlyContains(targetList, new[] { controller.Character, mockFriendly.Object.Character });
             targetList.Clear();
 
             await controller.Act(combat.Object);
-            AssertionUtilities.OnlyContains(targetList, new[] { _mockEnemy.Object.Character, mockEnemy2.Object.Character });
+            AssertUtilities.OnlyContains(targetList, new[] { _mockEnemy.Object.Character, mockEnemy2.Object.Character });
             targetList.Clear();
 
             await controller.Act(combat.Object);
-            AssertionUtilities.OnlyContains(targetList, new[] { controller.Character });
+            AssertUtilities.OnlyContains(targetList, new[] { controller.Character });
             targetList.Clear();
 
             await controller.Act(combat.Object);
-            AssertionUtilities.OnlyContains(targetList, new[] { _mockEnemy.Object.Character });
+            AssertUtilities.OnlyContains(targetList, new[] { _mockEnemy.Object.Character });
             targetList.Clear();
 
 
             await controller.Act(combat.Object);
-            AssertionUtilities.OnlyContains(targetList, new[] {
+            AssertUtilities.OnlyContains(targetList, new[] {
                 controller.Character,
                 mockFriendly.Object.Character,
                 _mockEnemy.Object.Character,
@@ -147,11 +147,11 @@ namespace Irrelephant.DnB.Tests
             combat.SetupGet(c => c.Defenders).Returns(new List<CharacterController> { controller });
 
             await controller.Act(combat.Object);
-            AssertionUtilities.OnlyContains(targetList, new[] { _mockEnemy.Object.Character });
+            AssertUtilities.OnlyContains(targetList, new[] { _mockEnemy.Object.Character });
             targetList.Clear();
 
             await controller.Act(combat.Object);
-            AssertionUtilities.OnlyContains(targetList, new[] { controller.Character });
+            AssertUtilities.OnlyContains(targetList, new[] { controller.Character });
         }
         private Mock<Effect> BuildMockEffect(Targets targets, Action<IEnumerable<Character>> callback)
         {

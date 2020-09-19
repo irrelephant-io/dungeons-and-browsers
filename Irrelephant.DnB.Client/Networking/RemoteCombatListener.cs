@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Irrelephant.DnB.Core.Networking;
 using Irrelephant.DnB.Core.Utils;
+using Irrelephant.DnB.DataTransfer.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 

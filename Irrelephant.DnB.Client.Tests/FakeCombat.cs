@@ -1,5 +1,5 @@
 ﻿using System;
-using Irrelephant.DnB.Core.Networking;
+using Irrelephant.DnB.DataTransfer.Models;
 
 namespace Irrelephant.DnB.Client.Tests
 {

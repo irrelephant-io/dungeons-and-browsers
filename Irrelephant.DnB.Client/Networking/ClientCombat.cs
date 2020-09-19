@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Core.Cards;
 using Irrelephant.DnB.Core.Characters;
 using Irrelephant.DnB.Core.Characters.Controller;
-using Irrelephant.DnB.Core.Data;
 using Irrelephant.DnB.Core.GameFlow;
-using Irrelephant.DnB.Core.Networking;
 using Irrelephant.DnB.Core.Utils;
+using Irrelephant.DnB.DataTransfer.Models;
 
 namespace Irrelephant.DnB.Client.Networking
 {

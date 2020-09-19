@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Irrelephant.DnB.Core.Networking;
+using Irrelephant.DnB.DataTransfer.Models;
 
 namespace Irrelephant.DnB.Server.Hubs
 {

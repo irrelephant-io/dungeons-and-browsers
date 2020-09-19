@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using Irrelephant.DnB.Core.Data;
 
-namespace Irrelephant.DnB.Core.Networking
+namespace Irrelephant.DnB.DataTransfer.Models
 {
     [DataContract]
     public class EffectSnapshot

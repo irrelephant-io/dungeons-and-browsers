@@ -6,7 +6,6 @@ using Irrelephant.DnB.Core.Characters;
 using Irrelephant.DnB.Core.Data;
 using Irrelephant.DnB.Core.Data.Effects;
 using Irrelephant.DnB.Core.GameFlow;
-using Irrelephant.DnB.Core.Networking;
 
 namespace Irrelephant.DnB.Server.Networking
 {

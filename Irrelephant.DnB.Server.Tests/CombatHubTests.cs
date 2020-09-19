@@ -2,12 +2,11 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using DeepEqual.Syntax;
-using Irrelephant.DnB.Client.Tests;
-using Irrelephant.DnB.Core.Networking;
-using Irrelephant.DnB.Core.Utils;
+using Irrelephant.DnB.DataTransfer.Models;
 using Irrelephant.DnB.Server.SampleData;
 using Irrelephant.DnB.Server.Tests.Fixtures;
 using Irrelephant.DnB.Server.Tests.Infrastructure;
+using Irrelephant.DnB.Tests.Utilities;
 using Microsoft.AspNetCore.SignalR.Client;
 using Moq;
 using Xunit;
@@ -36,10 +35,10 @@ namespace Irrelephant.DnB.Server.Tests
         {
             CombatSnapshot receivedSnapshot = null;
             _fixture.CombatConnection.On<CombatSnapshot>("Joined", snap => {
-                receivedSnapshot = snap;
+                receivedSnapshot = snap; 
             });
             await _fixture.CombatConnection.SendAsync("JoinCombat");
-            await AssertExtensions.Eventually(() => {
+            await AssertUtilities.Eventually(() => {
                 var expectedSnapshot = CombatFactory.BuildCombat(_fixture.Services).GetSnapshot();
                 expectedSnapshot.ActiveCharacterId = receivedSnapshot.ActiveCharacterId;
                 receivedSnapshot.Attackers = receivedSnapshot.Attackers

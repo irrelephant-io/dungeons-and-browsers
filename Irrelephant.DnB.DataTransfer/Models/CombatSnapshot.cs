@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Irrelephant.DnB.Core.Networking
+namespace Irrelephant.DnB.DataTransfer.Models
 {
     [DataContract]
     public class CombatSnapshot

@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Irrelephant.DnB.Client\Irrelephant.DnB.Client.csproj" />
+    <ProjectReference Include="..\Irrelephant.DnB.Tests\Irrelephant.DnB.Tests.csproj" />
   </ItemGroup>
 
 </Project>

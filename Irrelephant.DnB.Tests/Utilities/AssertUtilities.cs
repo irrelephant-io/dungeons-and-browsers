@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Irrelephant.DnB.Client.Tests
+namespace Irrelephant.DnB.Tests.Utilities
 {
-    public static class AssertExtensions
+    public class AssertUtilities
     {
+        public static void OnlyContains<TItem>(IEnumerable<TItem> targetCollection, IEnumerable<TItem> targets)
+        {
+            Assert.Empty(targetCollection.Except(targets));
+        }
+
         public static async Task Eventually(Func<Task> assertion)
         {
             var exceptions = new List<Exception>();

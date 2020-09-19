@@ -13,10 +13,12 @@ namespace Irrelephant.DnB.Core.GameFlow
         public Guid CombatId { get; set; }
 
         public virtual IEnumerable<CharacterController> Attackers { get; set; }
-        private IList<(int pos, CharacterController cc)> _pendingAttackers { get; set; } = new List<(int pos, CharacterController cc)>();
+
+        private IList<(int pos, CharacterController cc)> PendingAttackers { get; } = new List<(int pos, CharacterController cc)>();
 
         public virtual IEnumerable<CharacterController> Defenders { get; set; }
-        private IList<(int pos, CharacterController cc)> _pendingDefenders { get; set; } = new List<(int pos, CharacterController cc)>();
+
+        private IList<(int pos, CharacterController cc)> PendingDefenders { get; } = new List<(int pos, CharacterController cc)>();
 
         public virtual IEnumerable<CharacterController> Combatants => Attackers.Union(Defenders);
 
@@ -25,6 +27,8 @@ namespace Irrelephant.DnB.Core.GameFlow
         public bool IsStarted { get; private set; }
 
         public int Round { get; private set; } = 1;
+
+        public bool IsOver => !Attackers.Any() || !Defenders.Any();
 
         public event Action OnUpdate;
 
@@ -81,7 +85,7 @@ namespace Irrelephant.DnB.Core.GameFlow
         {
             if (IsStarted)
             {
-                _pendingAttackers.Add((position, controller));
+                PendingAttackers.Add((position, controller));
             }
             else
             {
@@ -96,7 +100,7 @@ namespace Irrelephant.DnB.Core.GameFlow
         {
             if (IsStarted)
             {
-                _pendingDefenders.Add((position, controller));
+                PendingDefenders.Add((position, controller));
             }
             else
             {
@@ -110,8 +114,8 @@ namespace Irrelephant.DnB.Core.GameFlow
 
         private async Task JoinPendingCombatants()
         {
-            Attackers = await JoinSide(Attackers, _pendingAttackers);
-            Defenders = await JoinSide(Defenders, _pendingDefenders);
+            Attackers = await JoinSide(Attackers, PendingAttackers);
+            Defenders = await JoinSide(Defenders, PendingDefenders);
         }
 
         private Task<CharacterController[]> JoinSide(IEnumerable<CharacterController> side, IList<(int pos, CharacterController cc)> buffer)
@@ -155,7 +159,5 @@ namespace Irrelephant.DnB.Core.GameFlow
             Attackers = Attackers.Where(combatant => combatant.Character.IsAlive).ToArray();
             Defenders = Defenders.Where(combatant => combatant.Character.IsAlive).ToArray();
         }
-
-        public bool IsOver => !Attackers.Any() || !Defenders.Any();
     }
 }

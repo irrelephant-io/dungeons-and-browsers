@@ -20,7 +20,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Irrelephant.DnB.Client.Test
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{16731B05-AC83-47E3-A829-B9F8A3974659}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irrelephant.DnB.Server.Tests", "Irrelephant.DnB.Server.Tests\Irrelephant.DnB.Server.Tests.csproj", "{91081D4C-A458-46A6-AEA4-B69DC2AAAD44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Irrelephant.DnB.Server.Tests", "Irrelephant.DnB.Server.Tests\Irrelephant.DnB.Server.Tests.csproj", "{91081D4C-A458-46A6-AEA4-B69DC2AAAD44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irrelephant.DnB.DataTransfer", "Irrelephant.DnB.DataTransfer\Irrelephant.DnB.DataTransfer.csproj", "{EAC44AD7-DFFF-4123-BE70-47C91F2F4500}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +54,10 @@ Global
 		{91081D4C-A458-46A6-AEA4-B69DC2AAAD44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91081D4C-A458-46A6-AEA4-B69DC2AAAD44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91081D4C-A458-46A6-AEA4-B69DC2AAAD44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAC44AD7-DFFF-4123-BE70-47C91F2F4500}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAC44AD7-DFFF-4123-BE70-47C91F2F4500}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAC44AD7-DFFF-4123-BE70-47C91F2F4500}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAC44AD7-DFFF-4123-BE70-47C91F2F4500}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

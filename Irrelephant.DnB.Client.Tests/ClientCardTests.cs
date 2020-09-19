@@ -6,9 +6,8 @@ using Irrelephant.DnB.Core.Characters;
 using Irrelephant.DnB.Core.Data;
 using Irrelephant.DnB.Core.Data.Effects;
 using Irrelephant.DnB.Core.Exceptions;
-using Irrelephant.DnB.Core.GameFlow;
-using Irrelephant.DnB.Core.Networking;
 using Irrelephant.DnB.Core.Utils;
+using Irrelephant.DnB.DataTransfer.Models;
 using Moq;
 using Xunit;
 

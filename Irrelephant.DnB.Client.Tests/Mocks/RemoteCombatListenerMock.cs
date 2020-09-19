@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Irrelephant.DnB.Client.Networking;
 using Irrelephant.DnB.Core.Exceptions;
-using Irrelephant.DnB.Core.Networking;
+using Irrelephant.DnB.DataTransfer.Models;
 using Moq;
 
 namespace Irrelephant.DnB.Client.Tests.Mocks

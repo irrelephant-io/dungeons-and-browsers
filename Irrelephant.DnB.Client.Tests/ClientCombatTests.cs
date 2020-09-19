@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Client.Networking;
@@ -7,8 +6,9 @@ using Irrelephant.DnB.Client.Tests.Mocks;
 using Irrelephant.DnB.Core.Characters;
 using Irrelephant.DnB.Core.Characters.Controller;
 using Irrelephant.DnB.Core.Exceptions;
-using Irrelephant.DnB.Core.Networking;
 using Irrelephant.DnB.Core.Utils;
+using Irrelephant.DnB.DataTransfer.Models;
+using Irrelephant.DnB.Tests.Utilities;
 using Moq;
 using Xunit;
 
@@ -35,7 +35,7 @@ namespace Irrelephant.DnB.Client.Tests
         [Fact]
         public async Task ShouldFetchCharacters_OnJoin()
         {
-            await AssertExtensions.Eventually(() => {
+            await AssertUtilities.Eventually(() => {
                 Assert.NotEmpty(_combat.Defenders);
                 Assert.NotEmpty(_combat.Attackers);
                 Assert.False(_combat.IsOver);
@@ -47,7 +47,7 @@ namespace Irrelephant.DnB.Client.Tests
         public async Task ShouldUpdateCharacters_WhenReceivingUpdateEvent()
         {
             await StableState();
-            await AssertExtensions.Eventually(() => {
+            await AssertUtilities.Eventually(() => {
                 _listener.Raise(l => l.OnCharacterUpdated += null, FakeCombat.CharacterUpdate);
                 Assert.Equal(FakeCombat.CharacterUpdate.Health, _combat.Attackers.Single().Character.Health);
             });
@@ -56,7 +56,7 @@ namespace Irrelephant.DnB.Client.Tests
         [Fact]
         public async Task ShouldReceiveMyCharacterId_WhenJoiningCombat()
         {
-            await AssertExtensions.Eventually(() => {
+            await AssertUtilities.Eventually(() => {
                 Assert.Equal(FakeCombat.Object.ActiveCharacterId, _combat.MyId);
                 var pcController = _combat.Attackers.First(c => c.Character.Id == _combat.MyId);
                 Assert.IsAssignableFrom<PlayerCharacterController>(pcController);
@@ -69,7 +69,7 @@ namespace Irrelephant.DnB.Client.Tests
         {
             await StableState();
             Assert.False(_combat.MyTurn);
-            await AssertExtensions.Eventually(() => {
+            await AssertUtilities.Eventually(() => {
                 Assert.True(_combat.MyTurn);
             });
         }
@@ -101,7 +101,7 @@ namespace Irrelephant.DnB.Client.Tests
         {
             var isFired = false;
             _combat.OnUpdate += () => isFired = true;
-            await AssertExtensions.Eventually(() => {
+            await AssertUtilities.Eventually(() => {
                 Assert.True(isFired);
             });
         }
@@ -112,7 +112,7 @@ namespace Irrelephant.DnB.Client.Tests
             await StableState();
             _listener.Raise(l => l.OnDrawCard += null, FakeCombat.Deck.Card2.CardId);
             var myChar = _combat.MyCharacter;
-            await AssertExtensions.Eventually(() => {
+            await AssertUtilities.Eventually(() => {
                 Assert.Contains(myChar.Hand, c => c.Id == FakeCombat.Deck.Card2.CardId);
                 Assert.DoesNotContain(myChar.DrawPile, c => c.Id == FakeCombat.Deck.Card2.CardId);
             });
@@ -124,7 +124,7 @@ namespace Irrelephant.DnB.Client.Tests
             await StableState();
             _listener.Raise(l => l.OnDiscardCard += null, FakeCombat.Deck.Card3.CardId);
             var myChar = _combat.MyCharacter;
-            await AssertExtensions.Eventually(() => {
+            await AssertUtilities.Eventually(() => {
                 Assert.DoesNotContain(myChar.Hand, c => c.Id == FakeCombat.Deck.Card3.CardId);
                 Assert.Contains(myChar.DiscardPile, c => c.Id == FakeCombat.Deck.Card3.CardId);
             });
@@ -136,7 +136,7 @@ namespace Irrelephant.DnB.Client.Tests
             await StableState();
             _listener.Raise(l => l.OnReshuffleDiscardPile += null);
             var myChar = _combat.MyCharacter;
-            await AssertExtensions.Eventually(() => {
+            await AssertUtilities.Eventually(() => {
                 Assert.Empty(myChar.DiscardPile);
                 Assert.Contains(myChar.DrawPile, c => c.Id == FakeCombat.Deck.Card1.CardId);
                 Assert.Contains(myChar.DrawPile, c => c.Id == FakeCombat.Deck.Card2.CardId);
@@ -153,7 +153,7 @@ namespace Irrelephant.DnB.Client.Tests
                 EffectTargets = card.Effects.ToDictionary(e => e.Id, _ => _combat.Defenders.First().Character.Id.ArrayOf().ToArray())
             };
             await _combat.PlayCard(targets);
-            await AssertExtensions.Eventually(() => {
+            await AssertUtilities.Eventually(() => {
                 Assert.Empty(_combat.MyCharacter.Hand);
                 Assert.Equal(_combat.MyCharacter.ActionsMax - card.ActionCost, _combat.MyCharacter.Actions);
             });

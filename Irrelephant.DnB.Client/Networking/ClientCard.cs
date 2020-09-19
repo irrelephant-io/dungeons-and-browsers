@@ -4,8 +4,8 @@ using Irrelephant.DnB.Core.Cards;
 using Irrelephant.DnB.Core.Characters;
 using Irrelephant.DnB.Core.Data;
 using Irrelephant.DnB.Core.Exceptions;
-using Irrelephant.DnB.Core.Networking;
 using Irrelephant.DnB.Core.Utils;
+using Irrelephant.DnB.DataTransfer.Models;
 
 namespace Irrelephant.DnB.Client.Networking
 {
