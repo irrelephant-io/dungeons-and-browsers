@@ -1,5 +1,23 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+.login-info {
+    z-index: 100500;
+}
+
+.login-info .name {
+    color: white;
+    size: 24px;
+}
+
+.login-info .login-button {
+    size: 14px;
+    cursor: pointer;
+}
+
+.login-info .login-button:hover {
+    text-decoration: underline;
+}
+
 .combat-view {
     display: flex;
     -o-justify-content: space-between;
@@ -109,8 +127,9 @@
 .control-surface {
     position: absolute;
     bottom: 0;
-    height: 100%;
+    height: calc(100% - 30px);
     width: 100%;
+    top: 30px;
     display: flex;
     flex-direction: column;
 }

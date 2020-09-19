@@ -1,6 +1,10 @@
 ﻿@page "/"
-@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Authorization
 @inject NavigationManager Navigation
+
+@attribute [Authorize]
+
+<LoginDisplay/>
 
 @if (IsReady)
 {
