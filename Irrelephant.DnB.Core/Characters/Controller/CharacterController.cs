@@ -11,6 +11,8 @@ namespace Irrelephant.DnB.Core.Characters.Controller
         protected CharacterController(Character character)
         {
             Character = character;
+            Character.OnUpdate += OnUpdate;
+            Character.OnDeath += Die;
         }
 
         public virtual Task Act(Combat combat)
@@ -19,6 +21,24 @@ namespace Irrelephant.DnB.Core.Characters.Controller
         }
 
         public event Action OnAction;
+
+        public event Action OnDeath;
+
+        protected virtual void Die()
+        {
+            OnDeath?.Invoke();
+        }
+
+        protected virtual void OnUpdate()
+        {
+            InvokeOnAction();
+        }
+
+        public virtual Task LeaveCombat()
+        {
+            OnAction?.Invoke();
+            return Task.CompletedTask;
+        }
 
         public void InvokeOnAction()
         {

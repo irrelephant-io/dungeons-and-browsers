@@ -20,6 +20,8 @@ namespace Irrelephant.DnB.Client.Networking
 
         event Action OnReshuffleDiscardPile;
 
+        event Action<Guid> LeftCombat; 
+
         public Task NotifyJoinedAsync();
 
         public Task<bool> NotifyEndTurnAsync(Guid combatId);

@@ -22,5 +22,11 @@ namespace Irrelephant.DnB.Server.Networking
             await base.Act(combat);
             await _combatHubContext.Clients.All.SendAsync("CharacterUpdated", Character.GetCharacterSnapshot());
         }
+
+        public async override Task LeaveCombat()
+        {
+            await _combatHubContext.Clients.All.SendAsync("LeftCombat", Character.Id);
+            await base.LeaveCombat();
+        }
     }
 }

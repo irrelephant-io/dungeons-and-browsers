@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Core.Characters;
 using Irrelephant.DnB.Core.Characters.Controller;
+using Irrelephant.DnB.Core.Data.Effects;
 using Irrelephant.DnB.Core.GameFlow;
 using Moq;
 using Xunit;
@@ -93,6 +94,16 @@ namespace Irrelephant.DnB.Tests
             var extraAttacker = new Mock<AiController>(new NonPlayerCharacter { Id = Guid.NewGuid() });
             await _combat.AddAttacker(position: 0, extraAttacker.Object);
             Assert.Contains(extraAttacker.Object, _combat.Combatants);
+        }
+
+        [Fact]
+        public async Task DyingNpc_ShouldUpdateTheirActionQueueAccordingly()
+        {
+            await _combat.Start();
+            await _defender1.Object.Character.DealDamage(int.MaxValue, ignoreArmor: true);
+            var npc = (NonPlayerCharacter)_defender1.Object.Character;
+            Assert.Single(npc.ActionPool);
+            Assert.IsType<DyingEffect>(npc.ActionPool.Single());
         }
     }
 }

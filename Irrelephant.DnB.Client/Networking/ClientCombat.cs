@@ -35,6 +35,13 @@ namespace Irrelephant.DnB.Client.Networking
             _remoteCombatListener.OnDiscardCard += OnDiscardCard;
             _remoteCombatListener.OnReshuffleDiscardPile += OnReshuffleDiscardPile;
             _remoteCombatListener.OnCardPlayed += OnCardPlayed;
+            _remoteCombatListener.LeftCombat += OnLeftCombat;
+        }
+
+        private void OnLeftCombat(Guid characterId)
+        {
+            Attackers = Attackers.Where(cc => cc.Character.Id != characterId).ToArray();
+            Defenders = Defenders.Where(cc => cc.Character.Id != characterId).ToArray();
         }
 
         private void OnCardPlayed(Guid cardId)

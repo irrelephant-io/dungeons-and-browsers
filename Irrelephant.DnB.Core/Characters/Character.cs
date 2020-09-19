@@ -17,6 +17,10 @@ namespace Irrelephant.DnB.Core.Characters
 
         public string Name { get; set; }
 
+        public event Action OnUpdate;
+
+        public event Action OnDeath;
+
         public virtual Task DealDamage(int amount, bool ignoreArmor = false)
         {
             if (!ignoreArmor)
@@ -27,6 +31,19 @@ namespace Irrelephant.DnB.Core.Characters
             }
 
             Health -= Math.Min(Health, amount);
+
+            if (!IsAlive)
+            {
+                Die();
+            }
+
+            OnUpdate?.Invoke();
+            return Task.CompletedTask;
+        }
+
+        protected virtual Task Die()
+        {
+            OnDeath?.Invoke();
             return Task.CompletedTask;
         }
 

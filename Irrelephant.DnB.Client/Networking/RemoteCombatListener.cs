@@ -30,6 +30,7 @@ namespace Irrelephant.DnB.Client.Networking
             _connection.On<Guid>("DiscardCard", cardId => OnDiscardCard?.Invoke(cardId));
             _connection.On<Guid>("CardPlayed", cardId => OnCardPlayed?.Invoke(cardId));
             _connection.On("ReshuffleDiscardPile", () => OnReshuffleDiscardPile?.Invoke());
+            _connection.On<Guid>("LeftCombat", (characterId) => LeftCombat?.Invoke(characterId));
         }
 
         public event Action<CombatSnapshot> OnJoinedCombat;
@@ -45,6 +46,8 @@ namespace Irrelephant.DnB.Client.Networking
         public event Action OnReshuffleDiscardPile;
 
         public event Action OnMyTurn;
+
+        public event Action<Guid> LeftCombat; 
 
         public async Task NotifyJoinedAsync()
         {

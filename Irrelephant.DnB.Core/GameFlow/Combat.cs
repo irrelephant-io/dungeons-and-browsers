@@ -76,7 +76,7 @@ namespace Irrelephant.DnB.Core.GameFlow
         public async Task ResolveRound()
         {
             await Combatants.Sequentially(RunCombatantTurn);
-            CleanupDeadBodies();
+            await CleanupDeadBodies();
             await JoinPendingCombatants();
             Round++;
         }
@@ -154,10 +154,18 @@ namespace Irrelephant.DnB.Core.GameFlow
             await playerCharacter.DiscardHand();
         }
 
-        private void CleanupDeadBodies()
+        private async Task CleanupDeadBodies()
         {
+            var cleanedUpAttackers = Attackers.Where(combatant => !combatant.Character.IsAlive).ToArray();
             Attackers = Attackers.Where(combatant => combatant.Character.IsAlive).ToArray();
+            var cleanedUpDefenders = Defenders.Where(combatant => !combatant.Character.IsAlive).ToArray();
             Defenders = Defenders.Where(combatant => combatant.Character.IsAlive).ToArray();
+            await Cleanup(cleanedUpDefenders.Union(cleanedUpAttackers).ToArray());
+        }
+
+        private async Task Cleanup(IEnumerable<CharacterController> cleanedUpChars)
+        {
+            await cleanedUpChars.Sequentially(cc => cc.LeaveCombat());
         }
     }
 }
