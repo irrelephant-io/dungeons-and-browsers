@@ -1,7 +1,6 @@
 ﻿using Irrelephant.DnB.Core.Infrastructure;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -47,8 +46,9 @@ namespace Irrelephant.DnB.Core.Utils
             Func<TItem, TKey> keySelector,
             Func<TItem, Task<TValue>> valueSelector)
         {
-            var values= await Task.WhenAll(items.Select(valueSelector));
-            var keys = items.Select(keySelector);
+            var enumerable = items as TItem[] ?? items.ToArray();
+            var values = await Task.WhenAll(enumerable.Select(valueSelector));
+            var keys = enumerable.Select(keySelector);
 
             return keys
                 .Zip(values, (k, v) => new KeyValuePair<TKey, TValue>(k, v))

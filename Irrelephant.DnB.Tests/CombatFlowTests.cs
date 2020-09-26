@@ -29,8 +29,8 @@ namespace Irrelephant.DnB.Tests
 
             _combat = new Combat
             {
-                Attackers = new[] { _attacker.Object },
-                Defenders = new[] { _defender1.Object, _defender2.Object }
+                Attackers = new List<CharacterController> { _attacker.Object },
+                Defenders = new List<CharacterController> { _defender1.Object, _defender2.Object }
             };
         }
 

@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace Irrelephant.DnB.Client.Shared
 {
-    public partial class ControlSurface : ComponentBase, ITargetProvider
+    public partial class ControlSurface : ITargetProvider
     {
         [Parameter]
         public Guid CombatId { get; set; }

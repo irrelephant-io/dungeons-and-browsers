@@ -13,17 +13,17 @@ namespace Irrelephant.DnB.Core.GameFlow
     {
         public Guid CombatId { get; set; }
 
-        public virtual IEnumerable<CharacterController> Attackers { get; set; }
+        public virtual IList<CharacterController> Attackers { get; set; }
 
-        public virtual IList<(int pos, CharacterController cc)> PendingAttackers { get; set; } = new List<(int pos, CharacterController cc)>();
+        public IList<(int pos, CharacterController cc)> PendingAttackers { get; protected set; } = new List<(int pos, CharacterController cc)>();
 
-        public virtual IEnumerable<CharacterController> Defenders { get; set; }
+        public virtual IList<CharacterController> Defenders { get; set; }
 
-        public virtual IList<(int pos, CharacterController cc)> PendingDefenders { get; set; } = new List<(int pos, CharacterController cc)>();
+        public IList<(int pos, CharacterController cc)> PendingDefenders { get; protected set; } = new List<(int pos, CharacterController cc)>();
 
-        public virtual IEnumerable<CharacterController> PendingCombatants => PendingAttackers.Union(PendingDefenders).Select(pending => pending.cc);
+        public IEnumerable<CharacterController> PendingCombatants => PendingAttackers.Union(PendingDefenders).Select(pending => pending.cc);
 
-        public virtual IEnumerable<CharacterController> Combatants => Attackers.Union(Defenders);
+        public IEnumerable<CharacterController> Combatants => Attackers.Union(Defenders);
 
         public CharacterController CurrentActiveCharacter { get; private set; }
 
@@ -50,7 +50,7 @@ namespace Irrelephant.DnB.Core.GameFlow
             return FindController(cc => cc.Character.Id == id);
         }
 
-        public CharacterController FindController(Func<CharacterController, bool> predicate)
+        private CharacterController FindController(Func<CharacterController, bool> predicate)
         {
             return Attackers.FirstOrDefault(predicate) 
                    ?? Defenders.FirstOrDefault(predicate)
@@ -87,56 +87,47 @@ namespace Irrelephant.DnB.Core.GameFlow
             Round++;
         }
 
-        public Task AddAttacker(int position, CharacterController controller)
+        public async Task AddAttacker(int position, CharacterController controller)
         {
             if (IsStarted)
             {
-                controller.JoinPendingCombat(JoinedSide.Attackers, position);
+                await controller.JoinPendingCombat(JoinedSide.Attackers, position);
                 PendingAttackers.Add((position, controller));
             }
             else
             {
-                var attackerList = Attackers.ToList();
-                attackerList.Insert(position, controller);
-                Attackers = attackerList.ToArray();
+                Attackers.Insert(position, controller);
             }
-            return Task.CompletedTask;
         }
 
-        public Task AddDefender(int position, CharacterController controller)
+        public async Task AddDefender(int position, CharacterController controller)
         {
             if (IsStarted)
             {
-                controller.JoinPendingCombat(JoinedSide.Defenders, position);
+                await controller.JoinPendingCombat(JoinedSide.Defenders, position);
                 PendingDefenders.Add((position, controller));
             }
             else
             {
-                var defenderList = Defenders.ToList();
-                defenderList.Insert(position, controller);
-                Defenders = defenderList.ToArray();
+                Defenders.Insert(position, controller);
             }
-
-            return Task.CompletedTask;
         }
 
         private async Task JoinPendingCombatants()
         {
-            Attackers = await JoinSide(Attackers, PendingAttackers);
-            Defenders = await JoinSide(Defenders, PendingDefenders);
+            await JoinSide(Attackers, PendingAttackers);
+            await JoinSide(Defenders, PendingDefenders);
         }
 
-        private async Task<CharacterController[]> JoinSide(IEnumerable<CharacterController> side, IList<(int pos, CharacterController cc)> buffer)
+        private async Task JoinSide(IList<CharacterController> side, IList<(int pos, CharacterController cc)> buffer)
         {
-            var sideList = side.ToList();
             foreach (var pending in buffer)
             {
-                sideList.Insert(pending.pos, pending.cc);
+                side.Insert(pending.pos, pending.cc);
                 pending.cc.OnAction += NotifyUpdate;
-                await pending.cc.JoinCombat(side == Attackers ? JoinedSide.Attackers : JoinedSide.Defenders, pending.pos);
+                await pending.cc.JoinCombat(ReferenceEquals(side, Attackers) ? JoinedSide.Attackers : JoinedSide.Defenders, pending.pos);
             }
             buffer.Clear();
-            return sideList.ToArray();
         }
 
         private async Task RunCombatantTurn(CharacterController characterController)
@@ -166,9 +157,9 @@ namespace Irrelephant.DnB.Core.GameFlow
         private async Task CleanupDeadBodies()
         {
             var cleanedUpAttackers = Attackers.Where(combatant => !combatant.Character.IsAlive).ToArray();
-            Attackers = Attackers.Where(combatant => combatant.Character.IsAlive).ToArray();
+            cleanedUpAttackers.ForEach(cc => Attackers.Remove(cc));
             var cleanedUpDefenders = Defenders.Where(combatant => !combatant.Character.IsAlive).ToArray();
-            Defenders = Defenders.Where(combatant => combatant.Character.IsAlive).ToArray();
+            cleanedUpDefenders.ForEach(cc => Defenders.Remove(cc));
             await Cleanup(cleanedUpDefenders.Union(cleanedUpAttackers).ToArray());
         }
 

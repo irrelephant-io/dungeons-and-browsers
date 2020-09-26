@@ -6,7 +6,6 @@ using Irrelephant.DnB.Core.Characters.Controller;
 using Irrelephant.DnB.Core.Data;
 using Irrelephant.DnB.Core.Data.Effects;
 using Irrelephant.DnB.Core.GameFlow;
-using Irrelephant.DnB.Core.Infrastructure;
 using Irrelephant.DnB.Tests.Utilities;
 using Moq;
 using Xunit;

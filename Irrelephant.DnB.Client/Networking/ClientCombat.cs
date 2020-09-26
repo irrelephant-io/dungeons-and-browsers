@@ -44,59 +44,27 @@ namespace Irrelephant.DnB.Client.Networking
         private void OnPendingCombat(JoinFightMessage message)
         {
             var character = MapCharacter(message.Character);
-            if (message.Side == JoinedSide.Attackers)
-            {
-                var attackersList = PendingAttackers.ToList();
-                attackersList.Add((message.Position, character));
-                PendingAttackers = attackersList;
-            }
-            else
-            {
-                var defendersList = PendingDefenders.ToList();
-                defendersList.Add((message.Position, character));
-                PendingDefenders = defendersList;
-            }
+            var pendingCollection = message.Side == JoinedSide.Attackers ? PendingAttackers : PendingDefenders;
+            pendingCollection.Add((message.Position, character));
             NotifyUpdate();
         }
 
         private void OnCharacterJoined(JoinFightMessage message)
         {
             var character = MapCharacter(message.Character);
-            if (message.Side == JoinedSide.Attackers)
-            {
-                InsertNewAttacker(message.Position, character);
-            }
-            else
-            {
-                InsertNewDefender(message.Position, character);
-            }
+            var pendingCollection = message.Side == JoinedSide.Attackers ? PendingAttackers : PendingDefenders;
+            var actualCollection = message.Side == JoinedSide.Attackers ? Attackers : Defenders;
+            var pendingEntry = pendingCollection.Single(pending => pending.cc.Character.Id == character.Character.Id);
+            pendingCollection.Remove(pendingEntry);
+            actualCollection.Insert(pendingEntry.pos, pendingEntry.cc);
             NotifyUpdate();
-        }
-
-        private void InsertNewAttacker(int position, CharacterController character)
-        {
-            var newCharList = Attackers.ToList();
-            var pendingList = PendingAttackers.ToList();
-            var pendingChar = PendingAttackers.FirstOrDefault(pending => pending.cc.Character.Id == character.Character.Id);
-            pendingList.Remove(pendingChar);
-            newCharList.Insert(position, pendingChar.cc);
-            Attackers = newCharList.ToArray();
-        }
-
-        private void InsertNewDefender(int position, CharacterController character)
-        {
-            var newCharList = Defenders.ToList();
-            var pendingList = PendingDefenders.ToList();
-            var pendingChar = PendingDefenders.FirstOrDefault(pending => pending.cc.Character.Id == character.Character.Id);
-            pendingList.Remove(pendingChar);
-            newCharList.Insert(position, pendingChar.cc);
-            Defenders = newCharList.ToArray();
         }
 
         private void OnLeftCombat(Guid characterId)
         {
-            Attackers = Attackers.Where(cc => cc.Character.Id != characterId).ToArray();
-            Defenders = Defenders.Where(cc => cc.Character.Id != characterId).ToArray();
+            var character = FindControllerByCharacterId(characterId);
+            Attackers.Remove(character);
+            Defenders.Remove(character);
         }
 
         private void OnCardPlayed(Guid cardId)
@@ -151,12 +119,11 @@ namespace Irrelephant.DnB.Client.Networking
         {
             CombatId = snapshot.Id;
             MyId = snapshot.ActiveCharacterId;
-            Attackers = snapshot.Attackers.Select(MapCharacter).ToArray();
-            PendingAttackers = snapshot.PendingAttackers.Select((item, index) => (index, MapCharacter(item))).ToArray();
-            Defenders = snapshot.Defenders.Select(MapCharacter).ToArray();
-            PendingDefenders = snapshot.PendingDefenders.Select((item, index) => (index, MapCharacter(item))).ToArray();
+            Attackers = snapshot.Attackers.Select(MapCharacter).ToList();
+            PendingAttackers = snapshot.PendingAttackers.Select((item, index) => (index, MapCharacter(item))).ToList();
+            Defenders = snapshot.Defenders.Select(MapCharacter).ToList();
+            PendingDefenders = snapshot.PendingDefenders.Select((item, index) => (index, MapCharacter(item))).ToList();
             MyCharacter.ClientCombat = this;
-            Console.WriteLine(MyCharacter.ClientCombat == null);
             IsReady = true;
             NotifyUpdate();
         }

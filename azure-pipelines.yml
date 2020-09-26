@@ -22,8 +22,11 @@ steps:
     command: build
     configuration: $(buildConfiguration)
     projects: "**/*.csproj"
-    feedsToUse: "select"
-    vstsFeed: "Content"
+
+- task: DotNetCoreCLI@2
+  displayName: "Run tests"
+  inputs:
+    command: test
 
 - task: DotNetCoreCLI@2
   displayName: "Publish backend"

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace Irrelephant.DnB.Client.Shared
 {
-    public partial class CombatView : ComponentBase
+    public partial class CombatView
     {
         [Parameter] public ClientCombat Combat { get; set; }
 
@@ -14,7 +14,7 @@ namespace Irrelephant.DnB.Client.Shared
         {
             if (Combat != null)
             {
-                Console.WriteLine("Wathcing combat " + Combat.CombatId);
+                Console.WriteLine("Watching combat " + Combat.CombatId);
             }
         }
     }
