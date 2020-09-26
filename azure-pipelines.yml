@@ -37,7 +37,7 @@ steps:
 - task: PublishBuildArtifacts@1
   displayName: Publish backend artifact
   inputs:
-    artifactName: frontend-drop
+    artifactName: backend-drop
     pathToPublish: "$(Build.ArtifactStagingDirectory)/backend"
 
 - task: DotNetCoreCLI@2
