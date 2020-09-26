@@ -7,7 +7,8 @@ namespace Irrelephant.DnB.Client.Pages
     [Authorize]
     public partial class Index
     {
-        private NavigationManager NavigationManager { get; }
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
 
         [Parameter]
         public string CombatId { get; set; }
