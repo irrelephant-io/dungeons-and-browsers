@@ -29,10 +29,10 @@ steps:
   displayName: "Publish backend"
   inputs:
     command: publish
-    publishWebProjects: False
+    publishWebProjects: false
     projects: "**/Irrelephant.DnB.Server.csproj"
     arguments: "--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/backend"
-    zipAfterPublish: False
+    zipAfterPublish: true
 
 - task: PublishBuildArtifacts@1
   displayName: Publish backend artifact
@@ -44,10 +44,10 @@ steps:
   displayName: "Publish frontend"
   inputs:
     command: publish
-    publishWebProjects: False
+    publishWebProjects: false
     projects: "**/Irrelephant.DnB.Client.csproj"
     arguments: "--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/frontend"
-    zipAfterPublish: False
+    zipAfterPublish: true
 
 - task: PublishBuildArtifacts@1
   displayName: Publish frontend artifact
