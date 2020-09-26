@@ -17,7 +17,7 @@ namespace Irrelephant.DnB.Client.Pages
 
         private Guid? _verifiedCombatId { get; set; }
 
-        public bool IsReady;
+        private bool IsReady { get; set; }
 
         protected override void OnParametersSet()
         {
