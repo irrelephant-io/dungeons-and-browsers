@@ -33,3 +33,6 @@ msbuild.wrn
 
 # NCrunch caches
 _NCrunch_*
+
+# local appsettings
+**/appsettings.Development.json

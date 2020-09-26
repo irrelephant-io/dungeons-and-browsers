@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Irrelephant.DnB.Core.Infrastructure;
 
 namespace Irrelephant.DnB.Core.Characters
 {
-    public abstract class Character
+    public abstract class Character : ICopyable<Character>
     {
         public Guid Id { get; set; }
 
@@ -50,5 +51,12 @@ namespace Irrelephant.DnB.Core.Characters
         public bool IsAlive => !CanDie || Health > 0;
 
         public bool CanDie => MaxHealth > 0;
+
+        public Character Copy()
+        {
+            var newChar = (NonPlayerCharacter)MemberwiseClone();
+            newChar.Id = Guid.NewGuid();
+            return newChar;
+        }
     }
 }

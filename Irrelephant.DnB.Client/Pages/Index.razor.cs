@@ -1,29 +1,52 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Client.Networking;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 
 namespace Irrelephant.DnB.Client.Pages
 {
+    [Authorize]
     public partial class Index : ComponentBase
     {
-        public bool IsReady;
-        
-        private ClientCombat _combat;
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
 
-        protected async override Task OnAfterRenderAsync(bool firstRender)
+        [Parameter]
+        public string CombatId { get; set; }
+
+        private Guid? _verifiedCombatId { get; set; }
+
+        public bool IsReady;
+
+        protected override void OnParametersSet()
         {
-            if (firstRender)
+            _verifiedCombatId = GetCombatId();
+            if (_verifiedCombatId == null)
             {
-                Console.WriteLine("Creating combat");
-                var network = new RemoteCombatListener(Navigation);
-                await network.StartAsync();
-                _combat = new ClientCombat(network);
-                _combat.OnUpdate += StateHasChanged;
-                IsReady = true;
-                Console.WriteLine("All good");
+                NavigationManager.NavigateTo(Guid.NewGuid().ToString("D"));
                 StateHasChanged();
             }
+            else
+            {
+                IsReady = true;
+                StateHasChanged();
+            }
+        }
+
+        private Guid? GetCombatId()
+        {
+            if (string.IsNullOrEmpty(CombatId))
+            {
+                return null;
+            }
+
+            if (Guid.TryParse(CombatId, out var guidId))
+            {
+                return guidId;
+            }
+
+            return null;
         }
     }
 }

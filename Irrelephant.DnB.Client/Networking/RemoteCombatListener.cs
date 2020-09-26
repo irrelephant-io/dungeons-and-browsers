@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Irrelephant.DnB.Client.Infrastructure;
 using Irrelephant.DnB.Core.Utils;
 using Irrelephant.DnB.DataTransfer.Models;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace Irrelephant.DnB.Client.Networking
@@ -13,10 +12,15 @@ namespace Irrelephant.DnB.Client.Networking
     {
         private readonly HubConnection _connection;
 
-        public RemoteCombatListener(NavigationManager navigationManager)
+        private Guid CombatId { get; }
+
+        public RemoteCombatListener(IApiTokenProvider apiTokenProvider, Uri baseAddress, Guid combatId)
         {
+            CombatId = combatId;
             _connection = new HubConnectionBuilder()
-                .WithUrl("https://localhost:44364/combat")
+                .WithUrl(new Uri(baseAddress, "combat"), opts => {
+                    opts.AccessTokenProvider = apiTokenProvider.GetToken;
+                })
                 .Build();
             SetupEventListeners();
         }
@@ -31,6 +35,8 @@ namespace Irrelephant.DnB.Client.Networking
             _connection.On<Guid>("CardPlayed", cardId => OnCardPlayed?.Invoke(cardId));
             _connection.On("ReshuffleDiscardPile", () => OnReshuffleDiscardPile?.Invoke());
             _connection.On<Guid>("LeftCombat", (characterId) => LeftCombat?.Invoke(characterId));
+            _connection.On<JoinFightMessage>("CharacterJoined", message => OnCharacterJoined?.Invoke(message));
+            _connection.On<JoinFightMessage>("PendingCombat", message => OnPendingCombat?.Invoke(message));
         }
 
         public event Action<CombatSnapshot> OnJoinedCombat;
@@ -47,23 +53,27 @@ namespace Irrelephant.DnB.Client.Networking
 
         public event Action OnMyTurn;
 
-        public event Action<Guid> LeftCombat; 
+        public event Action<Guid> LeftCombat;
+
+        public event Action<JoinFightMessage> OnCharacterJoined;
+
+        public event Action<JoinFightMessage> OnPendingCombat;
 
         public async Task NotifyJoinedAsync()
         {
-            await _connection.SendAsync("JoinCombat");
+            await _connection.SendAsync("JoinCombat", CombatId);
         }
 
-        public async Task<bool> NotifyEndTurnAsync(Guid combatId)
+        public async Task<bool> NotifyEndTurnAsync()
         {
-            await _connection.SendAsync("EndTurn", combatId);
+            await _connection.SendAsync("EndTurn", CombatId);
             return true;
         }
 
-        public async Task PlayCard(Guid combatId, CardTargets targets)
+        public async Task PlayCard(CardTargets targets)
         {
             var targetIds = targets.EffectTargets.Select(kvp => kvp.Key.ArrayOf().Union(kvp.Value).ToArray()).ToArray();
-            await _connection.SendAsync("PlayCard", combatId, targets.CardId, targetIds);
+            await _connection.SendAsync("PlayCard", CombatId, targets.CardId, targetIds);
         }
 
         public async Task StartAsync()

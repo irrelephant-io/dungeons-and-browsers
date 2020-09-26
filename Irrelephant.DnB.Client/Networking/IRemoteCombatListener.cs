@@ -20,13 +20,17 @@ namespace Irrelephant.DnB.Client.Networking
 
         event Action OnReshuffleDiscardPile;
 
-        event Action<Guid> LeftCombat; 
+        event Action<Guid> LeftCombat;
+
+        event Action<JoinFightMessage> OnCharacterJoined;
+
+        public event Action<JoinFightMessage> OnPendingCombat;
 
         public Task NotifyJoinedAsync();
 
-        public Task<bool> NotifyEndTurnAsync(Guid combatId);
+        public Task<bool> NotifyEndTurnAsync();
 
-        public Task PlayCard(Guid combatId, CardTargets targets);
+        public Task PlayCard(CardTargets targets);
 
         public Task StartAsync();
     }

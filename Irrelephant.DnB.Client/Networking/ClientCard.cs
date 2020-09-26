@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Core.Cards;
 using Irrelephant.DnB.Core.Characters;
@@ -29,6 +30,7 @@ namespace Irrelephant.DnB.Client.Networking
                     async e => (await targetProvider.PickTarget(e)).Select(c => c.Id).ToArray())
             };
             var clientCharacter = (ClientPlayerCharacter)player;
+            Console.WriteLine(clientCharacter.ClientCombat == null);
             await clientCharacter.ClientCombat.PlayCard(targets);
         }
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Core.Characters;
 using Irrelephant.DnB.Core.Characters.Controller;
+using Irrelephant.DnB.Core.Data;
 using Irrelephant.DnB.Core.Utils;
 
 namespace Irrelephant.DnB.Core.GameFlow
@@ -14,11 +15,13 @@ namespace Irrelephant.DnB.Core.GameFlow
 
         public virtual IEnumerable<CharacterController> Attackers { get; set; }
 
-        private IList<(int pos, CharacterController cc)> PendingAttackers { get; } = new List<(int pos, CharacterController cc)>();
+        public virtual IList<(int pos, CharacterController cc)> PendingAttackers { get; set; } = new List<(int pos, CharacterController cc)>();
 
         public virtual IEnumerable<CharacterController> Defenders { get; set; }
 
-        private IList<(int pos, CharacterController cc)> PendingDefenders { get; } = new List<(int pos, CharacterController cc)>();
+        public virtual IList<(int pos, CharacterController cc)> PendingDefenders { get; set; } = new List<(int pos, CharacterController cc)>();
+
+        public virtual IEnumerable<CharacterController> PendingCombatants => PendingAttackers.Union(PendingDefenders).Select(pending => pending.cc);
 
         public virtual IEnumerable<CharacterController> Combatants => Attackers.Union(Defenders);
 
@@ -49,7 +52,10 @@ namespace Irrelephant.DnB.Core.GameFlow
 
         public CharacterController FindController(Func<CharacterController, bool> predicate)
         {
-            return Attackers.FirstOrDefault(predicate) ?? Defenders.FirstOrDefault(predicate);
+            return Attackers.FirstOrDefault(predicate) 
+                   ?? Defenders.FirstOrDefault(predicate)
+                   ?? PendingAttackers.FirstOrDefault(pair => predicate(pair.cc)).cc
+                   ?? PendingDefenders.FirstOrDefault(pair => predicate(pair.cc)).cc;
         }
 
         public Task Start()
@@ -85,6 +91,7 @@ namespace Irrelephant.DnB.Core.GameFlow
         {
             if (IsStarted)
             {
+                controller.JoinPendingCombat(JoinedSide.Attackers, position);
                 PendingAttackers.Add((position, controller));
             }
             else
@@ -100,6 +107,7 @@ namespace Irrelephant.DnB.Core.GameFlow
         {
             if (IsStarted)
             {
+                controller.JoinPendingCombat(JoinedSide.Defenders, position);
                 PendingDefenders.Add((position, controller));
             }
             else
@@ -118,16 +126,17 @@ namespace Irrelephant.DnB.Core.GameFlow
             Defenders = await JoinSide(Defenders, PendingDefenders);
         }
 
-        private Task<CharacterController[]> JoinSide(IEnumerable<CharacterController> side, IList<(int pos, CharacterController cc)> buffer)
+        private async Task<CharacterController[]> JoinSide(IEnumerable<CharacterController> side, IList<(int pos, CharacterController cc)> buffer)
         {
             var sideList = side.ToList();
             foreach (var pending in buffer)
             {
                 sideList.Insert(pending.pos, pending.cc);
                 pending.cc.OnAction += NotifyUpdate;
+                await pending.cc.JoinCombat(side == Attackers ? JoinedSide.Attackers : JoinedSide.Defenders, pending.pos);
             }
             buffer.Clear();
-            return Task.FromResult(sideList.ToArray());
+            return sideList.ToArray();
         }
 
         private async Task RunCombatantTurn(CharacterController characterController)

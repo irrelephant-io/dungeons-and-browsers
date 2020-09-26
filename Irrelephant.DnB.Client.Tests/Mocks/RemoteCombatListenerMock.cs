@@ -23,7 +23,7 @@ namespace Irrelephant.DnB.Client.Tests.Mocks
 
         private void SetupPlayCard()
         {
-            Setup(l => l.PlayCard(It.IsAny<Guid>(), It.IsAny<CardTargets>()))
+            Setup(l => l.PlayCard(It.IsAny<CardTargets>()))
                 .Callback<Guid, CardTargets>(async (_, cardTargets) => {
                     if (!_isMyTurn)
                     {
@@ -43,7 +43,7 @@ namespace Irrelephant.DnB.Client.Tests.Mocks
 
         private void SetupNotifyEndTurn()
         {
-            Setup(l => l.NotifyEndTurnAsync(It.IsAny<Guid>()))
+            Setup(l => l.NotifyEndTurnAsync())
                 .Callback(async () =>
                 {
                     if (!_isMyTurn)

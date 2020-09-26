@@ -7,10 +7,11 @@
   <ItemGroup>
     <ProjectReference Include="..\Irrelephant.DnB.Core\Irrelephant.DnB.Core.csproj" />
     <ProjectReference Include="..\Irrelephant.DnB.DataTransfer\Irrelephant.DnB.DataTransfer.csproj" />
+    <ProjectReference Include="..\Irrelephant.DnB.Server.Authentication\Irrelephant.DnB.Server.Authentication.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.8" />
   </ItemGroup>
 
 

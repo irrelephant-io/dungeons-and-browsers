@@ -5,7 +5,7 @@ namespace Irrelephant.DnB.Core.Characters
 {
     public static class CharacterLibrary
     {
-        public static Character VileGoblin = new NonPlayerCharacter
+        public static readonly Character VileGoblin = new NonPlayerCharacter
         {
             Id = Guid.NewGuid(),
             GraphicId = "goblin-0",
@@ -19,7 +19,7 @@ namespace Irrelephant.DnB.Core.Characters
             }
         };
 
-        public static Character WretchedGoblin = new NonPlayerCharacter
+        public static readonly Character WretchedGoblin = new NonPlayerCharacter
         {
             Id = Guid.NewGuid(),
             GraphicId = "goblin-1",
@@ -32,7 +32,7 @@ namespace Irrelephant.DnB.Core.Characters
             }
         };
 
-        public static Character RagingOrc = new NonPlayerCharacter
+        public static readonly Character RagingOrc = new NonPlayerCharacter
         {
             Id = Guid.NewGuid(),
             GraphicId = "orc-0",

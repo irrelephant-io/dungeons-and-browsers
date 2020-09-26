@@ -12,8 +12,14 @@ namespace Irrelephant.DnB.DataTransfer.Models
         [DataMember(Name = "attackers")]
         public CharacterSnapshot[] Attackers { get; set; }
 
+        [DataMember(Name = "pendingAttackers")]
+        public CharacterSnapshot[] PendingAttackers { get; set; }
+
         [DataMember(Name = "defenders")]
         public CharacterSnapshot[] Defenders { get; set; }
+
+        [DataMember(Name = "pendingDefenders")]
+        public CharacterSnapshot[] PendingDefenders { get; set; }
 
         [DataMember(Name = "activeCharacterId")]
         public Guid ActiveCharacterId { get; set; }

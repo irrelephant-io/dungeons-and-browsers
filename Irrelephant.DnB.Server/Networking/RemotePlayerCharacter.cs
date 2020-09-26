@@ -15,6 +15,8 @@ namespace Irrelephant.DnB.Server.Networking
 
         public IClientProxy HubClient => _combatHubContext.Clients.Client(ConnectionId);
 
+        public IClientProxy BroadcastHubClient => _combatHubContext.Clients.All;
+
         public RemotePlayerCharacter(IHubContext<CombatHub> combatHubContext)
         {
             _combatHubContext = combatHubContext;

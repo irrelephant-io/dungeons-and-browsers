@@ -1,6 +1,6 @@
-using System;
-using System.ComponentModel.Design;
 using System.Linq;
+using Irrelephant.DnB.Server.Authentication.Extensions;
+using Irrelephant.DnB.Server.Authentication.Options;
 using Irrelephant.DnB.Server.Hubs;
 using Irrelephant.DnB.Server.Repositories;
 using Microsoft.AspNetCore.Builder;
@@ -27,17 +27,20 @@ namespace Irrelephant.DnB.Server
             services.AddSignalR(cfg => {
                 cfg.EnableDetailedErrors = true;
             });
+            services
+                .AddOptions()
+                .Configure<GoogleApiCredentials>(Configuration.GetSection("Auth:GoogleCredentials").Bind);
+            services.AddConfiguredAuthentication(Configuration);
             services.AddScoped(container => container);
             services.AddSingleton<ICombatRepository, MemoryCombatRepository>();
             services.AddResponseCompression(options =>
-                options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new [] {"application/octet-stream" })
+                options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "application/octet-stream" })
             );
-            services.AddCors(options => options.AddPolicy("DefaultCorsPolicy", builder =>
-            {
+            services.AddCors(options => options.AddPolicy("DefaultCorsPolicy", builder => {
                 builder.AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()
-                    .WithOrigins("https://localhost:44325");
+                    .WithOrigins(Configuration.GetValue<string>("Cors:FrontEndOrigin"));
             }));
             services.AddControllers();
         }
@@ -52,11 +55,11 @@ namespace Irrelephant.DnB.Server
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseResponseCompression();
             app.UseCors("DefaultCorsPolicy");
-            app.UseEndpoints(endpoints =>
-            {
+            app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
                 endpoints.MapHub<CombatHub>("/combat");
             });

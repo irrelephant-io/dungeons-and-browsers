@@ -24,6 +24,8 @@ namespace Irrelephant.DnB.Server.SampleData
                 Turn = combat.Round,
                 Attackers = combat.Attackers.Select(cc => cc.Character).Select(c => GetCharacterSnapshot(c)).ToArray(),
                 Defenders = combat.Defenders.Select(cc => cc.Character).Select(c => GetCharacterSnapshot(c)).ToArray(),
+                PendingAttackers = combat.PendingAttackers.Select(pair => pair.cc.Character).Select(c => GetCharacterSnapshot(c)).ToArray(),
+                PendingDefenders = combat.PendingDefenders.Select(pair => pair.cc.Character).Select(c => GetCharacterSnapshot(c)).ToArray()
             };
         }
 
@@ -90,12 +92,12 @@ namespace Irrelephant.DnB.Server.SampleData
             {
                 Attackers = new CharacterController[]
                 {
-                    new RemoteAiController(hubContext, CharacterLibrary.VileGoblin)
+                    new RemoteAiController(hubContext, CharacterLibrary.VileGoblin.Copy())
                 },
                 Defenders = new[]
                 {
-                    new RemoteAiController(hubContext, CharacterLibrary.RagingOrc),
-                    new RemoteAiController(hubContext, CharacterLibrary.WretchedGoblin)
+                    new RemoteAiController(hubContext, CharacterLibrary.RagingOrc.Copy()),
+                    new RemoteAiController(hubContext, CharacterLibrary.WretchedGoblin.Copy())
                 }
             };
         }
@@ -180,7 +182,7 @@ namespace Irrelephant.DnB.Server.SampleData
                 Health = 70,
                 ActionsMax = 4,
                 DrawLimit = 6,
-                DrawPile = playerHand
+                DrawPile = playerHand.Shuffle()
             };
         }
     }

@@ -7,6 +7,7 @@ using Irrelephant.DnB.Core.GameFlow;
 using Irrelephant.DnB.Server.Networking;
 using Irrelephant.DnB.Server.Repositories;
 using Irrelephant.DnB.Server.SampleData;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Irrelephant.DnB.Server.Hubs
@@ -21,20 +22,78 @@ namespace Irrelephant.DnB.Server.Hubs
             _services = services;
             _combatRepo = combatRepo;
         }
-        
-        public async Task JoinCombat()
+
+        [Authorize]
+        public async Task JoinCombat(Guid combatId)
         {
-            var combat = CombatFactory.BuildCombat(_services);
-            combat.CombatId = Guid.NewGuid();
+            var combat = await GetOrCreateCombat(combatId);
+            var joiningPlayer = TryFindJoiningPlayer(combat);
+            if (joiningPlayer != null)
+            {
+                await RejoinExistingPlayer(joiningPlayer, combat);
+            }
+            else
+            {
+                await JoinNewPlayer(combat);
+                StartCombatIfNecessary(combat);
+            }
+        }
+
+        private async Task JoinNewPlayer(Combat combat)
+        {
             var joiningCharacter = CombatFactory.SetupPlayer(_services);
+            joiningCharacter.Name = Context.User.Identity.Name;
             joiningCharacter.ConnectionId = Context.ConnectionId;
-            var player = new RemotePlayerCharacterController(joiningCharacter);
-            await combat.AddAttacker(0, player);
+            var player = new RemotePlayerCharacterController(joiningCharacter)
+            {
+                ControllingIdentity = Context.User.Identity
+            };
+            if (combat.IsStarted)
+            {
+                await combat.AddDefender(0, player);
+            }
+            else
+            {
+                await combat.AddAttacker(0, player);
+            }
             var snapshot = combat.GetSnapshot();
-            snapshot.ActiveCharacterId = player.Character.Id;
-            await Clients.All.Joined(snapshot);
+            snapshot.ActiveCharacterId = joiningCharacter.Id;
+            await Clients.Caller.Joined(snapshot);
+        }
+
+        private async Task RejoinExistingPlayer(RemotePlayerCharacterController joiningPlayer, Combat combat)
+        {
+            joiningPlayer.RemoteCharacter.ConnectionId = Context.ConnectionId;
+            var snapshot = combat.GetSnapshot();
+            snapshot.ActiveCharacterId = joiningPlayer.RemoteCharacter.Id;
+            await Clients.Caller.Joined(snapshot);
+        }
+
+        private RemotePlayerCharacterController TryFindJoiningPlayer(Combat combat)
+        {
+            return combat.Combatants.Union(combat.PendingCombatants).FirstOrDefault(cc =>
+                cc is RemotePlayerCharacterController remoteCc
+                && remoteCc.ControllingIdentity.Name == Context.User.Identity.Name
+            ) as RemotePlayerCharacterController;
+        }
+
+        private async Task<Combat> GetOrCreateCombat(Guid? combatId)
+        {
+            Combat combat;
+
+            if (combatId.HasValue)
+            {
+                combat = await _combatRepo.GetCombat(combatId.Value);
+                if (combat != null)
+                {
+                    return combat;
+                }
+            }
+
+            combat = CombatFactory.BuildCombat(_services);
+            combat.CombatId = combatId ?? Guid.NewGuid();
             await _combatRepo.AddCombat(combat);
-            StartCombatIfNecessary(combat);
+            return combat;
         }
 
         private void StartCombatIfNecessary(Combat combat)
@@ -55,6 +114,7 @@ namespace Irrelephant.DnB.Server.Hubs
             await _combatRepo.RemoveCombat(combat);
         }
 
+        [Authorize]
         public async Task PlayCard(Guid combatId, Guid cardId, Guid[][] targets)
         {
             var combat = await _combatRepo.GetCombat(combatId);
@@ -71,6 +131,7 @@ namespace Irrelephant.DnB.Server.Hubs
             }
         }
 
+        [Authorize]
         public async Task EndTurn(Guid combatId)
         {
             var combat = await _combatRepo.GetCombat(combatId);
@@ -82,7 +143,7 @@ namespace Irrelephant.DnB.Server.Hubs
             else
             {
                 throw new NotMyTurnException();
-            }
+            } 
         }
     }
 }

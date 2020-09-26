@@ -1,16 +1,12 @@
-﻿@page "/"
+﻿@page "/{combatId}"
 @using Microsoft.AspNetCore.Authorization
-@inject NavigationManager Navigation
-
-@attribute [Authorize]
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 
 <LoginDisplay/>
 
 @if (IsReady)
 {
-    <ControlSurface Combat=_combat>
-        <CombatView Combat=_combat />
-    </ControlSurface>
+    <ControlSurface CombatId=_verifiedCombatId.Value/>
 }
 else
 {

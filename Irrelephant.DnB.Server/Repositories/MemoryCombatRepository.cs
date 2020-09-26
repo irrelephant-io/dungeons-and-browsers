@@ -12,7 +12,14 @@ namespace Irrelephant.DnB.Server.Repositories
 
         public Task<Combat> GetCombat(Guid id)
         {
-            return Task.FromResult(_ongoingCombats[id]);
+            if (_ongoingCombats.ContainsKey(id))
+            {
+                return Task.FromResult(_ongoingCombats[id]);
+            }
+            else
+            {
+                return Task.FromResult<Combat>(null);
+            }
         }
 
         public Task<Combat> AddCombat(Combat combat)

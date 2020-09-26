@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Irrelephant.DnB.Client.Infrastructure;
 using Irrelephant.DnB.Client.Networking;
 using Irrelephant.DnB.Core.Cards;
 using Irrelephant.DnB.Core.Characters;
@@ -16,12 +17,17 @@ namespace Irrelephant.DnB.Client.Shared
     public partial class ControlSurface : ComponentBase, ITargetProvider
     {
         [Parameter]
-        public ClientCombat Combat { get; set; }
+        public Guid CombatId { get; set; }
+
+        private ClientCombat Combat { get; set; }
 
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
         private string _currentPrompt;
+
+        [Inject]
+        public IRemoteCombatListenerFactory CombatListenerFactory { get; set; }
 
         private string CurrentPrompt {
             get => _currentPrompt;
@@ -46,13 +52,12 @@ namespace Irrelephant.DnB.Client.Shared
             await Combat.EndTurn();
         }
 
-        protected override void OnInitialized()
+        protected async override Task OnInitializedAsync()
         {
-            Combat.OnUpdate += () => {
-                Console.WriteLine("Updated");
-                Console.WriteLine(Combat.IsReady);
-                StateHasChanged();
-            };
+            var listener = CombatListenerFactory.MakeListener(CombatId);
+            await listener.StartAsync();
+            Combat = new ClientCombat(listener);
+            Combat.OnUpdate += StateHasChanged;
         }
 
         public Task<IEnumerable<Character>> PickTarget(Effect e)

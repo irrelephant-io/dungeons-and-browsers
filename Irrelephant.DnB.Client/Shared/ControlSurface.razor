@@ -1,8 +1,8 @@
-﻿@if (Combat.IsReady)
+﻿@if (Combat != null && Combat.IsReady)
 {
     <CascadingValue Value="this">
         <div class="combat @_targetPickingClass">
-            @ChildContent
+            <CombatView Combat=Combat />
         </div>
         <div class="action-prompt">@_currentPrompt</div>
         <div class="control-surface">
@@ -15,7 +15,9 @@
                 <span class="actions-total">@Player.Actions</span>/<span class="actions-max">@Player.ActionsMax</span>
             </div>
             <div class="hand-view @_targetPickingClass">
-                @{ int index = 0; }
+                @{
+                    int index = 0;
+                }
                 @foreach (var card in Player.Hand)
                 {
                     <div class="rotate-container @GetRotationStyle(index)">
