@@ -100,20 +100,17 @@
 
 .character .graphic {
     border: 1px solid black;
-    -ms-border-radius: 10px;
     border-radius: 10px;
 }
 
     .character .graphic img {
         width: 150px;
         border-radius: 10px;
-        -webkit-object-fit: cover;
         object-fit: cover;
         height: 100px;
     }
 
 .rounded-card { 
-    -ms-border-radius: 15px;
     border-radius: 15px;
 }
 
@@ -137,8 +134,7 @@
     .control-surface .hand-view {
         display: flex;
         bottom: 0;
-        width: 100%;    
-        -o-justify-content: center;
+        width: 100%;
         -webkit-justify-content: center;
         justify-content: center;
         height: 300px;

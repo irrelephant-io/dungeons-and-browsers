@@ -121,7 +121,7 @@ namespace Irrelephant.DnB.Server.Hubs
             if (combat.CurrentActiveCharacter is RemotePlayerCharacterController remoteCharacterController
                 && remoteCharacterController.RemoteCharacter.ConnectionId == Context.ConnectionId)
             {
-                var card = remoteCharacterController.RemoteCharacter.Hand.First(card => card.Id == cardId);
+                var card = remoteCharacterController.RemoteCharacter.Hand.First(it => it.Id == cardId);
                 var effectTargets = targets.ToDictionary(t => t.First(), t => t.Skip(1).ToArray());
                 await card.Play(remoteCharacterController.RemoteCharacter, new RemoteTargetProvider(combat, effectTargets));
             }

@@ -1,10 +1,7 @@
 using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Client.Clients;
 using Irrelephant.DnB.Client.Infrastructure;
-using Irrelephant.DnB.Client.Networking;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

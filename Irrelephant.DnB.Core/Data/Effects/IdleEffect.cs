@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Core.Characters;
-using Irrelephant.DnB.Core.Infrastructure;
 
 namespace Irrelephant.DnB.Core.Data.Effects
 {

@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using System.Security.Principal;
+﻿using System.Security.Principal;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Core.Characters;
 using Irrelephant.DnB.Core.Characters.Controller;

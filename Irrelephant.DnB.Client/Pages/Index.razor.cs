@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Irrelephant.DnB.Client.Networking;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 
 namespace Irrelephant.DnB.Client.Pages
 {
     [Authorize]
-    public partial class Index : ComponentBase
+    public partial class Index
     {
-        [Inject]
-        public NavigationManager NavigationManager { get; set; }
+        private NavigationManager NavigationManager { get; }
 
         [Parameter]
         public string CombatId { get; set; }
 
-        private Guid? _verifiedCombatId { get; set; }
+        private Guid? _verifiedCombatId;
 
         private bool IsReady { get; set; }
 

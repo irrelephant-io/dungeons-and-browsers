@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Irrelephant.DnB.Core.Cards;
 using Irrelephant.DnB.Core.Characters;
@@ -90,11 +91,11 @@ namespace Irrelephant.DnB.Server.SampleData
             var hubContext = services.GetRequiredService<IHubContext<CombatHub>>();
             return new Combat
             {
-                Attackers = new CharacterController[]
+                Attackers = new List<CharacterController>
                 {
                     new RemoteAiController(hubContext, CharacterLibrary.VileGoblin.Copy())
                 },
-                Defenders = new[]
+                Defenders = new List<CharacterController>
                 {
                     new RemoteAiController(hubContext, CharacterLibrary.RagingOrc.Copy()),
                     new RemoteAiController(hubContext, CharacterLibrary.WretchedGoblin.Copy())

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Irrelephant.DnB.Core.Characters.Controller;
 using Irrelephant.DnB.Core.GameFlow;
 

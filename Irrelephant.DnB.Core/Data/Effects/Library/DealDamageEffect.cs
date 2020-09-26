@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Core.Characters;
-using Irrelephant.DnB.Core.Infrastructure;
 using Irrelephant.DnB.Core.Utils;
 
 namespace Irrelephant.DnB.Core.Data.Effects.Library

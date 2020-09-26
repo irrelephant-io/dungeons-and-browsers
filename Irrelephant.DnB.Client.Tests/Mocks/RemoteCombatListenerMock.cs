@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Irrelephant.DnB.Client.Networking;
 using Irrelephant.DnB.Core.Exceptions;
 using Irrelephant.DnB.DataTransfer.Models;
@@ -24,7 +23,7 @@ namespace Irrelephant.DnB.Client.Tests.Mocks
         private void SetupPlayCard()
         {
             Setup(l => l.PlayCard(It.IsAny<CardTargets>()))
-                .Callback<Guid, CardTargets>(async (_, cardTargets) => {
+                .Callback<CardTargets>(async cardTargets => {
                     if (!_isMyTurn)
                     {
                         return;

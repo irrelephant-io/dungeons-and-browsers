@@ -1,10 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Irrelephant.DnB.Core.Characters;
-using Irrelephant.DnB.Core.Infrastructure;
-
-namespace Irrelephant.DnB.Core.Data.Effects.Library
+﻿namespace Irrelephant.DnB.Core.Data.Effects.Library
 {
     public class DealDamageToSelfEffect : DealDamageEffect
     {

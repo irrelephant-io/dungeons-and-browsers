@@ -39,7 +39,7 @@ namespace Irrelephant.DnB.Client.Tests
 
         public static class Attacker
         {
-            public static Guid Id = new Guid("6223d4e5-875e-423c-bfdb-83292dab3b4b");
+            public static Guid CharacterId = new Guid("6223d4e5-875e-423c-bfdb-83292dab3b4b");
             public static string Name = "William the Mighty";
             public static string GraphicId = "player-0";
             public static int Health = 45;
@@ -49,7 +49,7 @@ namespace Irrelephant.DnB.Client.Tests
 
         public static class Defender
         {
-            public static Guid Id = new Guid("10adb33a-e0a9-49cd-ace0-deeafe526dad");
+            public static Guid CharacterId = new Guid("10adb33a-e0a9-49cd-ace0-deeafe526dad");
             public static string Name = "Johnathan the Pretty";
             public static string GraphicId = "player-0";
             public static int Health = 32;
@@ -59,7 +59,7 @@ namespace Irrelephant.DnB.Client.Tests
 
         public static CharacterSnapshot CharacterUpdate => new CharacterSnapshot
         {
-            Id = Attacker.Id,
+            Id = Attacker.CharacterId,
             GraphicId = Attacker.GraphicId,
             Name = Attacker.Name,
             Health = Attacker.Health - 10,
@@ -74,10 +74,12 @@ namespace Irrelephant.DnB.Client.Tests
         {
             Id = Id,
             Turn = Turn,
-            ActiveCharacterId = Attacker.Id,
+            ActiveCharacterId = Attacker.CharacterId,
+            PendingDefenders = new CharacterSnapshot[0],
+            PendingAttackers = new CharacterSnapshot[0],
             Attackers = new[] {
                 new CharacterSnapshot {
-                    Id = Attacker.Id,
+                    Id = Attacker.CharacterId,
                     GraphicId = Attacker.GraphicId,
                     Name = Attacker.Name,
                     Health = Attacker.Health,
@@ -121,7 +123,7 @@ namespace Irrelephant.DnB.Client.Tests
             },
             Defenders = new[] {
                 new CharacterSnapshot {
-                    Id = Defender.Id,
+                    Id = Defender.CharacterId,
                     Name = Defender.Name,
                     GraphicId = Defender.GraphicId,
                     Health = Defender.Health,

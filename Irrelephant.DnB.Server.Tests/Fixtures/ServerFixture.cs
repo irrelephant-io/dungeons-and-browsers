@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Irrelephant.DnB.Server.Repositories;
+using Irrelephant.DnB.Server.Authentication.Services;
+using Irrelephant.DnB.Server.Tests.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
@@ -24,10 +26,13 @@ namespace Irrelephant.DnB.Server.Tests.Fixtures
         public async Task InitializeAsync()
         {
             _testServer = new TestServer(new WebHostBuilder()
-                .ConfigureServices(services => {
-                    services.AddScoped<ICombatRepository, MemoryCombatRepository>();
+                .ConfigureAppConfiguration(cfg => {
+                    cfg.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
                 })
-                .UseStartup<Startup>());
+                .UseStartup<Startup>()
+                .ConfigureTestServices(services => {
+                    services.AddSingleton<ITokenValidator, TestTokenValidator>();
+                }));
             HttpClient = _testServer.CreateClient();
             CombatConnection = new HubConnectionBuilder()
                 .WithUrl(
@@ -35,6 +40,7 @@ namespace Irrelephant.DnB.Server.Tests.Fixtures
                     cfg => {
                         cfg.HttpMessageHandlerFactory = (_ => _testServer.CreateHandler());
                         cfg.Transports = HttpTransportType.LongPolling;
+                        cfg.AccessTokenProvider = () => TestTokenProvider.GetToken(HttpClient);
                     })
                 .Build();
             Services = _testServer.Services;
