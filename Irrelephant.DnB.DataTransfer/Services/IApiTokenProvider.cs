@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace Irrelephant.DnB.Client.Infrastructure
+namespace Irrelephant.DnB.DataTransfer.Services
 {
     public interface IApiTokenProvider
     {
-        public Task<string> GetToken();
+        Task<string> GetToken();
     }
 }

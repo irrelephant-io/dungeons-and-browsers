@@ -1,0 +1,73 @@
+﻿@page "/lobby"
+
+@using Irrelephant.DnB.DataTransfer.Models
+@using Irrelephant.DnB.DataTransfer.Clients
+
+@if (!_isLoading)
+{
+    <ol class="combat-list">
+        @if (_combats.Any())
+        {
+            @foreach (var combat in _combats)
+            {
+                <li id=@combat.CombatId>
+                    <span>@GetCombatSummary(combat)</span>
+                    <button @onclick="() => Join(combat)">Join as attacker</button>
+                    <button @onclick="() => Join(combat)">Join as defender</button>
+                </li>
+            }
+        }
+        else
+        {
+            <p>No active combats</p>
+        }
+    </ol>
+
+    <button @onclick="CreateNew">New combat</button>
+}
+else
+{
+    <p>Fetching combats...</p>
+}
+
+<button @onclick=RefreshCombats>Refresh</button>
+
+@code {
+    private bool _isLoading = true;
+
+    private IEnumerable<CombatInfo> _combats;
+
+    [Inject]
+    public NavigationManager Navigation { get; set; }
+
+    [Inject]
+    public ILobbyHttpClient LobbyClient { get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        await RefreshCombats();
+    }
+
+    private async Task RefreshCombats()
+    {
+        _isLoading = true;
+        _combats = await LobbyClient.GetOngoingCombatsAsync();
+        _isLoading = false;
+    }
+
+    private void Join(CombatInfo combatInfo)
+    {
+        Navigation.NavigateTo($"/{combatInfo.CombatId:D}");
+    }
+
+    private void CreateNew()
+    {
+        Navigation.NavigateTo("/new");
+    }
+
+    private string GetCombatSummary(CombatInfo combatInfo)
+    {
+        return $"Round {combatInfo.Round} - {string.Join(", ", combatInfo.Attackers)} VS {string.Join(", ", combatInfo.Defenders)}";
+    }
+}

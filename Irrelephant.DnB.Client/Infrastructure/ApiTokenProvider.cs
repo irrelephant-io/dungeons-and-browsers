@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Security.Authentication;
 using System.Threading.Tasks;
-using Irrelephant.DnB.Client.Clients;
+using Irrelephant.DnB.DataTransfer.Clients;
+using Irrelephant.DnB.DataTransfer.Services;
 using Microsoft.JSInterop;
 
 namespace Irrelephant.DnB.Client.Infrastructure

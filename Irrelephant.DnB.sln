@@ -24,7 +24,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Irrelephant.DnB.Server.Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Irrelephant.DnB.DataTransfer", "Irrelephant.DnB.DataTransfer\Irrelephant.DnB.DataTransfer.csproj", "{EAC44AD7-DFFF-4123-BE70-47C91F2F4500}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irrelephant.DnB.Server.Authentication", "Irrelephant.DnB.Server.Authentication\Irrelephant.DnB.Server.Authentication.csproj", "{099B3922-A942-493C-BFAC-283C6E110B1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Irrelephant.DnB.Server.Authentication", "Irrelephant.DnB.Server.Authentication\Irrelephant.DnB.Server.Authentication.csproj", "{099B3922-A942-493C-BFAC-283C6E110B1D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

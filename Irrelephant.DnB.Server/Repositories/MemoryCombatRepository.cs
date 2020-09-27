@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Irrelephant.DnB.Core.GameFlow;
 
@@ -9,6 +10,11 @@ namespace Irrelephant.DnB.Server.Repositories
     {
         private readonly IDictionary<Guid, Combat> _ongoingCombats = new Dictionary<Guid, Combat>();
 
+
+        public Task<IEnumerable<Combat>> ListCombats()
+        {
+            return Task.FromResult(_ongoingCombats.Values.AsEnumerable());
+        }
 
         public Task<Combat> GetCombat(Guid id)
         {

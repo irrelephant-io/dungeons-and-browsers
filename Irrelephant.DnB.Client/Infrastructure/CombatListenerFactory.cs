@@ -1,5 +1,7 @@
 ﻿using System;
 using Irrelephant.DnB.Client.Networking;
+using Irrelephant.DnB.DataTransfer.Options;
+using Irrelephant.DnB.DataTransfer.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Text.Json;
+using System.Threading.Tasks;
 using Irrelephant.DnB.Server.Authentication.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,7 @@ namespace Irrelephant.DnB.Server.Controllers
             {
                 return Unauthorized();
             }
-            return Ok(token);
+            return Ok(JsonSerializer.Serialize(token));
         }
     }
 }

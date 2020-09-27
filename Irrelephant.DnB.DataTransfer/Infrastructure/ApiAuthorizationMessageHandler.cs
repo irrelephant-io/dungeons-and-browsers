@@ -2,9 +2,9 @@
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using Irrelephant.DnB.Client.Infrastructure;
+using Irrelephant.DnB.DataTransfer.Services;
 
-namespace Irrelephant.DnB.Client.Handlers
+namespace Irrelephant.DnB.DataTransfer.Infrastructure
 {
     public class ApiAuthorizationMessageHandler : DelegatingHandler
     {

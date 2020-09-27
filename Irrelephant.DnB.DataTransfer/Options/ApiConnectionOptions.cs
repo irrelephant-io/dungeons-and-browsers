@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Irrelephant.DnB.Client.Infrastructure
+namespace Irrelephant.DnB.DataTransfer.Options
 {
     public class ApiConnectionOptions
     {

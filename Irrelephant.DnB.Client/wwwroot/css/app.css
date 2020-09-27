@@ -1,5 +1,9 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+.combat-list {
+    color: white;
+}
+
 .login-info {
     z-index: 100500;
 }

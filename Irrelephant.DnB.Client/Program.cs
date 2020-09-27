@@ -1,11 +1,11 @@
-using System;
 using System.Threading.Tasks;
-using Irrelephant.DnB.Client.Clients;
 using Irrelephant.DnB.Client.Infrastructure;
+using Irrelephant.DnB.DataTransfer.Extensions;
+using Irrelephant.DnB.DataTransfer.Options;
+using Irrelephant.DnB.DataTransfer.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using RazorComponentsPreview;
 
 namespace Irrelephant.DnB.Client
@@ -21,11 +21,7 @@ namespace Irrelephant.DnB.Client
             builder.Services.AddOidcAuthentication(options => {
                 builder.Configuration.Bind("OpenIdConnect", options.ProviderOptions);
             });
-            builder.Services.AddHttpClient<IAuthHttpClient, AuthHttpClient>((serviceProvider, client) => {
-                var connection = serviceProvider.GetRequiredService<IOptionsMonitor<ApiConnectionOptions>>();
-                client.BaseAddress = new Uri(connection.CurrentValue.BaseAddress, "/api");
-            });
-            
+            builder.Services.AddDungeonsClients();
             RegisterServices(builder.Services);
             await builder.Build().RunAsync();
         }

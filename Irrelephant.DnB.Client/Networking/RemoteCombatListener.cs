@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Irrelephant.DnB.Client.Infrastructure;
 using Irrelephant.DnB.Core.Utils;
 using Irrelephant.DnB.DataTransfer.Models;
+using Irrelephant.DnB.DataTransfer.Services;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace Irrelephant.DnB.Client.Networking
@@ -88,9 +88,9 @@ namespace Irrelephant.DnB.Client.Networking
             }
         }
 
-        public ValueTask DisposeAsync()
+        public async ValueTask DisposeAsync()
         {
-            return _connection.DisposeAsync();
+            await _connection.DisposeAsync();
         }
     }
 }
