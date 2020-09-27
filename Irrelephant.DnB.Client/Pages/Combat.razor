@@ -1,0 +1,12 @@
+﻿@page "/combat/{combatId}"
+
+<LoginDisplay/>
+
+@if (IsReady)
+{
+    <ControlSurface CombatId=_verifiedCombatId.Value/>
+}
+else
+{
+    <p>Still loading...</p>
+}

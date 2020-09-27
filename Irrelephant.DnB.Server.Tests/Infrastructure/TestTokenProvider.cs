@@ -14,7 +14,7 @@ namespace Irrelephant.DnB.Server.Tests.Infrastructure
             {
                 var pretendIdToken = new StringContent("\"I AM A GOOGLE ID TOKEN WANNABE\"", Encoding.UTF8, "application/json");
                 var result = await testClient.PostAsync("/api/auth/login", pretendIdToken);
-                _acquiredToken = await result.Content.ReadAsStringAsync();
+                _acquiredToken = (await result.Content.ReadAsStringAsync()).Trim('"');
             }
 
             return _acquiredToken;
