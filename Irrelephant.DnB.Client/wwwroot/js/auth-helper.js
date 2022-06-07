@@ -1,4 +1,8 @@
-﻿async function getCurrentIdToken() {
-    const user = await window.AuthenticationService.instance._userManager.getUser();
-    return user.id_token;
+﻿function getCurrentIdToken(oidcTokenKey) {
+    let token = window.sessionStorage.getItem(oidcTokenKey);
+    if (token !== undefined) {
+        return JSON.parse(token).id_token;
+    }
+    
+    return null;
 }

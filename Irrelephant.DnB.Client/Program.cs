@@ -1,43 +1,28 @@
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Irrelephant.DnB.Client;
 using Irrelephant.DnB.Client.Infrastructure;
 using Irrelephant.DnB.DataTransfer.Extensions;
 using Irrelephant.DnB.DataTransfer.Options;
 using Irrelephant.DnB.DataTransfer.Services;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using RazorComponentsPreview;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
-namespace Irrelephant.DnB.Client
-{
-    public class Program
-    {
-        public static async Task Main(string[] args)
-        {
-            var builder = WebAssemblyHostBuilder.CreateDefault(args);
-            builder.RootComponents.Add<App>("app");
-            builder.Services.AddRazorComponentsRuntimeCompilation();
-            ConfigureOptions(builder);
-            builder.Services.AddOidcAuthentication(options => {
-                builder.Configuration.Bind("OpenIdConnect", options.ProviderOptions);
-            });
-            builder.Services.AddDungeonsClients();
-            RegisterServices(builder.Services);
-            await builder.Build().RunAsync();
-        }
+var builder = WebAssemblyHostBuilder.CreateDefault(args);
+builder.RootComponents.Add<App>("app");
+builder.Logging.SetMinimumLevel(LogLevel.Trace);
 
-        private static void ConfigureOptions(WebAssemblyHostBuilder builder)
-        {
-            builder.Services
-                .AddOptions()
-                .Configure<ApiConnectionOptions>(opts => builder.Configuration.GetSection("Api").Bind(opts));
-        }
+builder.Services
+    .AddOptions()
+    .Configure<OidcProviderOptions>(opts => builder.Configuration.GetSection("OpenIdConnect").Bind(opts))
+    .Configure<ApiConnectionOptions>(opts => builder.Configuration.GetSection("Api").Bind(opts));
 
-        private static void RegisterServices(IServiceCollection services)
-        {
-            services
-                .AddSingleton<IApiTokenProvider, ApiTokenProvider>()
-                .AddScoped<IRemoteCombatListenerFactory, RemoteCombatListenerFactory>();
-        }
-    }
-}
+builder.Services.AddOidcAuthentication(options => {
+    builder.Configuration.Bind("OpenIdConnect", options.ProviderOptions);
+});
+
+builder.Services.AddDungeonsClients();
+
+builder.Services
+    .AddScoped<IApiTokenProvider, ApiTokenProvider>()
+    .AddScoped<IRemoteCombatListenerFactory, RemoteCombatListenerFactory>();
+
+await builder.Build().RunAsync();

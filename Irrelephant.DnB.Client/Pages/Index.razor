@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
 
 @using Irrelephant.DnB.DataTransfer.Models
 @using Irrelephant.DnB.DataTransfer.Clients
@@ -43,7 +45,7 @@ else
     [Inject]
     public ILobbyHttpClient LobbyClient { get; set; }
 
-    protected async override Task OnParametersSetAsync()
+    protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
         await RefreshCombats();

@@ -1,8 +1,10 @@
 ﻿@inject NavigationManager Navigation
+@inject ILogger<RedirectToLogin> Logger
 
 @code {
     protected override void OnInitialized()
     {
+        Logger.LogInformation("Trying sign-in");
         Navigation.NavigateTo($"authentication/login?returnUrl={Uri.EscapeDataString(Navigation.Uri)}");
     }
 }

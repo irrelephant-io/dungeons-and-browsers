@@ -1,17 +1,20 @@
+﻿@inject ILogger<App> Logger;
+
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(Program).Assembly">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" 
                                 DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>
-                    @if (!context.User.Identity.IsAuthenticated)
+                    @if (context.User.Claims.All(c => c.Type != "id_token"))
                     {
-                        <RedirectToLogin />
+                        @code { }
+                        <RedirectToLogin/>
                     }
                     else
                     {
                         <p>
-                            You are not authorized to access 
+                            You are not authorized to access
                             this resource.
                         </p>
                     }
